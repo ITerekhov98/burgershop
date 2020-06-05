@@ -11,21 +11,21 @@ from foodcartapp.views.OrderViews import order_list_view
 from foodcartapp.views.ProductViews import product_list_view, AddProductView, UpdateProductView, DeleteProductView
 from foodcartapp.views.AuthViews import LoginView, LogoutView, SignUpView
 from foodcartapp.views.LocationViews import location_list_view,AddLocationView,DeleteLocationView,UpdateLocationView
-from foodcartapp.RESTviews import *
+from foodcartapp.RESTviews import location_detail_api
 
-app_name="foodcartapp"
+app_name = "foodcartapp"
 
-urlpatterns=[
+urlpatterns = [
 
-    path('products/',product_list_view.as_view(),name="ProductsView"),
-    path('addproduct/',AddProductView.as_view(),name="AddProductView"),
-    path('<int:pk>/editProduct/',UpdateProductView.as_view(),name="UpdateProductView"),
-    path('<int:pk>/deleteProduct/',DeleteProductView.as_view(),name="DeleteProductView"),
+    path('products/', product_list_view.as_view(), name="ProductsView"),
+    path('addproduct/', AddProductView.as_view(), name="AddProductView"),
+    path('<int:pk>/editProduct/', UpdateProductView.as_view(), name="UpdateProductView"),
+    path('<int:pk>/deleteProduct/', DeleteProductView.as_view(), name="DeleteProductView"),
 
-    path('locations/',location_list_view.as_view(),name="LocationsView"),
-    path('addlocation/',AddLocationView.as_view(),name="AddLocationView"),
-    path('<int:pk>/editLoction/',UpdateLocationView.as_view(),name="UpdateLocationView"),
-    path('<int:pk>/deleteLoction/',DeleteLocationView.as_view(),name="DeleteLocationView"),
+    path('locations/', location_list_view.as_view(), name="LocationsView"),
+    path('addlocation/', AddLocationView.as_view(), name="AddLocationView"),
+    path('<int:pk>/editLoction/', UpdateLocationView.as_view(), name="UpdateLocationView"),
+    path('<int:pk>/deleteLoction/', DeleteLocationView.as_view(), name="DeleteLocationView"),
 
     path('hotels/', hotel_list_view.as_view(), name="HotelView"),
     path('addhotel/', AddHotelView.as_view(), name="AddHotelView"),
@@ -38,26 +38,25 @@ urlpatterns=[
     path('<int:pk>/editCity/', UpdateCityView.as_view(), name="UpdateCityView"),
     path('<int:pk>/deleteCity/', DeleteCityView.as_view(), name="DeleteCityView"),
 
-    path('orders/',order_list_view.as_view(),name="OrderListView"),
+    path('orders/', order_list_view.as_view(), name="OrderListView"),
 
-    path('login/',LoginView.as_view(),name="Login"),
-    path('logout/',LogoutView.as_view(),name="Logout"),
-    path('sign_up/',SignUpView.as_view(),name="Signup"),
+    path('login/', LoginView.as_view(), name="Login"),
+    path('logout/', LogoutView.as_view(), name="Logout"),
+    path('sign_up/', SignUpView.as_view(), name="Signup"),
 
-    path('api/locations/',location_list_api,name="LocationListAPI"),
-    path('api/locations/<int:pk>/',location_detail_api,name="LocationDetailAPI"),
+    path('api/locations/', location_list_api, name="LocationListAPI"),
+    path('api/locations/<int:pk>/', location_detail_api, name="LocationDetailAPI"),
 
     path('api/products/', product_list_api, name="ProductListAPI"),
     path('api/products/<int:pk>/', product_detail_api, name="ProductDetailAPI"),
 
-    path('api/cities/',city_list_api, name="CityListAPI"),
+    path('api/cities/', city_list_api, name="CityListAPI"),
     path('api/cities/<int:pk>/', city_detail_api, name="CityDetailAPI"),
 
 
-    path('api/order/',order_list_api, name="OrderListAPI"),
+    path('api/order/', order_list_api, name="OrderListAPI"),
     path('api/order/<int:pk>/', order_detail_api, name="OrderDetailAPI"),
 
-    path('api/user_signup/',customer_signup_api,name="UserSignupAPI")
+    path('api/user_signup/', customer_signup_api, name="UserSignupAPI")
 
 ]
-

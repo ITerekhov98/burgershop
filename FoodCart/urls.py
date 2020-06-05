@@ -15,27 +15,23 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_jwt.views import obtain_jwt_token
 
-from foodcartapp import urls
 from FoodCart import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name="index.html")),
-    path('',include(urls)),
+    path('', include('foodcartapp.urls')),
     path('api-jwttoken-auth/', obtain_jwt_token),
     path('api-basictoken-auth/', obtain_auth_token)
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
-
-from django.conf import settings
-from django.conf.urls import include, url
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path(r'__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
