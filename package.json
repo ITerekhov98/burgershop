@@ -59,8 +59,8 @@
     "postinstall": "npm run build"
   },
   "engines": {
-      "node":"9.10.1",
-      "npm":"5.6.0"    
+    "node": "9.10.1",
+    "npm": "5.6.0"
   },
   "jest": {
     "collectCoverageFrom": [
