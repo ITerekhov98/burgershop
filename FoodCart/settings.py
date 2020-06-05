@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+import dj_database_url
+import cloudinary
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +29,7 @@ SECRET_KEY = 'j#jww5g6d96bi#kbfpq%mgblr8^yg8$zmmg+c6dm+bxfa*&c+l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fudocart.herokuapp.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -72,22 +74,24 @@ REST_FRAMEWORK = {
     ),
 }
 
-import cloudinary
 cloudinary.config(
-  cloud_name = "dfrr0ppdf",
-  api_key = "567162634652493",
-  api_secret = "FL9Kd2pDfTMPkcNr-zTbS5XiSzA"
+    cloud_name="dfrr0ppdf",
+    api_key="567162634652493",
+    api_secret="FL9Kd2pDfTMPkcNr-zTbS5XiSzA"
 )
-
 
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
-        }
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'bundles/js/',  # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, '../webpack-stats.dev.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    }
 }
-
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
@@ -122,8 +126,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FoodCart.wsgi.application'
 
-#PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-#STATIC_ROOT = os.path.join(PROJECT_ROOT,'static')
 MEDIA_ROOT = os.path.join(STATIC_ROOT,'media')
 MEDIA_URL = '/media/'
 
@@ -141,12 +143,11 @@ MEDIA_URL = '/media/'
 #     }
 # }
 
-import dj_database_url
 DATABASES = {
-      'default': dj_database_url.config(
-          default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
-      )
-  }
+    'default': dj_database_url.config(
+        default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -186,18 +187,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-INTERNAL_IPS=[
+INTERNAL_IPS = [
     '127.0.0.1'
-    ]
+]
 
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
 ]
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.prod.json'),
-        }
-}
