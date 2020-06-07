@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
 import NavBarComponent from './components/NavBarComponent';
 import CartModalComponent from './components/CartModalComponent';
 import BannerComponent from './components/BannerComponent';
@@ -114,7 +113,7 @@ checkOut(refs){
   getProducts(){
 		const url = "/api/products/";
 
-		axios.get(url)
+		fetch(url)
 			.then(response => {
 				this.setState({
 					products : response.data
@@ -125,7 +124,7 @@ checkOut(refs){
 getCities(){
 	const url = "/api/cities/";
 
-		axios.get(url)
+		fetch(url)
 			.then(response => {
 				this.setState({
 					cities : response.data
@@ -139,7 +138,7 @@ getCities(){
 
     const url="/api/locations/";
 
-    axios.get(url)
+    fetch(url)
     .then(response => {
       this.setState({
         locations:response.data

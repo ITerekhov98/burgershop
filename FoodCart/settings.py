@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'rest_framework.authtoken',
-    'webpack_loader',
     'cloudinary'
 ]
 
@@ -79,19 +78,6 @@ cloudinary.config(
     api_key="567162634652493",
     api_secret="FL9Kd2pDfTMPkcNr-zTbS5XiSzA"
 )
-
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'bundles/js/',  # must end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, '../webpack-stats.dev.json'),
-        'POLL_INTERVAL': 0.1,
-        'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
-    }
-}
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
@@ -194,4 +180,5 @@ INTERNAL_IPS = [
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
+    os.path.join(BASE_DIR, "bundles"),
 ]

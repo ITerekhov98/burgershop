@@ -2,7 +2,6 @@ django==3.0.7
 cloudinary==1.21.0
 djangorestframework==3.11.0
 django-debug-toolbar==2.2
-django-webpack-loader==0.7.0
 dj-database-url==0.5.0
 djangorestframework-jwt==1.11.0
 Pillow==7.1.2
