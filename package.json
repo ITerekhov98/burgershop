@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.10.2",
-    "@babel/preset-react": "7.10.1",
     "@babel/runtime": "7.10.2",
     "autoprefixer": "9.8.0",
     "bootstrap": "^4.5.0",
