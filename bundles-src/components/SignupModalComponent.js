@@ -56,7 +56,7 @@ class SignupModalComponent extends Component{
             phonenumber : value
         })
     }
-    
+
     savePincode = (event) => {
         const {target : {value}} = event;
         this.setState({
@@ -76,7 +76,7 @@ class SignupModalComponent extends Component{
         this.signup(this.state)
     }
 
-    signup =({username,password,firstname,lastname,phonenumber,pincode,address})=>{
+    async signup({username,password,firstname,lastname,phonenumber,pincode,address}){
             console.log(username + " : "+password+" : "+firstname+" : "+lastname+":"+phonenumber+":"+pincode+":"+address);
             var formData  = new FormData();
             formData.append('username', username);
@@ -86,37 +86,38 @@ class SignupModalComponent extends Component{
             formData.append('phone_number',phonenumber);
             formData.append('pincode',pincode);
             formData.append('address',address);
-            fetch(this.state.url, { 
-                method: 'post',
-                body: formData, 
-              }) .then(function(response) {
-                return response.json();
-            })
-            .then((myJson) => {
-                if ('token' in myJson){
-                    this.cookies.set('userJwtToken', myJson, { path: '/',expires: new Date(Date.now()+2592000)} );
-                    this.cookies.set('username',formData.get('username'), {path : '/', expires: new Date(Date.now()+2592000)})
-                    console.log(this.cookies.get('userJwtToken'));
-                    console.log('After getting token');
-                    this.props.toggleisAuthenticated();
-                    this.props.handleSignupModalClose();
-                }
-                else{
-                    alert("Invalid Credentials");
-                }
-            })
-            .catch(e => {console.log("Error occured in Signup")});
+
+            try{
+              let response = await fetch(this.state.url, {
+                  method: 'post',
+                  body: formData,
+                });
+              let myJson = await response.json();
+              if ('token' in myJson){
+                  this.cookies.set('userJwtToken', myJson, { path: '/',expires: new Date(Date.now()+2592000)} );
+                  this.cookies.set('username',formData.get('username'), {path : '/', expires: new Date(Date.now()+2592000)})
+                  console.log(this.cookies.get('userJwtToken'));
+                  console.log('After getting token');
+                  this.props.toggleisAuthenticated();
+                  this.props.handleSignupModalClose();
+              }
+              else{
+                  alert("Invalid Credentials");
+              }
+            } catch(e){
+              console.log("Error occured in Signup");
+            }
     }
 
 
     render(){
         return(
-            
+
             <Modal show={this.props.signupModalActive} onHide={this.props.handleSignupModalClose}>
             <Modal.Header closeButton>
               <h2><center><Modal.Title>Signup</Modal.Title></center></h2>
             </Modal.Header>
-            <Modal.Body> 
+            <Modal.Body>
                 <div className="form-group container-fluid">
                     <label htmlFor="username">Username:</label>
                     <input onChange={this.saveUsername} required id="username" type="text" className="form-control" placeholder="Enter username"/><br/>
@@ -132,9 +133,9 @@ class SignupModalComponent extends Component{
                     <input onChange={this.savePincode} required id="pincode" type="text" maxLength="7" className="form-control" placeholder="Enter Pincode"/><br/>
                     <label htmlFor="address">Address:</label>
                     <input onChange={this.saveAddress} required id="address" type="text" maxLength="256" className="form-control" placeholder="Enter Address"/><br/>
-                    
+
                 </div>
-                
+
             </Modal.Body>
             <Modal.Footer>
                <Button id="signup" onClick={(events)=>{
@@ -145,7 +146,7 @@ class SignupModalComponent extends Component{
               <Button onClick={this.props.handleSignupModalClose}>Close</Button>
             </Modal.Footer>
           </Modal>
-            
+
 
 
         );

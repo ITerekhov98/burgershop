@@ -14,7 +14,8 @@ class FoodCartSpecialsComponent extends Component{
         console.log(this.props.searchCityIndex+" : "+this.props.searchLocationIndex);
 		let searchCityIndex=parseInt(this.props.searchCityIndex);
 		let searchLocationIndex=parseInt(this.props.searchLocationIndex);
-		productsData = this.props.productsList.filter(
+
+    productsData = this.props.productsList.filter(
 			function(x){
 				return x.name.toLowerCase().includes(term) || !term;
 			}
@@ -36,15 +37,15 @@ class FoodCartSpecialsComponent extends Component{
 
         ).map(product =>{
 			return(
-						<Product 
-						key={product.id} 
-						price={product.full_price} 
-						name={product.name} 
-						image={product.image} 
-						id={product.id} 
-						addToCart={this.props.addToCart} 
-						productQuantity={this.props.productQuantity} 
-						updateQuantity={this.props.updateQuantity} 
+						<Product
+						key={product.id}
+						price={product.full_price}
+						name={product.name}
+						image={product.image}
+						id={product.id}
+						addToCart={this.props.addToCart}
+						productQuantity={this.props.productQuantity}
+						updateQuantity={this.props.updateQuantity}
 						openModal={this.props.openModal}
 						/>
 				)
@@ -61,7 +62,7 @@ class FoodCartSpecialsComponent extends Component{
 			view = <CSSTransitionGroup
 				transitionName="fadeIn"
 				transitionEnterTimeout={500}
-				transitionLeaveTimeout={300} 
+				transitionLeaveTimeout={300}
 				component="div"
 				className="products">
 					{productsData}
