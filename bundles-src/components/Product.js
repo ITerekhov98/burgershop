@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import Counter from './Counter';
 
 class Product extends Component{
-	constructor(props){
-		super(props);
+  constructor(props){
+    super(props);
         this.state = {
             selectedProduct: {},
             quickViewProdcut: {},
@@ -28,7 +28,7 @@ class Product extends Component{
             setTimeout(() => {
                 this.setState({
                     isAdded: false,
-                    selectedProduct: {} 
+                    selectedProduct: {}
                 });
             }, 3500);
         });

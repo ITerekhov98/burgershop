@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Product from './LoadingProduct';
 
 class LoadingProducts extends Component {
-	render() {
-		return (
-			<div className="products loading">
+  render() {
+    return (
+      <div className="products loading">
                 <Product />
                 <Product />
                 <Product />
@@ -14,8 +14,8 @@ class LoadingProducts extends Component {
                 <Product />
                 <Product />
             </div>
-		)
-	}
+    )
+  }
 }
 
 export default LoadingProducts;
