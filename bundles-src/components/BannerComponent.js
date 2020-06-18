@@ -24,7 +24,7 @@ const BannerComponent = (props) => {
 
   let carousel_indicators = props.banners.map( (cfg, index) => {
     return (
-      <li data-target="#myCarousel" data-slide-to={index} className={index ? '' : 'active'}></li>
+      <li data-target="#myCarousel" key={index} data-slide-to={index} className={index ? '' : 'active'}></li>
     )
   });
 
