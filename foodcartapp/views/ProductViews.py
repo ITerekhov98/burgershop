@@ -7,10 +7,6 @@ from django.views.generic import DeleteView
 from django.views.generic import ListView
 from django.views.generic import UpdateView
 
-import cloudinary
-import cloudinary.api
-import cloudinary.uploader
-
 from foodcartapp.forms.ProductsForms import AddProduct
 from foodcartapp.forms.ProductsForms import UpdateProduct
 from foodcartapp.models import Hotel
@@ -58,9 +54,7 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         form = AddProduct(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.image = cloudinary.uploader.upload_image(request.FILES['image']).url
-            product.save()
+            form.save()
         return redirect("foodcartapp:ProductsView")
 
 

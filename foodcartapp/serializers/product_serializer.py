@@ -9,7 +9,7 @@ class ProductSerializer(serializers.Serializer):
     half_price = serializers.DecimalField(max_digits=8, decimal_places=2)
     full_price = serializers.DecimalField(max_digits=8, decimal_places=2)
     availabilty = serializers.BooleanField(default=True)
-    image = serializers.URLField()
+    image = serializers.URLField(source='image.url', read_only=True)
     special_status = serializers.BooleanField(default=False)
     category = serializers.CharField(max_length=50)
     hotel = HotelSerializer(many=False)
