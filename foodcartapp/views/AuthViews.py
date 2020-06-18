@@ -6,8 +6,6 @@ from django.contrib.auth.models import *
 from foodcartapp.forms.AuthForms import Signup, Login
 
 
-#
-
 class SignUpView(View):
     def get(self,request,*args,**kwargs):
         form=Signup()

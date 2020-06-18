@@ -1,4 +1,4 @@
-"""FoodCart URL Configuration
+"""FoodCart URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -12,11 +12,12 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
 """
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+from django.shortcuts import render
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_jwt.views import obtain_jwt_token
 
@@ -24,7 +25,7 @@ from FoodCart import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name="index.html")),
+    path('', render, kwargs={'template_name': 'index.html'}),
     path('', include('foodcartapp.urls')),
     path('api-jwttoken-auth/', obtain_jwt_token),
     path('api-basictoken-auth/', obtain_auth_token)
