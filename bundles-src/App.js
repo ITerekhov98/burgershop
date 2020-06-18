@@ -61,14 +61,12 @@ class App extends Component {
 
   async checkOut(refs){
 
-    //refs.setAttribute("disabled", "disabled");
     let cookies=new Cookies();
     const url="api/order/";
     let data={};
     data.products=this.state.cart;
     let tokenObj=cookies.get('userJwtToken');
     if(!this.state.isAuthenticated){
-     // alert("Login First");
       this.handleLoginModalShow();
       return;
     }
@@ -97,7 +95,6 @@ class App extends Component {
     } catch(error){
       console.log('Request failed', error);
     };
-    //refs.removeAttribute("disabled");
   }
 
 
@@ -177,7 +174,6 @@ class App extends Component {
   // Filter by Category
   handleCategory(event){
     this.setState({category: event.target.value});
-  //  console.log(this.state.category);
   }
 
   handleCartClose() {

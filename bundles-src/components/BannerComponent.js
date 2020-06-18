@@ -1,57 +1,56 @@
 import React, { Component } from 'react';
 
 const BannerComponent = (props) => {
+  const title_container_style = "position: absolute;z-index: 99; width: 100vw; height: 600px;background-color: rgba(0,0,0,0.3);";
+  const section_style = "height:600px;";
+  const headline_style = "margin-top: 155px;"
+  const bannerStyle = {
+    maxWidth: "100%",
+    height: "auto",
+    width: "auto\9"
+  };
 
-    const title_container_style="position: absolute;z-index: 99; width: 100vw; height: 600px;background-color: rgba(0,0,0,0.3);";
-    const section_style="height:600px;";
-    const headline_style="margin-top: 155px;"
-    const bannerStyle={
-      maxWidth:"100%",
-      height:"auto",
-      width:"auto\9"
-    };
-
-    let carousel_items = props.banners.map( (cfg, index) => {
-      return (
-        <div className={index ? 'item' : 'item active'} key={index}>
-          <img src={cfg.src} alt={cfg.title} style={bannerStyle}/>
-          <div className="carousel-caption">
-            <h3>{cfg.title}</h3>
-            <p>{cfg.text}</p>
-          </div>
-        </div>
-      )
-    });
-
-    let carousel_indicators = props.banners.map( (cfg, index) => {
-      return (
-        <li data-target="#myCarousel" data-slide-to={index} className={index ? '' : 'active'}></li>
-      )
-    });
-
+  let carousel_items = props.banners.map( (cfg, index) => {
     return (
-        <div className="container-fluid"  style={{padding: "0px"}}>
-        <h2>Carousel Example</h2>
-        <div id="myCarousel" className="carousel slide" data-ride="carousel">
-          <ol className="carousel-indicators">
-            {carousel_indicators}
-          </ol>
-
-          <div className="carousel-inner">
-            {carousel_items}
-          </div>
-
-          <a className="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span className="glyphicon glyphicon-chevron-left"></span>
-            <span className="sr-only">Previous</span>
-          </a>
-          <a className="right carousel-control" href="#myCarousel" data-slide="next">
-            <span className="glyphicon glyphicon-chevron-right"></span>
-            <span className="sr-only">Next</span>
-          </a>
+      <div className={index ? 'item' : 'item active'} key={index}>
+        <img src={cfg.src} alt={cfg.title} style={bannerStyle}/>
+        <div className="carousel-caption">
+          <h3>{cfg.title}</h3>
+          <p>{cfg.text}</p>
         </div>
       </div>
-    );
+    )
+  });
+
+  let carousel_indicators = props.banners.map( (cfg, index) => {
+    return (
+      <li data-target="#myCarousel" data-slide-to={index} className={index ? '' : 'active'}></li>
+    )
+  });
+
+  return (
+      <div className="container-fluid" style={{padding: "0px"}}>
+      <h2>Carousel Example</h2>
+      <div id="myCarousel" className="carousel slide" data-ride="carousel">
+        <ol className="carousel-indicators">
+          {carousel_indicators}
+        </ol>
+
+        <div className="carousel-inner">
+          {carousel_items}
+        </div>
+
+        <a className="left carousel-control" href="#myCarousel" data-slide="prev">
+          <span className="glyphicon glyphicon-chevron-left"></span>
+          <span className="sr-only">Previous</span>
+        </a>
+        <a className="right carousel-control" href="#myCarousel" data-slide="next">
+          <span className="glyphicon glyphicon-chevron-right"></span>
+          <span className="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  );
 }
 
 export default BannerComponent;
