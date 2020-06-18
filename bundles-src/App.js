@@ -14,12 +14,12 @@ import FoodCartSpecialsComponent from './components/FoodCartSpecialsComponent';
 
 class App extends Component {
 
-  constructor(){
+  constructor(props){
     super();
     this.state = {
       products: [],
-      locations:[],
-      cities:[],
+      locations: [],
+      cities: [],
       cart: [],
       totalItems: 0,
       totalAmount: 0,
@@ -29,12 +29,12 @@ class App extends Component {
       quickViewProduct: {},
       showCart: false,
       quickViewModalActive: false,
-      isAuthenticated:false,
-      loginModalActive:false,
-      signupModalActive:false,
-      quantity:1,
-      searchCityIndex:0,
-      searchLocationIndex:0
+      isAuthenticated: false,
+      loginModalActive: false,
+      signupModalActive: false,
+      quantity: 1,
+      searchCityIndex: 0,
+      searchLocationIndex: 0,
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
