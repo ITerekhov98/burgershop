@@ -21,7 +21,7 @@ const BannerComponent = (props) => {
           </ol>
 
           <div className="carousel-inner">
-      
+
             <div className="item active">
               <img src="https://res.cloudinary.com/dfrr0ppdf/image/upload/v1529922518/carousel/Burger.jpg" alt="Burger" style={bannerStyle} />
               <div className="carousel-caption">
@@ -29,7 +29,7 @@ const BannerComponent = (props) => {
                 <p>Tasty Burger at your door step</p>
               </div>
             </div>
-      
+
             <div className="item">
               <img src="https://res.cloudinary.com/dfrr0ppdf/image/upload/v1529922515/carousel/food.jpg" alt="Spices" style={bannerStyle}/>
               <div className="carousel-caption">
@@ -37,7 +37,7 @@ const BannerComponent = (props) => {
                 <p>All Cuisines</p>
               </div>
             </div>
-          
+
             <div className="item">
               <img src="https://res.cloudinary.com/dfrr0ppdf/image/upload/v1529922513/carousel/tasty.jpg" alt="New York" style={bannerStyle}/>
               <div style={{color:"black"}}className="carousel-caption">
@@ -45,7 +45,7 @@ const BannerComponent = (props) => {
                 <p>Food is incomplete without a tasty dessert</p>
               </div>
             </div>
-        
+
           </div>
           <a className="left carousel-control" href="#myCarousel" data-slide="prev">
             <span className="glyphicon glyphicon-chevron-left"></span>

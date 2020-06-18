@@ -22,7 +22,7 @@ class QuickView extends Component{
           <h2><center><Modal.Title>Quick View</Modal.Title></center></h2>
         </Modal.Header>
         <Modal.Body>
-          <center>  
+          <center>
               <img src={this.props.product.image} style={imageSizing}/>
               <div className="container-fluid">
               <Table responsive>
@@ -45,7 +45,7 @@ class QuickView extends Component{
               </Table>
               </div>
         </center>
-            
+
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.handleQuickViewModalClose}>Close</Button>

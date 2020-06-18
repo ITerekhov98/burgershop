@@ -36,7 +36,7 @@ class CartModalComponent extends Component{
                 </CSSTransitionGroup>
             )
         });
-  
+
         let view;
         if(cartItems.length <= 0){
             view = <EmptyCart />
@@ -54,9 +54,9 @@ class CartModalComponent extends Component{
                         </tr>
                     </thead>
                     <tbody>
-                       
+
                         {cartItems}
-                    
+
                     </tbody>
                 </Table>)
         }
@@ -68,9 +68,9 @@ class CartModalComponent extends Component{
             <h2><center><Modal.Title>Cart</Modal.Title></center></h2>
           </Modal.Header>
           <Modal.Body>
-              
+
                     {view}
-              
+
           </Modal.Body>
           <Modal.Footer>
             <Button id="checkout" onClick={(event)=>{
@@ -79,7 +79,7 @@ class CartModalComponent extends Component{
                 if(this.props.cartItems.length>0)
                     this.props.checkOut();
                 //this.props.handleCartClose();
-                document.getElementById('checkout').style.pointerEvents = 'auto'; 
+                document.getElementById('checkout').style.pointerEvents = 'auto';
                 //document.getElementById("checkout").removeAttribute("disabled");
             }} className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}>PROCEED TO CHECKOUT</Button>
             <Button onClick={this.props.handleCartClose}>Close</Button>
