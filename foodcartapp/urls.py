@@ -10,7 +10,7 @@ from foodcartapp.views.HotelViews import hotel_list_view, DeleteHotelView, Updat
 from foodcartapp.views.OrderViews import order_list_view
 from foodcartapp.views.ProductViews import product_list_view, AddProductView, UpdateProductView, DeleteProductView
 from foodcartapp.views.AuthViews import LoginView, LogoutView, SignUpView
-from foodcartapp.views.LocationViews import location_list_view,AddLocationView,DeleteLocationView,UpdateLocationView
+from foodcartapp.views.LocationViews import location_list_view, AddLocationView, DeleteLocationView, UpdateLocationView
 from foodcartapp.RESTviews import location_detail_api
 
 app_name = "foodcartapp"

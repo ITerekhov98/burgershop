@@ -1,10 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView,UpdateView,DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from foodcartapp.forms.HotelForms import UpdateHotel, AddHotel
-from foodcartapp.models import *
-
+from foodcartapp.models import Hotel, User, Location, CustomUser
 
 
 class PermissionHelper(PermissionRequiredMixin):
@@ -17,9 +16,9 @@ class PermissionHelper(PermissionRequiredMixin):
             return False
 
 
-class hotel_list_view(LoginRequiredMixin,ListView):
+class hotel_list_view(LoginRequiredMixin, ListView):
     login_url = reverse_lazy("foodcartapp:login")
-    model =Hotel
+    model = Hotel
     template_name = "hotel_list.html"
     permission_denied_message = "User does not have permission to view Hotel"
     context_object_name = "hotel_list"
@@ -33,12 +32,10 @@ class hotel_list_view(LoginRequiredMixin,ListView):
         return context
 
 
-
-class AddHotelView(LoginRequiredMixin,CreateView):
+class AddHotelView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("foodcartapp:login")
     template_name = 'add_hotel.html'
     form_class = AddHotel
-   # permission_required = "foodcartapp.add_hotel"
     permission_denied_message = "User does not have permission to add Hotel"
     raise_exception = True
     model = Hotel
@@ -71,7 +68,7 @@ class UpdateHotelView(LoginRequiredMixin,PermissionHelper,UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UpdateHotelView, self).get_context_data(**kwargs)
         context['hotel'] = Hotel.objects.get(id=self.kwargs['pk'])
-        context['location']=Location.objects.all()
+        context['location'] = Location.objects.all()
         return context
 
 
@@ -83,4 +80,3 @@ class DeleteHotelView(LoginRequiredMixin,PermissionHelper,DeleteView):
     permission_denied_message = "User does not have permission to delete hotel"
     raise_exception = True
     success_url = reverse_lazy("foodcartapp:HotelView")
-

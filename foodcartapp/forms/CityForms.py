@@ -1,15 +1,14 @@
 from django.forms import ModelForm
-from foodcartapp.models import *
+from foodcartapp.models import City
 
 
 class AddCity(ModelForm):
     class Meta:
-        model=City
-        exclude=[]
+        model = City
+        exclude = []
 
 
 class UpdateCity(ModelForm):
     class Meta:
-        model=City
-        exclude=[]
-
+        model = City
+        exclude = []
