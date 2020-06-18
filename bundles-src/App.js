@@ -35,6 +35,7 @@ class App extends Component {
       quantity: 1,
       searchCityIndex: 0,
       searchLocationIndex: 0,
+      banners: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
@@ -118,6 +119,16 @@ class App extends Component {
     });
   }
 
+  async getBanners(){
+    const url = "/api/banners/";
+
+    let response = await fetch(url);
+    let data = await response.json();
+    this.setState({
+      banners : data
+    });
+  }
+
   async getCities(){
     const url = "/api/cities/";
 
@@ -143,6 +154,7 @@ class App extends Component {
     this.getProducts();
     this.getLocations();
     this.getCities();
+    this.getBanners();
   }
 
 
@@ -345,7 +357,7 @@ class App extends Component {
           toggleisAuthenticated={this.toggleisAuthenticated}
         />
 
-        <BannerComponent />
+        <BannerComponent banners={this.state.banners}/>
 
 
         <div id="what_we_do" className="container-fluid"></div>

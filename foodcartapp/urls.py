@@ -4,6 +4,7 @@ from foodcartapp.RESTviews.CityRestView import city_list_api, city_detail_api
 from foodcartapp.RESTviews.LocationsRestView import location_list_api
 from foodcartapp.RESTviews.OrderRestView import order_list_api, order_detail_api
 from foodcartapp.RESTviews.ProductRestView import product_list_api, product_detail_api
+from foodcartapp.RESTviews.BannersView import banners_list_api
 from foodcartapp.RESTviews.UserRestView import customer_signup_api
 from foodcartapp.views.CityViews import city_list_view, AddCityView, UpdateCityView, DeleteCityView
 from foodcartapp.views.HotelViews import hotel_list_view, DeleteHotelView, UpdateHotelView, AddHotelView
@@ -50,6 +51,8 @@ urlpatterns = [
     path('api/products/', product_list_api, name="ProductListAPI"),
     path('api/products/<int:pk>/', product_detail_api, name="ProductDetailAPI"),
 
+    path('api/banners/', banners_list_api, name="BannersListAPI"),
+
     path('api/cities/', city_list_api, name="CityListAPI"),
     path('api/cities/<int:pk>/', city_detail_api, name="CityDetailAPI"),
 
@@ -57,6 +60,6 @@ urlpatterns = [
     path('api/order/', order_list_api, name="OrderListAPI"),
     path('api/order/<int:pk>/', order_detail_api, name="OrderDetailAPI"),
 
-    path('api/user_signup/', customer_signup_api, name="UserSignupAPI")
+    path('api/user_signup/', customer_signup_api, name="UserSignupAPI"),
 
 ]
