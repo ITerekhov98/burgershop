@@ -1,9 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.views import View
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Group
-from foodcartapp.forms.AuthForms import Signup, Login
+from foodcartapp.forms.AuthForms import Login
+from foodcartapp.forms.AuthForms import Signup
 
 
 class SignUpView(View):

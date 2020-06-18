@@ -1,13 +1,21 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView,UpdateView,DeleteView
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from foodcartapp.forms.ProductsForms import AddProduct, UpdateProduct
-from foodcartapp.models import User, Product, Hotel
 import cloudinary
-import cloudinary.uploader
 import cloudinary.api
+import cloudinary.uploader
+
+from foodcartapp.forms.ProductsForms import AddProduct
+from foodcartapp.forms.ProductsForms import UpdateProduct
+from foodcartapp.models import Hotel
+from foodcartapp.models import Product
+from foodcartapp.models import User
 
 
 class PermissionHelper(PermissionRequiredMixin):
@@ -42,7 +50,7 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     success_url = reverse_lazy("foodcartapp:ProductsView")
 
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context=super(AddProductView,self).get_context_data(**kwargs)
         context['hotel']=Hotel.objects.filter(hoteladmin_id=self.request.user.id)
         return context
