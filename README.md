@@ -87,7 +87,7 @@ parcel --version
 
 Запустите сборку фронтенда. Parcel будет следить за изменениями в JS-коде и пересобирать бандлы:
 ```sh
-parcel watch bundles-src/index.js -d bundles
+parcel watch bundles-src/index.js -d bundles --public-url="./"
 ```
 
 TODO: что за бандлы, зачем нужны и где лежат. Почему их нет в репозитории?
@@ -97,7 +97,7 @@ TODO: что за бандлы, зачем нужны и где лежат. По
 Собрать фронтенд:
 
 ```sh
-parcel build bundles-src/index.js -d bundles
+parcel build bundles-src/index.js -d bundles --public-url="./"
 ```
 
 

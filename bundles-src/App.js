@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './css/App.css';
 import NavBarComponent from './components/NavBarComponent';
 import CartModalComponent from './components/CartModalComponent';
 import BannerComponent from './components/BannerComponent';

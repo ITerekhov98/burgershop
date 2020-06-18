@@ -4,8 +4,6 @@ const FiltersComponent = (props) =>{
 
 
     // const divStyle={
-    //         /* The image used */
-    //         backgroundImage: "url('https://res.cloudinary.com/dfrr0ppdf/image/upload/v1529930478/BannerComponent/pizzaCapture.png')",
 
     //         /* Control the height of the image */
     //         minHeight: "380px",
