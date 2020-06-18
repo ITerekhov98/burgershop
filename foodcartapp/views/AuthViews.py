@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.views import View
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, Group
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.views import View
+
 from foodcartapp.forms.AuthForms import Login
 from foodcartapp.forms.AuthForms import Signup
 

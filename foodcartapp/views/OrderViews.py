@@ -1,5 +1,7 @@
 from django.views.generic import ListView
-from foodcartapp.models import OrderDetails, User
+
+from foodcartapp.models import OrderDetails
+from foodcartapp.models import User
 
 
 class order_list_view(ListView):

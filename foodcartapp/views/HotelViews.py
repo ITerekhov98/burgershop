@@ -1,9 +1,18 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from foodcartapp.forms.HotelForms import UpdateHotel, AddHotel
-from foodcartapp.models import Hotel, User, Location, CustomUser
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
+
+from foodcartapp.forms.HotelForms import AddHotel
+from foodcartapp.forms.HotelForms import UpdateHotel
+from foodcartapp.models import CustomUser
+from foodcartapp.models import Hotel
+from foodcartapp.models import Location
+from foodcartapp.models import User
 
 
 class PermissionHelper(PermissionRequiredMixin):
@@ -27,8 +36,6 @@ class hotel_list_view(LoginRequiredMixin, ListView):
         context = super(hotel_list_view, self).get_context_data(**kwargs)
         context['hotel_list'] = Hotel.objects.filter(hoteladmin__id=self.request.user.id)
         context['Name'] = User.objects.get(id=self.request.user.id).username
-        # if(len(context['card_list'])!=0):
-        #     context['hotel']=Product.objects.values('hotel__name').filter(user__id=self.request.user.id)
         return context
 
 
@@ -55,7 +62,7 @@ class AddHotelView(LoginRequiredMixin, CreateView):
         return redirect("foodcartapp:HotelView")
 
 
-class UpdateHotelView(LoginRequiredMixin,PermissionHelper,UpdateView):
+class UpdateHotelView(LoginRequiredMixin, PermissionHelper, UpdateView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Hotel
     permission_required = "foodcartapp.change_hotel"
@@ -72,7 +79,7 @@ class UpdateHotelView(LoginRequiredMixin,PermissionHelper,UpdateView):
         return context
 
 
-class DeleteHotelView(LoginRequiredMixin,PermissionHelper,DeleteView):
+class DeleteHotelView(LoginRequiredMixin, PermissionHelper, DeleteView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Hotel
     template_name = "hotel_confirm_delete.html"

@@ -51,12 +51,12 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy("foodcartapp:ProductsView")
 
     def get_context_data(self, **kwargs):
-        context=super(AddProductView,self).get_context_data(**kwargs)
-        context['hotel']=Hotel.objects.filter(hoteladmin_id=self.request.user.id)
+        context = super(AddProductView, self).get_context_data(**kwargs)
+        context['hotel'] = Hotel.objects.filter(hoteladmin_id=self.request.user.id)
         return context
 
     def post(self, request, *args, **kwargs):
-        form = AddProduct(request.POST,request.FILES)
+        form = AddProduct(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.image = cloudinary.uploader.upload_image(request.FILES['image']).url

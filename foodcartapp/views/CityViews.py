@@ -1,10 +1,15 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from foodcartapp.forms.CityForms import UpdateCity, AddCity
-from foodcartapp.models import *
+from foodcartapp.forms.CityForms import AddCity
+from foodcartapp.forms.CityForms import UpdateCity
+from foodcartapp.models import City
 
 
 class PermissionHelper(PermissionRequiredMixin):
@@ -18,7 +23,7 @@ class PermissionHelper(PermissionRequiredMixin):
 class city_list_view(PermissionHelper, ListView):
     login_url = "/login/"
     permission_denied_message = "User is not Authorized"
-    model =City
+    model = City
     template_name = "city_list.html"
     context_object_name = "city_list"
 

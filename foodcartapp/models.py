@@ -43,7 +43,7 @@ class Product(models.Model):
     image = models.ImageField()
     special_status = models.BooleanField(default=False)
     category = models.CharField(max_length=50)
-    hotel = models.ForeignKey(Hotel,on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
 
 
 class Order(models.Model):

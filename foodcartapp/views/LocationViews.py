@@ -1,9 +1,14 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from foodcartapp.forms.LocationForms import AddLocation, UpdateLocation
+from foodcartapp.forms.LocationForms import AddLocation
+from foodcartapp.forms.LocationForms import UpdateLocation
 from foodcartapp.models import Location
 
 
