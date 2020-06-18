@@ -1,11 +1,15 @@
+import datetime
+
 from rest_framework import status
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
+from rest_framework.decorators import authentication_classes
+from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
+
 from foodcartapp.models import Order
 from foodcartapp.serializers.order_serializer import OrderSerializer
 from foodcartapp.serializers.orderdetails_serializer import OrderDetailsSerializer
 from foodcartapp.serializers.product_serializer import ProductSerializer
-import datetime
 
 
 @api_view(['POST'])
