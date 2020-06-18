@@ -7,9 +7,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'j#jww5g6d96bi#kbfpq%mgblr8^yg8$zmmg+c6dm+bxfa*&c+l'
 
@@ -17,9 +14,6 @@ SECRET_KEY = 'j#jww5g6d96bi#kbfpq%mgblr8^yg8$zmmg+c6dm+bxfa*&c+l'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'rest_framework',
@@ -49,7 +43,7 @@ ROOT_URLCONF = 'FoodCart.urls'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -116,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
