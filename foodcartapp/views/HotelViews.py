@@ -19,10 +19,7 @@ class PermissionHelper(PermissionRequiredMixin):
     def has_permission(self):
         user = Hotel.objects.values('hoteladmin__id').get(id=self.kwargs['pk'])
         user_id = user['hoteladmin__id']
-        if self.request.user.id == user_id:
-            return True
-        else:
-            return False
+        return self.request.user.id == user_id
 
 
 class hotel_list_view(LoginRequiredMixin, ListView):

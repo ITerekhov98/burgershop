@@ -18,10 +18,7 @@ class PermissionHelper(PermissionRequiredMixin):
     def has_permission(self):
         user = Product.objects.values('hotel__user__id').get(id=self.kwargs['pk'])
         user_id = user['hotel__user__id']
-        if self.request.user.id == user_id:
-            return True
-        else:
-            return False
+        return self.request.user.id == user_id
 
 
 class product_list_view(ListView):

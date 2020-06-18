@@ -47,8 +47,7 @@ class LoginView(View):
         if(request.user.is_authenticated):
             if request.user.is_staff:
                 return redirect("foodcartapp:HotelView")
-            else:
-                raise PermissionDenied
+            raise PermissionDenied
 
         form = Login()
         return render(request, "login.html", context={'title': 'Login | User', 'form': form})
@@ -64,10 +63,7 @@ class LoginView(View):
                 login(request, user)
                 if user.is_staff:
                     return redirect("foodcartapp:HotelView")
-                else:
-                    raise PermissionDenied
-            else:
-                raise PermissionDenied
+            raise PermissionDenied
 
 
 class LogoutView(View):

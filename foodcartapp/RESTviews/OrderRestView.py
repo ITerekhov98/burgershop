@@ -2,8 +2,6 @@ import datetime
 
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.decorators import authentication_classes
-from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 
 from foodcartapp.models import Order
@@ -14,16 +12,14 @@ from foodcartapp.serializers.product_serializer import ProductSerializer
 
 @api_view(['POST'])
 def order_list_api(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == 'POST':
-        order_data = {}
-        order_data['customer_id'] = request.user.id
-        order_data['status'] = 1
-        order_data['order_time'] = datetime.datetime.now()
-        order_data['amount'] = request.data['amount']
-        order_data['order_type'] = 1  # default order_type set to Cash On Delivery Payment interface to be integrated
+        order_data = {
+            'customer_id': request.user.id,
+            'status': 1,
+            'order_time': datetime.datetime.now(),
+            'amount': request.data['amount'],
+            'order_type': 1,  # default order_type set to Cash On Delivery Payment interface to be integrated
+        }
 
         products = request.data.pop('products')
         order_serializer = OrderSerializer(data=order_data)
@@ -31,27 +27,21 @@ def order_list_api(request):
         if order_serializer.is_valid():
             order = order_serializer.save()
             for product in products:
-                orderdetails_data = {}
-                orderdetails_data['product_id'] = product['id']
-                orderdetails_data['quantity'] = product['quantity']
-                orderdetails_data['order_id'] = order.id
+                orderdetails_data = {
+                    'product_id': product['id'],
+                    'quantity': product['quantity'],
+                    'order_id': order.id,
+                }
                 orderdetail_serializer = OrderDetailsSerializer(data=orderdetails_data)
                 if orderdetail_serializer.is_valid():
                     orderdetail_serializer.save()
 
             return Response(order_serializer.data, status=status.HTTP_201_CREATED)
         return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes(())
-@permission_classes(())
 def order_detail_api(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         order = Order.objects.get(pk=pk)
     except order.DoesNotExist:
@@ -72,5 +62,3 @@ def order_detail_api(request, pk):
     elif request.method == 'DELETE':
         order.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -16,8 +16,7 @@ class PermissionHelper(PermissionRequiredMixin):
     def has_permission(self):
         if self.request.user.is_superuser:
             return True
-        else:
-            raise PermissionDenied
+        raise PermissionDenied
 
 
 class city_list_view(PermissionHelper, ListView):

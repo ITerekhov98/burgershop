@@ -1,7 +1,5 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.decorators import authentication_classes
-from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 
 from foodcartapp.models import City
@@ -9,12 +7,7 @@ from foodcartapp.serializers.city_serializer import CitySerializer
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes(())
-@permission_classes(())
 def city_list_api(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == 'GET':
         cities = City.objects.all()
         serializer = CitySerializer(cities, many=True)
@@ -27,17 +20,10 @@ def city_list_api(request):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes(())
-@permission_classes(())
 def city_detail_api(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         city = City.objects.get(pk=pk)
     except City.DoesNotExist:
@@ -58,5 +44,3 @@ def city_detail_api(request, pk):
     elif request.method == 'DELETE':
         city.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
