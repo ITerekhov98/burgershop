@@ -1,16 +1,17 @@
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from foodcartapp.models import OrderItem
-from foodcartapp.models import User
+from foodcartapp.models import Order
 
 
-class order_list_view(ListView):
-    model = OrderItem
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
     template_name = "order_list.html"
     context_object_name = "orderdetails_list"
 
     def get_context_data(self, **kwargs):
-        context = super(order_list_view, self).get_context_data(**kwargs)
-        context['orders_list'] = OrderItem.objects.filter(product__restaurant__admin__user__id=self.request.user.id)
-        context['Name'] = User.objects.get(id=self.request.user.id).username
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'Name': self.request.user.username,
+            'orders_list': Order.objects.filter(items__product__restaurant__admin=self.request.user),
+        }

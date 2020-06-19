@@ -3,11 +3,6 @@ import React from 'react';
 const FooterComponent = props => {
   return (
     <div className="container-fluid" style={{backgroundColor:"black",color:"white",width:"100%"}}>
-      <a href="#what_we_do" title="To Top" style={{float:"right"}}>
-        <span className="glyphicon glyphicon-chevron-up"></span>
-        Move to top
-      </a>
-      <br/>
       <h2 className="text-center">CONTACT</h2>
 
       <div className="row">

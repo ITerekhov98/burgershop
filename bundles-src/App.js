@@ -64,7 +64,7 @@ class App extends Component {
     data.products=this.state.cart;
     let tokenObj=cookies.get('userJwtToken');
     if(!this.state.isAuthenticated){
-      this.handleLoginModalShow();
+      this.handleSignupModalShow();
       return;
     }
     data.token=tokenObj.token;

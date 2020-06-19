@@ -9,17 +9,13 @@ from django.views.generic import UpdateView
 
 from ..forms.RestaurantForms import AddRestaurant
 from ..forms.RestaurantForms import UpdateRestaurant
-from ..models import Customer
 from ..models import Restaurant
-from ..models import User
 from ..models import City
 
 
-class PermissionHelper(PermissionRequiredMixin):
+class RestautantAdminsOnly(PermissionRequiredMixin):
     def has_permission(self):
-        user = Restaurant.objects.values('admin__id').get(id=self.kwargs['pk'])
-        user_id = user['admin__id']
-        return self.request.user.id == user_id
+        return self.request.user.administrated_restaurants.exists()
 
 
 class restaurant_list_view(LoginRequiredMixin, ListView):
@@ -30,9 +26,13 @@ class restaurant_list_view(LoginRequiredMixin, ListView):
     context_object_name = "restaurants"
 
     def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            'restaurants': self.request.user.administrated_restaurants.all(),
+            'Name': self.request.user.username,
+        }
+
         context = super().get_context_data(**kwargs)
-        context['restaurants'] = Restaurant.objects.filter(admin__id=self.request.user.id)
-        context['Name'] = User.objects.get(id=self.request.user.id).username
         return context
 
 
@@ -46,9 +46,10 @@ class AddRestaurantView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("foodcartapp:RestaurantView")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['cities'] = City.objects.all()
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'cities': City.objects.all(),
+        }
 
     def post(self, request, *args, **kwargs):
         form = AddRestaurant(request.POST)
@@ -59,7 +60,7 @@ class AddRestaurantView(LoginRequiredMixin, CreateView):
         return redirect("foodcartapp:RestaurantView")
 
 
-class UpdateRestaurantView(LoginRequiredMixin, PermissionHelper, UpdateView):
+class UpdateRestaurantView(LoginRequiredMixin, RestautantAdminsOnly, UpdateView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Restaurant
     permission_required = "foodcartapp.change_restaurant"
@@ -70,13 +71,14 @@ class UpdateRestaurantView(LoginRequiredMixin, PermissionHelper, UpdateView):
     success_url = reverse_lazy("foodcartapp:RestaurantView")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['restaurant'] = Restaurant.objects.get(id=self.kwargs['pk'])
-        context['cities'] = City.objects.all()
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'restaurant': Restaurant.objects.get(id=self.kwargs['pk']),
+            'cities': City.objects.all(),
+        }
 
 
-class DeleteRestaurantView(LoginRequiredMixin, PermissionHelper, DeleteView):
+class DeleteRestaurantView(LoginRequiredMixin, RestautantAdminsOnly, DeleteView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Restaurant
     template_name = "restaurant_confirm_delete.html"

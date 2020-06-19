@@ -12,22 +12,22 @@ from foodcartapp.forms.CityForms import UpdateCity
 from foodcartapp.models import City
 
 
-class PermissionHelper(PermissionRequiredMixin):
+class StaffOnly(PermissionRequiredMixin):
     def has_permission(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_stuff:
             return True
         raise PermissionDenied
 
 
-class city_list_view(PermissionHelper, ListView):
-    login_url = "/login/"
+class CityListView(LoginRequiredMixin, StaffOnly, ListView):
+    login_url = reverse_lazy("foodcartapp:login")
     permission_denied_message = "User is not Authorized"
     model = City
     template_name = "city_list.html"
     context_object_name = "city_list"
 
 
-class AddCityView(LoginRequiredMixin, PermissionHelper, CreateView):
+class AddCityView(LoginRequiredMixin, StaffOnly, CreateView):
     login_url = reverse_lazy("foodcartapp:login")
     template_name = 'add_city.html'
     form_class = AddCity
@@ -37,7 +37,7 @@ class AddCityView(LoginRequiredMixin, PermissionHelper, CreateView):
     success_url = reverse_lazy("foodcartapp:CitiesView")
 
 
-class UpdateCityView(LoginRequiredMixin, PermissionHelper, UpdateView):
+class UpdateCityView(LoginRequiredMixin, StaffOnly, UpdateView):
     login_url = reverse_lazy("foodcartapp:login")
     model = City
     permission_denied_message = "User does not have permission to change City"
@@ -47,7 +47,7 @@ class UpdateCityView(LoginRequiredMixin, PermissionHelper, UpdateView):
     success_url = reverse_lazy("foodcartapp:CitiesView")
 
 
-class DeleteCityView(LoginRequiredMixin, PermissionHelper, DeleteView):
+class DeleteCityView(LoginRequiredMixin, StaffOnly, DeleteView):
     login_url = reverse_lazy("foodcartapp:login")
     model = City
     template_name = "city_confirm_delete.html"

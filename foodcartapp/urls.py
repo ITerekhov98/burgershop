@@ -5,11 +5,11 @@ from foodcartapp.RESTviews.OrderRestView import order_list_api
 from foodcartapp.RESTviews.ProductRestView import product_list_api
 from foodcartapp.RESTviews.BannersView import banners_list_api
 from foodcartapp.RESTviews.UserRestView import customer_signup_api
-from foodcartapp.views.CityViews import city_list_view, AddCityView, UpdateCityView, DeleteCityView
+from foodcartapp.views.CityViews import CityListView, AddCityView, UpdateCityView, DeleteCityView
 from foodcartapp.views.RestaurantViews import restaurant_list_view, DeleteRestaurantView, UpdateRestaurantView, AddRestaurantView
-from foodcartapp.views.OrderViews import order_list_view
+from foodcartapp.views.OrderViews import OrderListView
 from foodcartapp.views.ProductViews import product_list_view, AddProductView, UpdateProductView, DeleteProductView
-from foodcartapp.views.AuthViews import LoginView, LogoutView, SignUpView
+from foodcartapp.views.AuthViews import LoginView, LogoutView
 
 app_name = "foodcartapp"
 
@@ -26,16 +26,15 @@ urlpatterns = [
     path('<int:pk>/deleteRestaurant/', DeleteRestaurantView.as_view(), name="DeleteRestaurantView"),
 
 
-    path('cities/', city_list_view.as_view(), name="CitiesView"),
+    path('cities/', CityListView.as_view(), name="CitiesView"),
     path('addcity/', AddCityView.as_view(), name="AddCityView"),
     path('<int:pk>/editCity/', UpdateCityView.as_view(), name="UpdateCityView"),
     path('<int:pk>/deleteCity/', DeleteCityView.as_view(), name="DeleteCityView"),
 
-    path('orders/', order_list_view.as_view(), name="OrderListView"),
+    path('orders/', OrderListView.as_view(), name="OrderListView"),
 
-    path('login/', LoginView.as_view(), name="Login"),
+    path('login/', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="Logout"),
-    path('sign_up/', SignUpView.as_view(), name="Signup"),
 
     path('api/products/', product_list_api, name="ProductListAPI"),
 

@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -9,28 +8,26 @@ from django.views.generic import UpdateView
 
 from foodcartapp.forms.ProductsForms import AddProduct
 from foodcartapp.forms.ProductsForms import UpdateProduct
-from foodcartapp.models import Restaurant
 from foodcartapp.models import Product
-from foodcartapp.models import User
 
 
-class PermissionHelper(PermissionRequiredMixin):
+class RestautantAdminsOnly(PermissionRequiredMixin):
     def has_permission(self):
-        user = Product.objects.values('restaurant__admin__id').get(id=self.kwargs['pk'])
-        user_id = user['restaurant__admin__id']
-        return self.request.user.id == user_id
+        return self.request.user.administrated_restaurants.exists()
 
 
-class product_list_view(ListView):
+class product_list_view(LoginRequiredMixin, ListView):
+    login_url = reverse_lazy("foodcartapp:login")
     model = Product
     template_name = "products_list.html"
     context_object_name = "products_list"
 
     def get_context_data(self, **kwargs):
-        context = super(product_list_view, self).get_context_data(**kwargs)
-        context['products_list'] = Product.objects.filter(restaurant__admin__user__id=self.request.user.id)
-        context['Name'] = User.objects.get(id=self.request.user.id).username
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'products_list': Product.objects.filter(restaurant__admin=self.request.user),
+            'Name': self.request.user.username,
+        }
 
 
 class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -44,18 +41,13 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy("foodcartapp:ProductsView")
 
     def get_context_data(self, **kwargs):
-        context = super(AddProductView, self).get_context_data(**kwargs)
-        context['restaurant'] = Restaurant.objects.filter(admin_id=self.request.user.id)
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form = AddProduct(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-        return redirect("foodcartapp:ProductsView")
+        return {
+            **super().get_context_data(**kwargs),
+            'restaurants': self.request.user.administrated_restaurants.all(),
+        }
 
 
-class UpdateProductView(LoginRequiredMixin, PermissionHelper, UpdateView):
+class UpdateProductView(LoginRequiredMixin, RestautantAdminsOnly, UpdateView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Product
     permission_denied_message = "User does not have permission to change Product"
@@ -65,13 +57,14 @@ class UpdateProductView(LoginRequiredMixin, PermissionHelper, UpdateView):
     success_url = reverse_lazy("foodcartapp:ProductsView")
 
     def get_context_data(self, **kwargs):
-        context = super(UpdateProductView, self).get_context_data(**kwargs)
-        context['product'] = Product.objects.get(id=self.kwargs['pk'])
-        context['restaurant'] = Restaurant.objects.filter(admin_id=self.request.user.id)
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'product': Product.objects.get(id=self.kwargs['pk']),
+            'restaurants': self.request.user.administrated_restaurants.all(),
+        }
 
 
-class DeleteProductView(LoginRequiredMixin, PermissionHelper, DeleteView):
+class DeleteProductView(LoginRequiredMixin, RestautantAdminsOnly, DeleteView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Product
     template_name = "product_confirm_delete.html"
