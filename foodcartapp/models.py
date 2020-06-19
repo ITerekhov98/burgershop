@@ -56,7 +56,7 @@ class Product(models.Model):
     availability = models.BooleanField('в продаже', default=True, db_index=True)
     image = models.ImageField('картинка')
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
-    category = models.CharField('категория', max_length=50)  # FIXME заменить на choices
+    category = models.CharField('категория', max_length=50)  # FIXME заменить на choices или отдельную модель данных
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='products')
 
     def __str__(self):
