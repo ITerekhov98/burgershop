@@ -190,36 +190,34 @@ class App extends Component {
   // Add to Cart
   handleAddToCart(selectedProducts){
 
-    let cartItem = this.state.cart;
+    let cartItems = this.state.cart;
     let productID = selectedProducts.id;
     let productQty = selectedProducts.quantity;
 
-    if(this.checkProduct(productID)){
-      console.log('Product already in the cart');
-      let index = cartItem.findIndex((x => x.id == productID));
-      cartItem[index].quantity = parseFloat(cartItem[index].quantity) + parseFloat(productQty);
+    if (this.checkProduct(productID)){
+      let index = cartItems.findIndex((x => x.id == productID));
+      cartItems[index].quantity = parseFloat(cartItems[index].quantity) + parseFloat(productQty);
       this.setState({
-        cart: cartItem
+        cart: cartItems
       })
     }
     else {
-      cartItem.push(selectedProducts);
+      cartItems.push(selectedProducts);
     }
 
     this.setState({
-      cart : cartItem,
+      cart : cartItems,
       cartBounce: true,
     });
 
 
-    setTimeout(function(){
+    setTimeout(() => {
+      // FIXME протестировать этот код, он работает?
       this.setState({
         cartBounce:false,
         quantity: 1
       });
-      console.log(this.state.quantity);
-      console.log(this.state.cart);
-    }.bind(this),1000);
+    }, 1000);
 
     this.sumTotalItems(this.state.cart);
     this.sumTotalAmount(this.state.cart);
