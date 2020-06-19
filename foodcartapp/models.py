@@ -39,8 +39,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 class Restaurant(models.Model):
     name = models.CharField('название', max_length=50)
     city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='restaurants')
-    admin = models.ForeignKey(Customer, verbose_name='администратор', on_delete=models.SET_NULL,
-                              null=True, blank=True, related_name='administrated_restaurants')  # FIXME почему ссылка на Customer ? На User!
+    admin = models.ForeignKey(User, verbose_name='администратор', on_delete=models.SET_NULL,
+                              null=True, blank=True, related_name='administrated_restaurants')
 
     def __str__(self):
         return f"{self.name}"

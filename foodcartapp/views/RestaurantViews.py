@@ -54,7 +54,7 @@ class AddRestaurantView(LoginRequiredMixin, CreateView):
         form = AddRestaurant(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.admin = Customer.objects.get(id=request.user.id)
+            post.admin = request.user
             post.save()
         return redirect("foodcartapp:RestaurantView")
 
