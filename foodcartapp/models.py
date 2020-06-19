@@ -96,7 +96,7 @@ class Order(models.Model):
         verbose_name_plural = 'заказы'
 
 
-class OrderDetails(models.Model):  # FIXME переименовать в OrderPosition ?
+class OrderPosition(models.Model):
     product = models.ForeignKey(Product, verbose_name='товар', on_delete=models.CASCADE, related_name='order_positions')
     quantity = models.DecimalField('количество', max_digits=8, decimal_places=2)
     order = models.ForeignKey(Order, verbose_name='заказ', on_delete=models.CASCADE, related_name='positions')

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from foodcartapp.models import Order
 from foodcartapp.serializers.order_serializer import OrderSerializer
-from foodcartapp.serializers.orderdetails_serializer import OrderDetailsSerializer
+from foodcartapp.serializers.orderdetails_serializer import OrderPositionSerializer
 from foodcartapp.serializers.product_serializer import ProductSerializer
 
 
@@ -32,7 +32,7 @@ def order_list_api(request):
                     'quantity': product['quantity'],
                     'order_id': order.id,
                 }
-                orderdetail_serializer = OrderDetailsSerializer(data=orderdetails_data)
+                orderdetail_serializer = OrderPositionSerializer(data=orderdetails_data)
                 if orderdetail_serializer.is_valid():
                     orderdetail_serializer.save()
 
