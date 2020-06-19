@@ -2,7 +2,7 @@
 
 {% block content %}
 
-  <center><h2>Hotels of {{Name}}</h2></center>
+  <center><h2>Restaurants of {{Name}}</h2></center>
   <hr/>
 
   <div class="container">
@@ -13,11 +13,11 @@
               <th>Edit/Delete</th>
           </tr>
 
-       {% for i in hotel_list %}
+       {% for i in restaurants %}
           <tr>
               <td>{{i.id}}</td>
               <td>{{i.name}}</td>
-              <td><a href="/{{i.id}}/editHotel/">Edit/</a><a href="/{{i.id}}/deleteHotel/">Delete</a></td>
+              <td><a href="/{{i.id}}/editRestaurant/">Edit/</a><a href="/{{i.id}}/deleteRestaurant/">Delete</a></td>
           </tr>
 
   {% endfor %}

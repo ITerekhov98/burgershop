@@ -13,7 +13,7 @@ class FoodCartSpecialsComponent extends Component{
     productsData = this.props.productsList.filter(x => {
       return x.name.toLowerCase().includes(term) || !term;
     }).filter(x => {
-      return x.hotel.city == searchCityIndex || !searchCityIndex;
+      return x.restaurant.city == searchCityIndex || !searchCityIndex;
     }).filter(x => {
       return x.special_status == true;
     }).map(product =>{

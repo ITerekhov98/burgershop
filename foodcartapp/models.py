@@ -36,18 +36,18 @@ def create_user_profile(sender, instance, created, **kwargs):
         Customer.objects.create(user=instance)
 
 
-class Hotel(models.Model):   # FIXME переименовать в ресторан ?
+class Restaurant(models.Model):
     name = models.CharField('название', max_length=50)
-    city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='hotels')  # FIXME
-    hoteladmin = models.ForeignKey(Customer, verbose_name='администратор', on_delete=models.SET_NULL,
-                                   null=True, blank=True, related_name='administrated_hotels')
+    city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='restaurants')
+    admin = models.ForeignKey(Customer, verbose_name='администратор', on_delete=models.SET_NULL,
+                              null=True, blank=True, related_name='administrated_restaurants')  # FIXME почему ссылка на Customer ? На User!
 
     def __str__(self):
         return f"{self.name}"
 
     class Meta:
-        verbose_name = '???'  # FIXME
-        verbose_name_plural = '???'  # FIXME
+        verbose_name = 'ресторан'
+        verbose_name_plural = 'рестораны'
 
 
 class Product(models.Model):
@@ -57,7 +57,7 @@ class Product(models.Model):
     image = models.ImageField('картинка')
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
     category = models.CharField('категория', max_length=50)  # FIXME заменить на choices
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='products')  # FIXME
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='products')
 
     def __str__(self):
         return f"{self.name}"

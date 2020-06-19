@@ -38,10 +38,10 @@
           </div>
 
           <div class="form-group">
-          <label for="id_hotel">Hotel:</label>
-          <select name="hotel"  class="form-control" required="" id="id_hotel">
-              <option value="" selected="">Choose Hotel</option>
-              {% for i in hotel %}
+          <label for="id_restaurant">Restaurant:</label>
+          <select name="restaurant"  class="form-control" required="" id="id_restaurant">
+              <option value="" selected="">Choose Restaurant</option>
+              {% for i in restaurants %}
                    <option value={{i.id}}>{{i.name}}</option>
               {% endfor %}
           </select>

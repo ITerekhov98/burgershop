@@ -11,6 +11,6 @@ class order_list_view(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(order_list_view, self).get_context_data(**kwargs)
-        context['orders_list'] = OrderItem.objects.filter(product__hotel__hoteladmin__user__id=self.request.user.id)
+        context['orders_list'] = OrderItem.objects.filter(product__restaurant__admin__user__id=self.request.user.id)
         context['Name'] = User.objects.get(id=self.request.user.id).username
         return context

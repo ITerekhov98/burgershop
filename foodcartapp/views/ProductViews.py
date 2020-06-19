@@ -9,15 +9,15 @@ from django.views.generic import UpdateView
 
 from foodcartapp.forms.ProductsForms import AddProduct
 from foodcartapp.forms.ProductsForms import UpdateProduct
-from foodcartapp.models import Hotel
+from foodcartapp.models import Restaurant
 from foodcartapp.models import Product
 from foodcartapp.models import User
 
 
 class PermissionHelper(PermissionRequiredMixin):
     def has_permission(self):
-        user = Product.objects.values('hotel__user__id').get(id=self.kwargs['pk'])
-        user_id = user['hotel__user__id']
+        user = Product.objects.values('restaurant__admin__id').get(id=self.kwargs['pk'])
+        user_id = user['restaurant__admin__id']
         return self.request.user.id == user_id
 
 
@@ -28,7 +28,7 @@ class product_list_view(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(product_list_view, self).get_context_data(**kwargs)
-        context['products_list'] = Product.objects.filter(hotel__hoteladmin__user__id=self.request.user.id)
+        context['products_list'] = Product.objects.filter(restaurant__admin__user__id=self.request.user.id)
         context['Name'] = User.objects.get(id=self.request.user.id).username
         return context
 
@@ -45,7 +45,7 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(AddProductView, self).get_context_data(**kwargs)
-        context['hotel'] = Hotel.objects.filter(hoteladmin_id=self.request.user.id)
+        context['restaurant'] = Restaurant.objects.filter(admin_id=self.request.user.id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -67,7 +67,7 @@ class UpdateProductView(LoginRequiredMixin, PermissionHelper, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UpdateProductView, self).get_context_data(**kwargs)
         context['product'] = Product.objects.get(id=self.kwargs['pk'])
-        context['hotel'] = Hotel.objects.filter(hoteladmin_id=self.request.user.id)
+        context['restaurant'] = Restaurant.objects.filter(admin_id=self.request.user.id)
         return context
 
 
