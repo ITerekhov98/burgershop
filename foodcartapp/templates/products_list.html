@@ -1,4 +1,4 @@
-{% extends 'base_restorator_page.html' %}
+{% extends 'base_restaurateur_page.html' %}
 
 {% block title %}Меню | FoodCartApp{% endblock %}
 
@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-sm-5 col-md-5 col-lg-5"></div>
     <div class="col-sm-2 col-md-2 col-lg-2">
-      <a href="{% url 'foodcartapp:AddProductView' %}" class="btn btn-primary">Добавить блюдо</a>
+      <a href="{% url 'restaurateur:AddProductView' %}" class="btn btn-primary">Добавить блюдо</a>
     </div>
     <div class="col-sm-5 col-md-5 col-lg-5"></div>
   </div>
@@ -43,8 +43,8 @@
           <td>{{product.special_status}}</td>
           <td>{{product.restaurant.name}}</td>
           <td>
-            <a href="{% url 'foodcartapp:UpdateProductView' pk=product.id %}">Редактировать</a>/
-            <a href="{% url 'foodcartapp:DeleteProductView' pk=product.id %}">Удалить</a>
+            <a href="{% url 'restaurateur:UpdateProductView' pk=product.id %}">Редактировать</a>/
+            <a href="{% url 'restaurateur:DeleteProductView' pk=product.id %}">Удалить</a>
           </td>
         </tr>
       {% endfor %}

@@ -5,36 +5,20 @@ from foodcartapp.RESTviews.OrderRestView import order_list_api
 from foodcartapp.RESTviews.ProductRestView import product_list_api
 from foodcartapp.RESTviews.BannersView import banners_list_api
 from foodcartapp.RESTviews.UserRestView import customer_signup_api
-from foodcartapp.views.RestaurantViews import RestaurantListView
-from foodcartapp.views.OrderViews import OrderListView
-from foodcartapp.views.ProductViews import ProductListView, AddProductView, UpdateProductView, DeleteProductView
-from foodcartapp.views.AuthViews import LoginView, LogoutView
+
 
 app_name = "foodcartapp"
 
 urlpatterns = [
+    path('products/', product_list_api, name="ProductListAPI"),
 
-    path('products/', ProductListView.as_view(), name="ProductsView"),
-    path('products/add/', AddProductView.as_view(), name="AddProductView"),
-    path('products/<int:pk>/edit/', UpdateProductView.as_view(), name="UpdateProductView"),
-    path('products/<int:pk>/delete/', DeleteProductView.as_view(), name="DeleteProductView"),
+    path('banners/', banners_list_api, name="BannersListAPI"),
 
-    path('restaurants/', RestaurantListView.as_view(), name="RestaurantView"),
-
-    path('orders/', OrderListView.as_view(), name="OrderListView"),
-
-    path('login/', LoginView.as_view(), name="login"),
-    path('logout/', LogoutView.as_view(), name="logout"),
-
-    path('api/products/', product_list_api, name="ProductListAPI"),
-
-    path('api/banners/', banners_list_api, name="BannersListAPI"),
-
-    path('api/cities/', city_list_api, name="CityListAPI"),
+    path('cities/', city_list_api, name="CityListAPI"),
 
 
-    path('api/order/', order_list_api, name="OrderListAPI"),
+    path('order/', order_list_api, name="OrderListAPI"),
 
-    path('api/user_signup/', customer_signup_api, name="UserSignupAPI"),
+    path('user_signup/', customer_signup_api, name="UserSignupAPI"),
 
 ]

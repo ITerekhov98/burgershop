@@ -26,7 +26,8 @@ from FoodCart import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', render, kwargs={'template_name': 'index.html'}, name='start_page'),
-    path('', include('foodcartapp.urls')),
+    path('api/', include('foodcartapp.urls')),
+    path('manager/', include('restaurateur.urls')),
     path('api-jwttoken-auth/', obtain_jwt_token),
     path('api-basictoken-auth/', obtain_auth_token)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

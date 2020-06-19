@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
-from ..models import Restaurant
+from foodcartapp.models import Restaurant
 
 
 class RestautantAdminsOnly(PermissionRequiredMixin):
@@ -12,7 +12,7 @@ class RestautantAdminsOnly(PermissionRequiredMixin):
 
 
 class RestaurantListView(LoginRequiredMixin, ListView):
-    login_url = reverse_lazy("foodcartapp:login")
+    login_url = reverse_lazy("restaurateur:login")
     model = Restaurant
     template_name = "restaurant_list.html"
     permission_denied_message = "User does not have permission to view Restaurant"

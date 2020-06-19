@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import views as auth_views
 
-from foodcartapp.forms.AuthForms import Login
+from ..forms.AuthForms import Login
 
 
 class LoginView(View):
@@ -29,7 +29,7 @@ class LoginView(View):
             if user:
                 login(request, user)
                 if user.is_staff:
-                    return redirect("foodcartapp:RestaurantView")
+                    return redirect("restaurateur:RestaurantView")
                 return redirect("start_page")
 
         return render(request, "login.html", context={
@@ -39,4 +39,4 @@ class LoginView(View):
 
 
 class LogoutView(auth_views.LogoutView):
-    next_page = reverse_lazy('foodcartapp:login')
+    next_page = reverse_lazy('restaurateur:login')

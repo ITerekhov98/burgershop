@@ -1,4 +1,4 @@
-{% extends 'base_restorator_page.html' %}
+{% extends 'base_restaurateur_page.html' %}
 
 {% block title %}Добавить блюдо | FoodCartApp{% endblock %}
 
@@ -12,7 +12,7 @@
       <div class="col-sm-2 col-md-2 col-lg-2"></div>
 
       <div class="col-sm-8 col-md-8 col-lg-8">
-        <form action="{% url 'foodcartapp:AddProductView' %}" class="form-horizontal" method="post" enctype="multipart/form-data">
+        <form action="{% url 'restaurateur:AddProductView' %}" class="form-horizontal" method="post" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="form-group">
