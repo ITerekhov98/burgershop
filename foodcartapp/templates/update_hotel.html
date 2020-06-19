@@ -6,7 +6,7 @@
       <div class="row">
   <div class="col-md-3 col-md-3 col-lg-3"></div>
 
-          <div class="col-md-6 col-lg-6 col-sm-6">
+        <div class="col-md-6 col-lg-6 col-sm-6">
       <form action="/addhotel/" method="post">
       {% csrf_token %}
       <div class="form-group">
@@ -22,12 +22,7 @@
                   {% endfor %}
           </select>
       </div>
-      <div class="form-group">
-          <label for="id_gst">GST:</label>
-          <input type="number" class="form-control" name="gst" step="0.01" required="" id="id_gst" value={{hotel.gst}}>
-      </div>
-
-          <br>
+      <br>
      <input type="submit" value="Submit">
       </form>
       </div>

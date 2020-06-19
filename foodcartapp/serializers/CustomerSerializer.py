@@ -8,7 +8,6 @@ class CustomerSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
     phone_number = serializers.CharField(max_length=10)
-    pincode = serializers.CharField(max_length=7)
     address = serializers.CharField(max_length=256)
 
     def create(self, validated_data):
@@ -16,8 +15,7 @@ class CustomerSerializer(serializers.Serializer):
                                         password=validated_data['password'],
                                         first_name=validated_data['first_name'],
                                         last_name=validated_data['last_name'])
-        user.customuser.phone_number = validated_data['phone_number']
-        user.customuser.pincode = validated_data['pincode']
-        user.customuser.address = validated_data['address']
+        user.customer_profile.phone_number = validated_data['phone_number']
+        user.customer_profile.address = validated_data['address']
         user.save()
         return user

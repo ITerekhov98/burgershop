@@ -25,9 +25,8 @@ class SignUpView(View):
             password = form.cleaned_data['password']
 
             user = User.objects.create_user(username=username, password=password)
-            user.customuser.phone_number = form.cleaned_data['phone_number']
-            user.customuser.address = form.cleaned_data['address']
-            user.customuser.pincode = form.cleaned_data['pincode']
+            user.customer_profile.phone_number = form.cleaned_data['phone_number']
+            user.customer_profile.address = form.cleaned_data['address']
 
             staff = Group.objects.get(name="HotelAdmins")
             staff.user_set.add(user)

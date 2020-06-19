@@ -12,7 +12,6 @@ class SignupModalComponent extends Component{
     firstname:"",
     lastname:"",
     phonenumber:"",
-    pincode:"",
     address:""
   }
 
@@ -51,13 +50,6 @@ class SignupModalComponent extends Component{
     })
   }
 
-  savePincode = event => {
-    const {target : {value}} = event;
-    this.setState({
-      pincode : value
-    })
-  }
-
   saveAddress = event => {
     const {target : {value}} = event;
     this.setState({
@@ -70,14 +62,13 @@ class SignupModalComponent extends Component{
     this.signup(this.state)
   }
 
-  async signup({username,password,firstname,lastname,phonenumber,pincode,address}){
+  async signup({username,password,firstname,lastname,phonenumber,address}){
     var formData  = new FormData();
     formData.append('username', username);
     formData.append('password', password);
     formData.append('first_name', firstname);
     formData.append('last_name', lastname);
     formData.append('phone_number', phonenumber);
-    formData.append('pincode', pincode);
     formData.append('address', address);
 
     try {
@@ -118,8 +109,6 @@ class SignupModalComponent extends Component{
             <input onChange={this.saveLastname} required id="lastname" type="text" className="form-control" placeholder="Enter Last Name"/><br/>
             <label htmlFor="phonenumber">Phone Number:</label>
             <input onChange={this.savePhonenumber} required id="phonenumber" maxLength="10" type="text" className="form-control" placeholder="Enter Phone Number"/><br/>
-            <label htmlFor="pincode">Pincode:</label>
-            <input onChange={this.savePincode} required id="pincode" type="text" maxLength="7" className="form-control" placeholder="Enter Pincode"/><br/>
             <label htmlFor="address">Address:</label>
             <input onChange={this.saveAddress} required id="address" type="text" maxLength="256" className="form-control" placeholder="Enter Address"/><br/>
           </div>
