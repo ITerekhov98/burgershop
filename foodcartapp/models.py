@@ -85,7 +85,7 @@ class Order(models.Model):
 
     customer = models.ForeignKey(Customer, verbose_name='заказчик', on_delete=models.SET_NULL,
                                  null=True, blank=True, related_name='orders')
-    status = models.SmallIntegerField('статус', default=1, db_index=True, choices=STATUSES)
+    status = models.SmallIntegerField('статус', default=NEW_ORDER, db_index=True, choices=STATUSES)
     order_time = models.DateTimeField('заказано', default=timezone.now, db_index=True)
     delivery_time = models.DateTimeField('доставлено', blank=True, null=True, db_index=True)
     amount = models.DecimalField('стоимость', max_digits=15, decimal_places=2)
