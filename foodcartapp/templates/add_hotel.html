@@ -14,11 +14,11 @@
           <input type="text" name="name" class="form-control" maxlength="50" required="" id="id_name">
       </div>
       <div class="form-group">
-          <label for="id_location">Location:</label>
-          <select name="location" required="" class="form-control" id="id_location">
-                  <option value="" selected="">Choose Location</option>
-                  {% for i in location %}
-                      <option value={{i.id}}>{{i.name}},{{i.city.name}}</option>
+          <label for="id_city">City:</label>
+          <select name="city" required="" class="form-control" id="id_city">
+                  <option value="" selected="">Choose City</option>
+                  {% for i in cities %}
+                    <option value={{i.id}}>{{i.name}},</option>
                   {% endfor %}
           </select>
       </div>

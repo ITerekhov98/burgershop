@@ -7,12 +7,12 @@ from django.views.generic import DeleteView
 from django.views.generic import ListView
 from django.views.generic import UpdateView
 
-from foodcartapp.forms.HotelForms import AddHotel
-from foodcartapp.forms.HotelForms import UpdateHotel
-from foodcartapp.models import Customer
-from foodcartapp.models import Hotel
-from foodcartapp.models import Location
-from foodcartapp.models import User
+from ..forms.HotelForms import AddHotel
+from ..forms.HotelForms import UpdateHotel
+from ..models import Customer
+from ..models import Hotel
+from ..models import User
+from ..models import City
 
 
 class PermissionHelper(PermissionRequiredMixin):
@@ -30,7 +30,7 @@ class hotel_list_view(LoginRequiredMixin, ListView):
     context_object_name = "hotel_list"
 
     def get_context_data(self, **kwargs):
-        context = super(hotel_list_view, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['hotel_list'] = Hotel.objects.filter(hoteladmin__id=self.request.user.id)
         context['Name'] = User.objects.get(id=self.request.user.id).username
         return context
@@ -46,8 +46,8 @@ class AddHotelView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("foodcartapp:HotelView")
 
     def get_context_data(self, **kwargs):
-        context = super(AddHotelView, self).get_context_data(**kwargs)
-        context['location'] = Location.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['cities'] = City.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -70,9 +70,9 @@ class UpdateHotelView(LoginRequiredMixin, PermissionHelper, UpdateView):
     success_url = reverse_lazy("foodcartapp:HotelView")
 
     def get_context_data(self, **kwargs):
-        context = super(UpdateHotelView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['hotel'] = Hotel.objects.get(id=self.kwargs['pk'])
-        context['location'] = Location.objects.all()
+        context['cities'] = City.objects.all()
         return context
 
 

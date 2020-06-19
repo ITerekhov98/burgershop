@@ -16,18 +16,6 @@ class City(models.Model):
         verbose_name_plural = 'города'
 
 
-class Location(models.Model):  # FIXME выпилить?
-    name = models.CharField('', max_length=50, help_text='')  # FIXME
-    city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='cities')
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = '???'  # FIXME
-        verbose_name_plural = '???'  # FIXME
-
-
 class Customer(models.Model):
     user = models.OneToOneField(User, verbose_name='учётка', on_delete=models.SET_NULL, null=True, blank=True,
                                 related_name='customer', help_text='если зарегистрирован на сайте')
@@ -50,7 +38,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class Hotel(models.Model):   # FIXME переименовать в ресторан ?
     name = models.CharField('название', max_length=50)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='hotels')  # FIXME
+    city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='hotels')  # FIXME
     hoteladmin = models.ForeignKey(Customer, verbose_name='администратор', on_delete=models.SET_NULL,
                                    null=True, blank=True, related_name='administrated_hotels')
 

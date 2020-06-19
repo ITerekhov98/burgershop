@@ -9,13 +9,10 @@ class Products extends Component{
     let productsData;
     let term = this.props.term.toLowerCase();
     let searchCityIndex = parseInt(this.props.searchCityIndex);
-    let searchLocationIndex = parseInt(this.props.searchLocationIndex);
     productsData = this.props.productsList.filter(x => {
       return x.name.toLowerCase().includes(term) || !term;
     }).filter(x => {
-      return x.hotel.location.id==searchLocationIndex || !searchLocationIndex;
-    }).filter(x => {
-      return x.hotel.location.city==searchCityIndex || !searchCityIndex;
+      return x.hotel.city==searchCityIndex || !searchCityIndex;
     }).filter(x => {
       return x.special_status==false;
     }).map(product => {

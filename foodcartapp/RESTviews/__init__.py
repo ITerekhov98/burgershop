@@ -1,2 +1,0 @@
-from .LocationsRestView import location_detail_api
-from .LocationsRestView import location_list_api

@@ -18,7 +18,6 @@ class App extends Component {
     super();
     this.state = {
       products: [],
-      locations: [],
       cities: [],
       cart: [],
       totalItems: 0,
@@ -34,7 +33,6 @@ class App extends Component {
       signupModalActive: false,
       quantity: 1,
       searchCityIndex: 0,
-      searchLocationIndex: 0,
       banners: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -55,7 +53,6 @@ class App extends Component {
     this.toggleisAuthenticated=this.toggleisAuthenticated.bind(this);
     this.updateQuantity=this.updateQuantity.bind(this);
     this.checkOut=this.checkOut.bind(this);
-    this.handleLocationSearch=this.handleLocationSearch.bind(this);
     this.handleCitySearch=this.handleCitySearch.bind(this);
   }
 
@@ -136,20 +133,8 @@ class App extends Component {
     });
   }
 
-  async getLocations(){
-
-    const url="/api/locations/";
-
-    let response = await fetch(url)
-    let data = await response.json();
-    this.setState({
-      locations: data
-    });
-  }
-
   componentWillMount(){
     this.getProducts();
-    this.getLocations();
     this.getCities();
     this.getBanners();
   }
@@ -158,12 +143,6 @@ class App extends Component {
   handleCitySearch(event){
     this.setState({
       searchCityIndex:Number(event.target.value)
-    })
-  }
-
-  handleLocationSearch(event){
-    this.setState({
-      searchLocationIndex:Number(event.target.value)
     })
   }
 
@@ -367,10 +346,8 @@ class App extends Component {
               <center>
                 <FiltersComponent
                   cityIndex={this.state.searchCityIndex}
-                  locations={this.state.locations}
                   cities={this.state.cities}
                   products={this.state.products}
-                  handleLocationSearch={this.handleLocationSearch}
                   handleCitySearch={this.handleCitySearch}
                 />
               </center>
@@ -398,7 +375,6 @@ class App extends Component {
             productsList={this.state.products}
             term={this.state.term}
             searchCityIndex={this.state.searchCityIndex}
-            searchLocationIndex={this.state.searchLocationIndex}
             addToCart={this.handleAddToCart}
             productQuantity={this.state.quantity}
             updateQuantity={this.updateQuantity}
@@ -418,7 +394,6 @@ class App extends Component {
               productsList={this.state.products}
               term={this.state.term}
               searchCityIndex={this.state.searchCityIndex}
-              searchLocationIndex={this.state.searchLocationIndex}
               addToCart={this.handleAddToCart}
               productQuantity={this.state.quantity}
               updateQuantity={this.updateQuantity}

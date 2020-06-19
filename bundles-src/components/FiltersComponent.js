@@ -6,22 +6,9 @@ const FiltersComponent = props =>{
     position: "center",
   }
 
-  const locations={
-    margin: "20px",
-    position: "center",
-  }
-
   let CityOptions=props.cities.map(city => {
     return (
       <option key={city.id} value={city.id}>{city.name}</option>
-    )
-  });
-
-  let AreaOptions=props.locations.filter(x => {
-    return x.city==props.cityIndex || !props.cityIndex;
-  }).map(location => {
-    return (
-      <option key={location.id} value={location.id}>{location.name}</option>
     )
   });
 
@@ -32,13 +19,6 @@ const FiltersComponent = props =>{
         <select id="cities" style={cities} className="form-control" onChange={props.handleCitySearch}>
             <option key="0" value="0">Choose City</option>
             {CityOptions}
-        </select>
-      </div>
-      <div className="form-group">
-        <label htmlFor="locations">Search by Location</label>
-         <select id="locations" style={locations} className="form-control" onChange={props.handleLocationSearch}>
-         <option key="0" value="0">Choose Location</option>
-            {AreaOptions}
         </select>
       </div>
     </div>
