@@ -9,7 +9,7 @@ from django.views.generic import UpdateView
 
 from foodcartapp.forms.HotelForms import AddHotel
 from foodcartapp.forms.HotelForms import UpdateHotel
-from foodcartapp.models import CustomUser
+from foodcartapp.models import Customer
 from foodcartapp.models import Hotel
 from foodcartapp.models import Location
 from foodcartapp.models import User
@@ -54,7 +54,7 @@ class AddHotelView(LoginRequiredMixin, CreateView):
         form = AddHotel(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.hoteladmin = CustomUser.objects.get(id=request.user.id)
+            post.hoteladmin = Customer.objects.get(id=request.user.id)
             post.save()
         return redirect("foodcartapp:HotelView")
 

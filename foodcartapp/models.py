@@ -28,7 +28,7 @@ class Location(models.Model):  # FIXME выпилить?
         verbose_name_plural = '???'  # FIXME
 
 
-class CustomUser(models.Model):  # FIXME переименовать в Customer ?
+class Customer(models.Model):
     user = models.OneToOneField(User, verbose_name='учётка', on_delete=models.SET_NULL, null=True, blank=True,
                                 related_name='customer', help_text='если зарегистрирован на сайте')
     phone_number = models.CharField('телефон', max_length=10)
@@ -45,13 +45,13 @@ class CustomUser(models.Model):  # FIXME переименовать в Customer 
 @receiver(post_save, sender=User, dispatch_uid='create_user_profile')
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        CustomUser.objects.create(user=instance)
+        Customer.objects.create(user=instance)
 
 
 class Hotel(models.Model):   # FIXME переименовать в ресторан ?
     name = models.CharField('название', max_length=50)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='hotels')  # FIXME
-    hoteladmin = models.ForeignKey(CustomUser, verbose_name='администратор', on_delete=models.SET_NULL,
+    hoteladmin = models.ForeignKey(Customer, verbose_name='администратор', on_delete=models.SET_NULL,
                                    null=True, blank=True, related_name='administrated_hotels')
 
     def __str__(self):
@@ -80,7 +80,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(CustomUser, verbose_name='заказчик', on_delete=models.SET_NULL,
+    customer = models.ForeignKey(Customer, verbose_name='заказчик', on_delete=models.SET_NULL,
                                  null=True, blank=True, related_name='orders')
     status = models.SmallIntegerField('статус', default=1, db_index=True)  # FIXME определить choices и их названия
     order_time = models.DateTimeField('заказано', default=timezone.now, db_index=True)
