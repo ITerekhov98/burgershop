@@ -65,7 +65,7 @@ class Hotel(models.Model):   # FIXME переименовать в рестор�
 class Product(models.Model):
     name = models.CharField('название', max_length=50)
     full_price = models.DecimalField('цена', max_digits=8, decimal_places=2)  # FIXME переименовать поле в price
-    availabilty = models.BooleanField('в продаже', default=True, db_index=True)  # FIXME опечатка в названии
+    availability = models.BooleanField('в продаже', default=True, db_index=True)
     image = models.ImageField('картинка')
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
     category = models.CharField('категория', max_length=50)  # FIXME заменить на choices

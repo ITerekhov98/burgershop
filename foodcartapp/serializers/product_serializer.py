@@ -7,7 +7,7 @@ class ProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=50)
     full_price = serializers.DecimalField(max_digits=8, decimal_places=2)
-    availabilty = serializers.BooleanField(default=True)
+    availability = serializers.BooleanField(default=True)
     image = serializers.URLField(source='image.url', read_only=True)
     special_status = serializers.BooleanField(default=False)
     category = serializers.CharField(max_length=50)
