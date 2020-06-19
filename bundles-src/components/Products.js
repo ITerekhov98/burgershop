@@ -19,7 +19,7 @@ class Products extends Component{
       return(
         <Product
           key={product.id}
-          price={product.full_price}
+          price={product.price}
           name={product.name}
           image={product.image}
           id={product.id}
