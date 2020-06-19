@@ -96,10 +96,10 @@ class Order(models.Model):
         verbose_name_plural = 'заказы'
 
 
-class OrderPosition(models.Model):
-    product = models.ForeignKey(Product, verbose_name='товар', on_delete=models.CASCADE, related_name='order_positions')
+class OrderItem(models.Model):
+    product = models.ForeignKey(Product, verbose_name='товар', on_delete=models.CASCADE, related_name='orders_items')
     quantity = models.DecimalField('количество', max_digits=8, decimal_places=2)
-    order = models.ForeignKey(Order, verbose_name='заказ', on_delete=models.CASCADE, related_name='positions')
+    order = models.ForeignKey(Order, verbose_name='заказ', on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
         return f"{self.product} x{self.quantity} for order #{self.order_id}"
