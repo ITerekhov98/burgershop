@@ -16,16 +16,16 @@ class RestautantAdminsOnly(PermissionRequiredMixin):
         return self.request.user.administrated_restaurants.exists()
 
 
-class product_list_view(LoginRequiredMixin, ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy("foodcartapp:login")
     model = Product
     template_name = "products_list.html"
-    context_object_name = "products_list"
+    context_object_name = "products"
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'products_list': Product.objects.filter(restaurant__admin=self.request.user),
+            'products': Product.objects.filter(restaurant__admin=self.request.user),
             'Name': self.request.user.username,
         }
 

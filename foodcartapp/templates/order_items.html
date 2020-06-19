@@ -1,0 +1,40 @@
+{% extends 'base_restorator_page.html' %}
+
+{% block title %}Заказы | FoodCartApp{% endblock %}
+
+{% block content %}
+  <center>
+    <h2>Заказы для {{Name}}</h2>
+  </center>
+
+  <hr/>
+  <br/>
+  <br/>
+  <div class="container">
+   <table class="table table-responsive">
+    <tr>
+      <th>ID заказа</th>
+      <th>Блюдо</th>
+      <th>ID блюда</th>
+      <th>Ресторан</th>
+      <th>Количество</th>
+      <th>ID клиента</th>
+      <th>Телефон</th>
+      <th>Адрес доставки</th>
+    </tr>
+
+    {% for item in order_items %}
+      <tr>
+        <td>{{item.order.id}}</td>
+        <td>{{item.product.name}}</td>
+        <td>{{item.product.id}}</td>
+        <td>{{item.product.restaurant.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.order.customer.id}}</td>
+        <td>{{item.order.customer.phone_number}}</td>
+        <td>{{item.order.customer.address}}</td>
+      </tr>
+    {% endfor %}
+   </table>
+  </div>
+{% endblock %}

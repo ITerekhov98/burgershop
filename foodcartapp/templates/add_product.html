@@ -1,57 +1,66 @@
-{% extends 'header.html' %}
+{% extends 'base_restorator_page.html' %}
+
+{% block title %}Добавить блюдо | FoodCartApp{% endblock %}
 
 {% block content %}
   <div class="container">
-      <div class="row">
-          <div class="col-sm-2 col-md-2 col-lg-2"></div>
-          <div class="col-sm-8 col-md-8 col-lg-8">
-      <form action="/addproduct/" class="form-horizontal" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+    <center>
+      <h2>Добавить блюдо</h2>
+    </center>
+
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2"></div>
+
+      <div class="col-sm-8 col-md-8 col-lg-8">
+        <form action="{% url 'foodcartapp:AddProductView' %}" class="form-horizontal" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
           <div class="form-group">
-          <label for="id_name">Name:</label>
-          <input type="text" name="name"  class="form-control" maxlength="50" required="" id="id_name">
+            <label for="id_name">Название:</label>
+            <input type="text" name="name"  class="form-control" maxlength="50" required id="id_name">
           </div>
 
           <div class="form-group">
-          <label for="id_category">Category:</label>
-          <input type="text" name="category"  class="form-control" maxlength="50" required="" id="id_category">
+            <label for="id_category">Категория:</label>
+            <input type="text" name="category"  class="form-control" maxlength="50" required id="id_category">
           </div>
 
           <div class="form-group">
-          <label for="id_price">Full price:</label>
-          <input type="number" name="price"  class="form-control" step="0.01" required="" id="id_price">
+            <label for="id_price">Цена:</label>
+            <input type="number" name="price"  class="form-control" step="0.01" required id="id_price">
           </div>
 
           <div class="form-group">
-          <label for="id_availability">Availability:</label>
-          <input type="checkbox" name="availability"  class="form-control" id="id_availability" checked="">
+            <label for="id_availability">В продаже:</label>
+            <input type="checkbox" name="availability"  class="form-control" id="id_availability" checked>
           </div>
 
           <div class="form-group">
-          <label for="id_image">Image URL:</label>
-          <input type="file" name="image"  class="form-control" required="" id="id_image">
+            <label for="id_image">Фотография:</label>
+            <input type="file" name="image" class="form-control" required id="id_image">
           </div>
 
           <div class="form-group">
-          <label for="id_special_status">Special status:</label>
-          <input type="checkbox" name="special_status"  class="form-control" id="id_special_status">
+            <label for="id_special_status">Спец.предложение:</label>
+            <input type="checkbox" name="special_status"  class="form-control" id="id_special_status">
           </div>
 
           <div class="form-group">
-          <label for="id_restaurant">Restaurant:</label>
-          <select name="restaurant"  class="form-control" required="" id="id_restaurant">
-              <option value="" selected="">Choose Restaurant</option>
-              {% for i in restaurants %}
-                   <option value={{i.id}}>{{i.name}}</option>
-              {% endfor %}
-          </select>
+            <label for="id_restaurant">Ресторан:</label>
+            <select name="restaurant" class="form-control" required id="id_restaurant">
+                <option value="" selected>Выберите ресторан</option>
+                {% for restaurant in restaurants %}
+                  <option value="{{restaurant.id}}">{{restaurant.name}}</option>
+                {% endfor %}
+            </select>
           </div>
 
           <br>
-              <input class="btn btn-primary" type="submit" value="Submit">
-      </form>
-              </div>
-          <div class="col-sm-2 col-md-2 col-lg-2"></div>
-          </div>
+          <button class="btn btn-primary" type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="col-sm-2 col-md-2 col-lg-2"></div>
+    </div>
   </div>
 {% endblock %}

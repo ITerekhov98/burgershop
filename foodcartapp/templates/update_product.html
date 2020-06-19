@@ -1,57 +1,63 @@
-{% extends 'header.html' %}
+{% extends 'base_restorator_page.html' %}
+
+{% block title %}Рестораны | FoodCartApp{% endblock %}
 
 {% block content %}
-   <div class="container">
-        <div class="row">
-            <div class="col-sm-2 col-md-2 col-lg-2"></div>
-            <div class="col-sm-8 col-md-8 col-lg-8">
-        <form action="/editProduct/" class="form-horizontal" method="post">
-              {% csrf_token %}
-            <div class="form-group">
-            <label for="id_name">Name:</label>
-            <input type="text" name="name"  class="form-control" maxlength="50" required="" id="id_name" value={{product.name}}>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2"></div>
 
-            <div class="form-group">
-            <label for="id_price">Full price:</label>
-            <input type="number" name="price"  class="form-control" step="0.01" required="" id="id_price" value={{product.price}}>
-            </div>
+      <div class="col-sm-8 col-md-8 col-lg-8">
+        <form action="{% url 'foodcartapp:UpdateProductView' pk=product.id %}" class="form-horizontal" method="post">
 
-            <div class="form-group">
-            <label for="id_availability">Availabilty:</label>
-            <input type="checkbox" name="availability"  class="form-control" id="id_availability" checked="" value="">
-            </div>
+          {% csrf_token %}
 
-            <div class="form-group">
-            <label for="id_image">Image URL:</label>
-            <input type="url" name="image"  class="form-control" required="" id="id_image" value={{product.image}}>
-            </div>
+          <div class="form-group">
+            <label for="id_name">Название:</label>
+            <input type="text" name="name"  class="form-control" maxlength="50" required id="id_name" value="{{product.name}}">
+          </div>
 
-            <div class="form-group">
-            <label for="id_special_status">Special status:</label>
+          <div class="form-group">
+            <label for="id_price">Цена:</label>
+            <input type="number" name="price"  class="form-control" step="0.01" required id="id_price" value="{{product.price}}">
+          </div>
+
+          <div class="form-group">
+            <label for="id_availability">В продаже:</label>
+            <input type="checkbox" name="availability"  class="form-control" id="id_availability" checked value="">
+          </div>
+
+          <div class="form-group">
+            <label for="id_image">Фотография:</label>
+            <input type="url" name="image"  class="form-control" required id="id_image" value="{{product.image}}">
+          </div>
+
+          <div class="form-group">
+            <label for="id_special_status">Спец.предложение:</label>
             <input type="checkbox" name="special_status"  class="form-control" id="id_special_status" value="">
-            </div>
+          </div>
 
-             <div class="form-group">
-            <label for="id_category">Category:</label>
-            <input type="text" name="category"  class="form-control" maxlength="50" required="" id="id_category" value={{product.category}}>
-            </div>
+          <div class="form-group">
+            <label for="id_category">Категория:</label>
+            <input type="text" name="category"  class="form-control" maxlength="50" required id="id_category" value="{{product.category}}">
+          </div>
 
-            <div class="form-group">
-            <label for="id_restaurant">Restaurant:</label>
-            <select name="restaurant"  class="form-control" required="" id="id_restaurant">
-                <option  value={{product.restaurant.id}} selected="">{{product.restaurant.name}}</option>
-                {% for i in restaurants %}
-                     <option value={{i.id}}>{{i.name}}</option>
-                {% endfor %}
+          <div class="form-group">
+            <label for="id_restaurant">Ресторан:</label>
+            <select name="restaurant"  class="form-control" required id="id_restaurant">
+              <option value="{{product.restaurant.id}}" selected>{{product.restaurant.name}}</option>
+              {% for restaurant in restaurants %}
+                <option value="{{restaurant.id}}">{{restaurant.name}}</option>
+              {% endfor %}
             </select>
-            </div>
+          </div>
 
-            <br>
-                <input class="btn btn-primary" type="submit" value="Submit">
+          <br>
+          <button class="btn btn-primary" type="submit">Submit</button>
         </form>
-                </div>
-            <div class="col-sm-2 col-md-2 col-lg-2"></div>
-            </div>
+      </div>
+
+      <div class="col-sm-2 col-md-2 col-lg-2"></div>
     </div>
+  </div>
 {% endblock %}

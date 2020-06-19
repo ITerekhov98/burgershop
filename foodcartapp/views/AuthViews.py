@@ -1,4 +1,3 @@
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views import View
@@ -6,12 +5,9 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
 from django.contrib.auth import views as auth_views
 
 from foodcartapp.forms.AuthForms import Login
-from foodcartapp.forms.AuthForms import Signup
 
 
 class LoginView(View):

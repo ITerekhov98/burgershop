@@ -1,27 +1,28 @@
-{% extends 'header.html' %}
+{% extends 'base_restorator_page.html' %}
+
+{% block title %}Рестораны | FoodCartApp{% endblock %}
 
 {% block content %}
 
-  <center><h2>Restaurants of {{Name}}</h2></center>
-  <hr/>
-
   <div class="container">
-   <table class="table table-responsive">
-          <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Edit/Delete</th>
-          </tr>
+    <center>
+      <h2>Ваши рестораны</h2>
+    </center>
 
-       {% for i in restaurants %}
-          <tr>
-              <td>{{i.id}}</td>
-              <td>{{i.name}}</td>
-              <td><a href="/{{i.id}}/editRestaurant/">Edit/</a><a href="/{{i.id}}/deleteRestaurant/">Delete</a></td>
-          </tr>
+    <hr/>
 
-  {% endfor %}
+    <table class="table table-responsive">
+      <tr>
+        <th>Id</th>
+        <th>Название</th>
+      </tr>
 
-   </table>
+      {% for restaurant in restaurants %}
+        <tr>
+          <td>{{restaurant.id}}</td>
+          <td>{{restaurant.name}}</td>
+        </tr>
+      {% endfor %}
+    </table>
   </div>
 {% endblock %}
