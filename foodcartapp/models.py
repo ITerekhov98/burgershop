@@ -68,9 +68,24 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    NEW_ORDER = 1
+    CONFIRMED_ORDER = 2
+    COOKING = 3
+    ON_THE_WAY = 4
+    DELIVERED_ORDER = 5
+    CANCELLED = 6
+    STATUSES = (
+        (NEW_ORDER, 'новый'),
+        (CONFIRMED_ORDER, 'подтверждён'),
+        (COOKING, 'готовится'),
+        (ON_THE_WAY, 'в пути'),
+        (DELIVERED_ORDER, 'доставлен'),
+        (CANCELLED, 'отменён'),
+    )
+
     customer = models.ForeignKey(Customer, verbose_name='заказчик', on_delete=models.SET_NULL,
                                  null=True, blank=True, related_name='orders')
-    status = models.SmallIntegerField('статус', default=1, db_index=True)  # FIXME определить choices и их названия
+    status = models.SmallIntegerField('статус', default=1, db_index=True, choices=STATUSES)
     order_time = models.DateTimeField('заказано', default=timezone.now, db_index=True)
     delivery_time = models.DateTimeField('доставлено', blank=True, null=True, db_index=True)
     amount = models.DecimalField('стоимость', max_digits=15, decimal_places=2)
