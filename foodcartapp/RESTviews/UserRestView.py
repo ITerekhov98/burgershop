@@ -9,15 +9,13 @@ from foodcartapp.serializers.CustomerSerializer import CustomerSerializer
 
 @api_view(['POST'])
 def customer_signup_api(request):
+    customerserializer = CustomerSerializer(data=request.data)
 
-    if request.method == 'POST':
-        customerserializer = CustomerSerializer(data=request.data)
+    if customerserializer.is_valid():
+        user = customerserializer.save()
+        customer = Group.objects.get(name="Customers")
+        customer.user_set.add(user)
 
-        if customerserializer.is_valid():
-            user = customerserializer.save()
-            customer = Group.objects.get(name="Customers")
-            customer.user_set.add(user)
-
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_201_CREATED)
-        return Response(customerserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+    return Response(customerserializer.errors, status=status.HTTP_400_BAD_REQUEST)
