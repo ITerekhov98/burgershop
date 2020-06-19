@@ -11,7 +11,7 @@ class OrderSerializer(serializers.Serializer):
     order_time = serializers.DateTimeField(default=datetime.datetime.now())
     delivery_time = serializers.DateTimeField(default=datetime.datetime.now())
     amount = serializers.DecimalField(max_digits=15, decimal_places=2)
-    order_type = serializers.IntegerField(default=1)
+    payment_type = serializers.IntegerField(default=1)
 
     def create(self, validated_data):
         order = Order.objects.create(**validated_data)

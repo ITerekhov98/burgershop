@@ -17,7 +17,6 @@ def order_list_api(request):
             'customer_id': request.user.id,
             'order_time': datetime.datetime.now(),
             'amount': request.data['amount'],
-            'order_type': 1,  # default order_type set to Cash On Delivery Payment interface to be integrated
         }
 
         products = request.data.pop('products')

@@ -74,7 +74,7 @@ class Order(models.Model):
     ON_THE_WAY = 4
     DELIVERED_ORDER = 5
     CANCELLED = 6
-    STATUSES = (
+    STATUS_CHOICES = (
         (NEW_ORDER, 'новый'),
         (CONFIRMED_ORDER, 'подтверждён'),
         (COOKING, 'готовится'),
@@ -83,13 +83,19 @@ class Order(models.Model):
         (CANCELLED, 'отменён'),
     )
 
+    CASH_ON_DELIVERY = 1
+    PAYMENT_CHOICES = (
+        (CASH_ON_DELIVERY, 'наличными после доставки'),
+    )
+
+
     customer = models.ForeignKey(Customer, verbose_name='заказчик', on_delete=models.SET_NULL,
                                  null=True, blank=True, related_name='orders')
-    status = models.SmallIntegerField('статус', default=NEW_ORDER, db_index=True, choices=STATUSES)
+    status = models.SmallIntegerField('статус', default=NEW_ORDER, db_index=True, choices=STATUS_CHOICES)
     order_time = models.DateTimeField('заказано', default=timezone.now, db_index=True)
     delivery_time = models.DateTimeField('доставлено', blank=True, null=True, db_index=True)
     amount = models.DecimalField('стоимость', max_digits=15, decimal_places=2)
-    order_type = models.SmallIntegerField('тип заказа', default=1, db_index=True)  # FIXME определить choices и их названия
+    payment_type = models.SmallIntegerField('тип заказа', default=CASH_ON_DELIVERY, db_index=True, choices=PAYMENT_CHOICES)
 
     def __str__(self):
         return f"{self.customer} status:{self.status} order time:{self.order_time}"
