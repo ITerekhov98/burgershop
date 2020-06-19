@@ -15,7 +15,7 @@ app_name = "foodcartapp"
 urlpatterns = [
 
     path('products/', ProductListView.as_view(), name="ProductsView"),
-    path('addproduct/', AddProductView.as_view(), name="AddProductView"),
+    path('products/add/', AddProductView.as_view(), name="AddProductView"),
     path('products/<int:pk>/edit/', UpdateProductView.as_view(), name="UpdateProductView"),
     path('products/<int:pk>/delete/', DeleteProductView.as_view(), name="DeleteProductView"),
 
@@ -24,7 +24,7 @@ urlpatterns = [
     path('orders/', OrderListView.as_view(), name="OrderListView"),
 
     path('login/', LoginView.as_view(), name="login"),
-    path('logout/', LogoutView.as_view(), name="Logout"),
+    path('logout/', LogoutView.as_view(), name="logout"),
 
     path('api/products/', product_list_api, name="ProductListAPI"),
 
