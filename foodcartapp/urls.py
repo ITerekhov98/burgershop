@@ -1,14 +1,13 @@
 from django.urls import path
 
-from foodcartapp.RESTviews.CityRestView import city_list_api
-from foodcartapp.RESTviews.ProductRestView import product_list_api
-from foodcartapp.RESTviews.BannersView import banners_list_api
+from .views import city_list_api, product_list_api, banners_list_api, register_order
 
 
 app_name = "foodcartapp"
 
 urlpatterns = [
-    path('products/', product_list_api, name="ProductListAPI"),
-    path('banners/', banners_list_api, name="BannersListAPI"),
-    path('cities/', city_list_api, name="CityListAPI"),
+    path('products/', product_list_api),
+    path('banners/', banners_list_api),
+    path('cities/', city_list_api),
+    path('order/', register_order),
 ]
