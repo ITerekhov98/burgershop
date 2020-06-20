@@ -1,19 +1,14 @@
 from django.templatetags.static import static
 from django.http import JsonResponse
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import serializers
 
 from .models import City
 from .models import Product
-from .models import Restaurant
 
 
-@api_view(['GET'])
 def banners_list_api(request):
     # FIXME move data to db?
-    return Response([
+    return JsonResponse([
         {
             'title': 'Burger',
             'src': static('burger.jpg'),
@@ -29,47 +24,47 @@ def banners_list_api(request):
             'src': static('tasty.jpg'),
             'text': 'Food is incomplete without a tasty dessert',
         }
-    ])
+    ], safe=False, json_dumps_params={
+        'ensure_ascii': False,
+        'indent': 4,
+    })
 
 
-class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = ['id', 'name']
-
-
-@api_view(['GET'])
 def city_list_api(request):
     cities = City.objects.all()
-    serializer = CitySerializer(cities, many=True)
-    return Response(serializer.data)
+    dumped_sities = [{'id': city.id, 'name': city.name} for city in cities]
+    return JsonResponse(dumped_sities, safe=False, json_dumps_params={
+        'ensure_ascii': False,
+        'indent': 4,
+    })
 
 
-class RestaurantSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Restaurant
-        fields = ['id', 'name']
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    image = serializers.URLField(source='image.url', read_only=True)
-    restaurant = RestaurantSerializer(many=False)
-
-    class Meta:
-        model = Product
-        fields = ['id', 'name', 'price', 'special_status', 'category', 'image', 'restaurant']
-
-
-@api_view(['GET'])
 def product_list_api(request):
     if request.user.is_authenticated:
         products = Product.objects.all()
     else:
         # FIXME стоит проверить на права администратора и выдать только товары его собственного магазина
         products = Product.objects.active()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+
+    dumped_products = []
+    for product in products:
+        dumped_product = {
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'special_status': product.special_status,
+            'category': product.category,
+            'image': product.image.url,
+            'restaurant': {
+                'id': product.id,
+                'name': product.name,
+            }
+        }
+        dumped_products.append(dumped_product)
+    return JsonResponse(dumped_products, safe=False, json_dumps_params={
+        'ensure_ascii': False,
+        'indent': 4,
+    })
 
 
 def register_order(request):
