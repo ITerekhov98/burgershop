@@ -57,7 +57,7 @@ class App extends Component {
   }
 
   async handleCheckout({firstname, lastname, phonenumber, address}){
-    console.log('handleCheckout started', refs);
+    console.log('handleCheckout started', firstname, lastname, phonenumber, address);
 
     const url = "api/order/";
     let data = {
