@@ -13,8 +13,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-transition-group": "^1.2.1",
-    "resolve": "1.17.0",
-    "universal-cookie": "^4.0.3"
+    "resolve": "1.17.0"
   },
   "engines": {
     "node": "9.10.1",

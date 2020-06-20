@@ -71,11 +71,12 @@ class CartModalComponent extends Component{
               document.getElementById('checkout').style.pointerEvents = 'none';
               document.getElementById("checkout").setAttribute("disabled", "disabled");
               if(this.props.cartItems.length>0){
-                this.props.checkOut();
+                this.props.handleCartClose();
+                this.props.handleProceed();
               }
               document.getElementById('checkout').style.pointerEvents = 'auto';
           }} className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}>PROCEED TO CHECKOUT</Button>
-          <Button onClick={this.props.handleCartClose}>Close</Button>
+          <Button onClick={this.props.handleCartClose}>Закрыть</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -7,6 +7,10 @@ from foodcartapp.serializers.product_serializer import ProductSerializer
 
 @api_view(['GET'])
 def product_list_api(request):
-    products = Product.objects.all()
+    if request.user.is_authenticated:
+        products = Product.objects.all()
+    else:
+        # FIXME стоит проверить на права администратора и выдать только товары его собственного магазина
+        products = Product.objects.active()
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)

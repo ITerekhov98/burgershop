@@ -3,14 +3,12 @@ import './css/App.css';
 import NavBarComponent from './components/NavBarComponent';
 import CartModalComponent from './components/CartModalComponent';
 import BannerComponent from './components/BannerComponent';
-import LoginModalComponent from './components/LoginModalComponent';
 import Products from './components/Products';
 import QuickView from './components/QuickView';
-import Cookies from 'universal-cookie';
 import FiltersComponent from './components/FiltersComponent';
 import FooterComponent from './components/FooterComponent';
-import SignupModalComponent from './components/SignupModalComponent';
 import FoodCartSpecialsComponent from './components/FoodCartSpecialsComponent';
+import CheckoutModal from './components/CheckoutModalComponent';
 
 class App extends Component {
 
@@ -20,20 +18,17 @@ class App extends Component {
       products: [],
       cities: [],
       cart: [],
-      totalItems: 0,
-      totalAmount: 0,
+      totalItems: 0,  // FIXME заменить на вычисляемые свойства
+      totalAmount: 0,  // FIXME заменить на вычисляемые свойства
       term: '',
       category: '',
-      cartBounce: false,
       quickViewProduct: {},
       showCart: false,
       quickViewModalActive: false,
-      isAuthenticated: false,
-      loginModalActive: false,
-      signupModalActive: false,
-      quantity: 1,
+      quantity: 1,  // FIXME что здесь хранится?
       searchCityIndex: 0,
       banners: [],
+      checkoutModalActive: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
@@ -46,30 +41,32 @@ class App extends Component {
     this.handleCartClose = this.handleCartClose.bind(this);
     this.handleQuickViewModalClose = this.handleQuickViewModalClose.bind(this);
     this.handleQuickViewModalShow = this.handleQuickViewModalShow.bind(this);
-    this.handleLoginModalShow=this.handleLoginModalShow.bind(this);
-    this.handleLoginModalClose=this.handleLoginModalClose.bind(this);
-    this.handleSignupModalShow=this.handleSignupModalShow.bind(this);
-    this.handleSignupModalClose=this.handleSignupModalClose.bind(this);
-    this.toggleisAuthenticated=this.toggleisAuthenticated.bind(this);
     this.updateQuantity=this.updateQuantity.bind(this);
-    this.checkOut=this.checkOut.bind(this);
+    this.handleCheckout=this.handleCheckout.bind(this);
     this.handleCitySearch=this.handleCitySearch.bind(this);
+    this.handleCheckoutModalShow=this.handleCheckoutModalShow.bind(this);
+    this.handleCheckoutModalClose=this.handleCheckoutModalClose.bind(this);
   }
 
-  async checkOut(refs){
+  handleCheckoutModalShow(){
+    this.setState({checkoutModalActive: true});
+  }
 
-    let cookies=new Cookies();
-    const url="api/order/";
-    let data={};
-    data.products=this.state.cart;
-    let tokenObj=cookies.get('userJwtToken');
-    if(!this.state.isAuthenticated){
-      this.handleSignupModalShow();
-      return;
-    }
-    data.token=tokenObj.token;
-    data.amount=this.state.totalAmount;
-    let json=JSON.stringify(data);
+  handleCheckoutModalClose(){
+    this.setState({checkoutModalActive: false});
+  }
+
+  async handleCheckout({firstname, lastname, phonenumber, address}){
+    console.log('handleCheckout started', refs);
+
+    const url = "api/order/";
+    let data = {
+      'products': this.state.cart,
+      firstname,
+      lastname,
+      phonenumber,
+      address
+    };
 
     try {
       let response = await fetch(url, {
@@ -77,20 +74,26 @@ class App extends Component {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'JWT '+tokenObj.token,
         },
-       body:json
-     });
-     this.setState({
-       totalAmount:0,
-       totalItems:0,
-       cart:[]
-     });
-      alert("Order Placed Succesfully");
-      this.handleCartClose();
+        body: JSON.stringify(data),
+      });
+      if (!response.ok){
+        alert('Ошибка при оформлении заказа. Попробуйте ещё раз или свяжитесь с нами по телефону.');
+      }
       let responseData = await response.json();
+
+      this.setState({
+        totalAmount: 0,
+        totalItems: 0,
+        cart: []
+      });
+
+      alert("Заказ оформлен. Вам перезвонят в течение 10 минут.");
+
+      this.handleCartClose();
     } catch(error){
       console.log('Request failed', error);
+      alert('Ошибка при оформлении заказа. Попробуйте ещё раз или свяжитесь с нами по телефону.');
     };
   }
 
@@ -163,23 +166,6 @@ class App extends Component {
     this.setState({ showCart: true });
   }
 
-  handleSignupModalShow(){
-    this.setState({signupModalActive:true});
-  }
-
-  handleSignupModalClose(){
-    this.setState({signupModalActive:false});
-  }
-
-
-  handleLoginModalShow(){
-    this.setState({loginModalActive:true});
-  }
-
-  handleLoginModalClose(){
-    this.setState({loginModalActive:false});
-  }
-
   updateQuantity(qty){
     console.log("quantity added...")
     this.setState({
@@ -207,14 +193,12 @@ class App extends Component {
 
     this.setState({
       cart : cartItems,
-      cartBounce: true,
     });
 
 
     setTimeout(() => {
       // FIXME протестировать этот код, он работает?
       this.setState({
-        cartBounce:false,
         quantity: 1
       });
     }, 1000);
@@ -280,31 +264,14 @@ class App extends Component {
     })
   }
 
-  toggleisAuthenticated(){
-    this.setState({
-      isAuthenticated:!this.state.isAuthenticated
-    });
-  }
-
   render() {
     return (
 
       <React.Fragment>
         <NavBarComponent
-          isAuthenticated={this.state.isAuthenticated}
-          handleLoginModalShow={this.handleLoginModalShow}
-          handleSignupModalShow={this.handleSignupModalShow}
           totalItems= {this.state.totalItems}
           totalAmount ={this.state.totalAmount}
           handleCartShow={this.handleCartShow}
-          toggleisAuthenticated={this.toggleisAuthenticated}
-        />
-
-        <LoginModalComponent
-          isAuthenticated={this.state.isAuthenticated}
-          loginModalActive={this.state.loginModalActive}
-          handleLoginModalClose={this.handleLoginModalClose}
-          toggleisAuthenticated={this.toggleisAuthenticated}
         />
 
         <CartModalComponent
@@ -312,7 +279,7 @@ class App extends Component {
           showCart={this.state.showCart}
           removeProduct={this.handleRemoveProduct}
           handleCartClose={this.handleCartClose}
-          checkOut={this.checkOut}
+          handleProceed={this.handleCheckoutModalShow}
         />
 
         <QuickView
@@ -322,16 +289,7 @@ class App extends Component {
           handleQuickViewModalClose={this.handleQuickViewModalClose}
         />
 
-
-        <SignupModalComponent
-          isAuthenticated={this.state.isAuthenticated}
-          signupModalActive={this.state.signupModalActive}
-          handleSignupModalClose={this.handleSignupModalClose}
-          toggleisAuthenticated={this.toggleisAuthenticated}
-        />
-
         <BannerComponent banners={this.state.banners}/>
-
 
         <div id="what_we_do" className="container-fluid"></div>
 
@@ -403,6 +361,14 @@ class App extends Component {
         <div id="contact_us" className="container-fluid" style={{backgroundColor:"black",width:"100%"}}>
           <FooterComponent/>
         </div>
+
+        <CheckoutModal
+          checkoutModalActive={true}
+          checkoutModalActive={this.state.checkoutModalActive}
+          handleCheckoutModalShow={this.handleCheckoutModalShow}
+          handleCheckoutModalClose={this.handleCheckoutModalClose}
+          handleCheckout={this.handleCheckout}
+        />
 
       </React.Fragment>
     );

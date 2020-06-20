@@ -6,4 +6,4 @@ from foodcartapp.models import City
 class CitySerializer(ModelSerializer):
     class Meta:
         model = City
-        fields = '__all__'
+        fields = ['id', 'name']

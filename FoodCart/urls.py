@@ -18,8 +18,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
-from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework_jwt.views import obtain_jwt_token
 
 from FoodCart import settings
 
@@ -28,8 +26,6 @@ urlpatterns = [
     path('', render, kwargs={'template_name': 'index.html'}, name='start_page'),
     path('api/', include('foodcartapp.urls')),
     path('manager/', include('restaurateur.urls')),
-    path('api-jwttoken-auth/', obtain_jwt_token),
-    path('api-basictoken-auth/', obtain_auth_token)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

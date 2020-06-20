@@ -1,15 +1,6 @@
 import React, { Component } from 'react'
-import Cookies from 'universal-cookie';
 
 class NavBarComponent extends Component{
-  cookies = new Cookies();
-  logout = (props) =>
-  {
-    this.cookies.remove('userJwtToken');
-    this.cookies.remove('username');
-    this.props.toggleisAuthenticated();
-  }
-
   render(){
     return (
       <div className="container-fluid">
@@ -29,9 +20,6 @@ class NavBarComponent extends Component{
                   <li><a href="#foodcart_specials">FoodCart Specials</a></li>
                   <li><a href="#products">Order Now</a></li>
                   <li><a href="#contact_us">Contact Us</a></li>
-                   { !this.props.isAuthenticated && <li><a href="#" onClick={this.props.handleLoginModalShow}><span className="glyphicon glyphicon-log-in"></span> Login</a></li> }
-                   { !this.props.isAuthenticated && <li><a href="#" onClick={this.props.handleSignupModalShow}><span className="glyphicon glyphicon-user"></span> Signup</a></li> }
-                   {this.props.isAuthenticated && <li><a href="#" onClick={this.logout}>Logout</a></li>}
                 </ul>
                 <ul className="nav navbar-nav navbar-right">
                   <li><a>Total Items:{this.props.totalItems ? <span>{this.props.totalItems}</span> : "" }</a></li>

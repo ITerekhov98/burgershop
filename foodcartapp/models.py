@@ -50,6 +50,11 @@ class Restaurant(models.Model):
         verbose_name_plural = 'рестораны'
 
 
+class ProductQuerySet(models.QuerySet):
+    def available(self):
+        return self.filter(availability=True)
+
+
 class Product(models.Model):
     name = models.CharField('название', max_length=50)
     price = models.DecimalField('цена', max_digits=8, decimal_places=2)
@@ -58,6 +63,8 @@ class Product(models.Model):
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
     category = models.CharField('категория', max_length=50)  # FIXME заменить на choices или отдельную модель данных
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='products')
+
+    objects = ProductQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.name}"

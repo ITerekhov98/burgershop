@@ -1,14 +1,19 @@
 from rest_framework import serializers
 
-from foodcartapp.serializers.restaurant_serializer import RestaurantSerializer
+from foodcartapp.models import Restaurant, Product
 
 
-class ProductSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField(max_length=50)
-    price = serializers.DecimalField(max_digits=8, decimal_places=2)
-    availability = serializers.BooleanField(default=True)
+class RestaurantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Restaurant
+        fields = ['id', 'name']
+
+
+class ProductSerializer(serializers.ModelSerializer):
     image = serializers.URLField(source='image.url', read_only=True)
-    special_status = serializers.BooleanField(default=False)
-    category = serializers.CharField(max_length=50)
     restaurant = RestaurantSerializer(many=False)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'price', 'special_status', 'category', 'image', 'restaurant']
