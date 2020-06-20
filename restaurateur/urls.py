@@ -1,7 +1,7 @@
 from django.urls import path
+from django.shortcuts import render
 
 from .views.RestaurantViews import RestaurantListView
-from .views.OrderViews import OrderListView
 from .views.ProductViews import ProductListView, AddProductView, UpdateProductView, DeleteProductView
 from .views.AuthViews import LoginView, LogoutView
 
@@ -16,7 +16,10 @@ urlpatterns = [
 
     path('restaurants/', RestaurantListView.as_view(), name="RestaurantView"),
 
-    path('orders/', OrderListView.as_view(), name="OrderListView"),
+    # TODO заглушка для нереализованного функционала
+    path('orders/', render, kwargs={
+        'template_name': 'order_items.html',
+    }, name="OrderListView"),
 
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
