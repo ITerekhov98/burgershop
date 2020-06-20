@@ -44,7 +44,7 @@ def product_list_api(request):
         products = Product.objects.all()
     else:
         # FIXME стоит проверить на права администратора и выдать только товары его собственного магазина
-        products = Product.objects.active()
+        products = Product.objects.available()
 
     dumped_products = []
     for product in products:
