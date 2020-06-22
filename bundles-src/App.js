@@ -57,8 +57,6 @@ class App extends Component {
   }
 
   async handleCheckout({firstname, lastname, phonenumber, address}){
-    console.log('handleCheckout started', firstname, lastname, phonenumber, address);
-
     const url = "api/order/";
     let data = {
       'products': this.state.cart,
@@ -77,8 +75,10 @@ class App extends Component {
         },
         body: JSON.stringify(data),
       });
+
       if (!response.ok){
         alert('Ошибка при оформлении заказа. Попробуйте ещё раз или свяжитесь с нами по телефону.');
+        return;
       }
       let responseData = await response.json();
 
@@ -92,8 +92,8 @@ class App extends Component {
 
       this.handleCartClose();
     } catch(error){
-      console.log('Request failed', error);
       alert('Ошибка при оформлении заказа. Попробуйте ещё раз или свяжитесь с нами по телефону.');
+      throw error;
     };
   }
 
@@ -115,6 +115,11 @@ class App extends Component {
         'Content-Type': 'application/json',
       }
     });
+
+    if (!response.ok){
+      return;
+    }
+
     let data = await response.json();
     this.setState({
       products : data
@@ -130,6 +135,11 @@ class App extends Component {
         'Content-Type': 'application/json',
       }
     });
+
+    if (!response.ok){
+      return;
+    }
+
     let data = await response.json();
     this.setState({
       banners : data
@@ -145,6 +155,11 @@ class App extends Component {
         'Content-Type': 'application/json',
       }
     });
+
+    if (!response.ok){
+      return;
+    }
+
     let data = await response.json();
     this.setState({
       cities : data
@@ -182,7 +197,6 @@ class App extends Component {
   }
 
   updateQuantity(qty){
-    console.log("quantity added...")
     this.setState({
         quantity: qty
     })
