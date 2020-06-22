@@ -40,6 +40,7 @@ class Product(models.Model):
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
     category = models.CharField('категория', max_length=50)  # TODO заменить на choices или отдельную модель данных
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='products')
+    ingridients = models.CharField('ингредиенты', max_length=200, blank=True)
 
     objects = ProductQuerySet.as_manager()
 
