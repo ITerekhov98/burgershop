@@ -72,8 +72,8 @@ class App extends Component {
       let response = await fetch(url, {
         method: 'post',
         headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
@@ -109,7 +109,12 @@ class App extends Component {
   async getProducts(){
     const url = "/api/products/";
 
-    let response = await fetch(url);
+    let response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
     let data = await response.json();
     this.setState({
       products : data
@@ -119,7 +124,12 @@ class App extends Component {
   async getBanners(){
     const url = "/api/banners/";
 
-    let response = await fetch(url);
+    let response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
     let data = await response.json();
     this.setState({
       banners : data
@@ -129,7 +139,12 @@ class App extends Component {
   async getCities(){
     const url = "/api/cities/";
 
-    let response = await fetch(url);
+    let response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
     let data = await response.json();
     this.setState({
       cities : data
