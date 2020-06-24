@@ -29,26 +29,23 @@ const BannerComponent = (props) => {
   });
 
   return (
-      <div className="container-fluid" style={{padding: "0px"}}>
-      <h2>Carousel Example</h2>
-      <div id="myCarousel" className="carousel slide" data-ride="carousel">
-        <ol className="carousel-indicators">
-          {carousel_indicators}
-        </ol>
+    <div id="myCarousel" className="carousel slide" data-ride="carousel">
+      <ol className="carousel-indicators">
+        {carousel_indicators}
+      </ol>
 
-        <div className="carousel-inner">
-          {carousel_items}
-        </div>
-
-        <a className="left carousel-control" href="#myCarousel" data-slide="prev">
-          <span className="glyphicon glyphicon-chevron-left"></span>
-          <span className="sr-only">Previous</span>
-        </a>
-        <a className="right carousel-control" href="#myCarousel" data-slide="next">
-          <span className="glyphicon glyphicon-chevron-right"></span>
-          <span className="sr-only">Next</span>
-        </a>
+      <div className="carousel-inner">
+        {carousel_items}
       </div>
+
+      <a className="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span className="glyphicon glyphicon-chevron-left"></span>
+        <span className="sr-only">Previous</span>
+      </a>
+      <a className="right carousel-control" href="#myCarousel" data-slide="next">
+        <span className="glyphicon glyphicon-chevron-right"></span>
+        <span className="sr-only">Next</span>
+      </a>
     </div>
   );
 }

@@ -12,3 +12,7 @@ footer .glyphicon {
   max-width: 100%;
 }
 
+.navbar {
+  position: sticky;
+  margin-bottom: 0;
+}
