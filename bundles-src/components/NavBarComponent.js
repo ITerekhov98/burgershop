@@ -11,12 +11,12 @@ class NavBarComponent extends Component{
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="#">FoodCart</a>
+            <a className="navbar-brand" href="#">Star Burger</a>
           </div>
           <div>
             <div className="collapse navbar-collapse" id="myNavbar">
               <ul className="nav navbar-nav">
-                <li><a href="#foodcart_specials">FoodCart Specials</a></li>
+                <li><a href="#foodcart_specials">Star Burger Specials</a></li>
                 <li><a href="#products">Order Now</a></li>
                 <li><a href="#contact_us">Contact Us</a></li>
               </ul>

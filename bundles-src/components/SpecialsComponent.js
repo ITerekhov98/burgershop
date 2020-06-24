@@ -4,7 +4,7 @@ import LoadingProducts from './loaders/LoadingProducts';
 import NoResults from "./NoResults";
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
-class FoodCartSpecialsComponent extends Component{
+class SpecialsComponent extends Component{
   render(){
     let productsData;
     let term = this.props.term.toLowerCase();
@@ -39,7 +39,7 @@ class FoodCartSpecialsComponent extends Component{
     } else if(productsData.length <= 0 && term){
       view = (
         <center>
-          <h3>No FoodCart Specials at this time</h3>
+          <h3>No Star Burger Specials at this time</h3>
         </center>
       )
     } else{
@@ -62,4 +62,4 @@ class FoodCartSpecialsComponent extends Component{
   }
 }
 
-export default FoodCartSpecialsComponent;
+export default SpecialsComponent;

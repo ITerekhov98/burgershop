@@ -7,7 +7,7 @@ import Products from './components/Products';
 import QuickView from './components/QuickView';
 import FiltersComponent from './components/FiltersComponent';
 import FooterComponent from './components/FooterComponent';
-import FoodCartSpecialsComponent from './components/FoodCartSpecialsComponent';
+import SpecialsComponent from './components/SpecialsComponent';
 import CheckoutModal from './components/CheckoutModalComponent';
 
 class App extends Component {
@@ -359,7 +359,7 @@ class App extends Component {
             <hr/>
           </center>
 
-          <FoodCartSpecialsComponent
+          <SpecialsComponent
             productsList={this.state.products}
             term={this.state.term}
             searchCityIndex={this.state.searchCityIndex}

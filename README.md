@@ -1,4 +1,4 @@
-# Сайт доставки еды FoodCart
+# Сайт доставки еды Star Burger
 
 TODO: скриншот
 
@@ -17,7 +17,7 @@ TODO: предметная область
 
 Скачайте код:
 ```sh
-git clone https://github.com/devmanorg/FoodCart
+git clone https://github.com/devmanorg/star-burger
 ```
 
 [Установите Python](https://www.python.org/), если этого ещё не сделали.
