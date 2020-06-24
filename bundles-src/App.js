@@ -110,7 +110,7 @@ class App extends Component {
 
 
   async getProducts(){
-    const url = "/api/productsproducts/";
+    const url = "/api/products/";
 
     let response = await fetch(url, {
       headers: {
