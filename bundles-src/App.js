@@ -66,12 +66,15 @@ class App extends Component {
       address
     };
 
+    let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
     try {
       let response = await fetch(url, {
         method: 'post',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
         },
         body: JSON.stringify(data),
       });
