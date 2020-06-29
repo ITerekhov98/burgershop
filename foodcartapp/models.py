@@ -2,20 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class City(models.Model):
-    name = models.CharField('название', max_length=50)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = 'город'
-        verbose_name_plural = 'города'
-
-
 class Restaurant(models.Model):
     name = models.CharField('название', max_length=50)
-    city = models.ForeignKey(City, verbose_name='город', on_delete=models.CASCADE, related_name='restaurants')
     admin = models.ForeignKey(User, verbose_name='администратор', on_delete=models.SET_NULL,
                               null=True, blank=True, related_name='administrated_restaurants')
 

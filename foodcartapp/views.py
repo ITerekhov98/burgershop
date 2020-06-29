@@ -2,7 +2,6 @@ from django.templatetags.static import static
 from django.http import JsonResponse
 
 
-from .models import City
 from .models import Product
 
 
@@ -25,15 +24,6 @@ def banners_list_api(request):
             'text': 'Food is incomplete without a tasty dessert',
         }
     ], safe=False, json_dumps_params={
-        'ensure_ascii': False,
-        'indent': 4,
-    })
-
-
-def city_list_api(request):
-    cities = City.objects.all()
-    dumped_sities = [{'id': city.id, 'name': city.name} for city in cities]
-    return JsonResponse(dumped_sities, safe=False, json_dumps_params={
         'ensure_ascii': False,
         'indent': 4,
     })

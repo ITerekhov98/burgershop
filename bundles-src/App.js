@@ -5,7 +5,6 @@ import CartModalComponent from './components/CartModalComponent';
 import BannerComponent from './components/BannerComponent';
 import Products from './components/Products';
 import QuickView from './components/QuickView';
-import FiltersComponent from './components/FiltersComponent';
 import FooterComponent from './components/FooterComponent';
 import SpecialsComponent from './components/SpecialsComponent';
 import CheckoutModal from './components/CheckoutModalComponent';
@@ -16,7 +15,6 @@ class App extends Component {
     super();
     this.state = {
       products: [],
-      cities: [],
       cart: [],
       totalItems: 0,  // FIXME заменить на вычисляемые свойства
       totalAmount: 0,  // FIXME заменить на вычисляемые свойства
@@ -26,7 +24,6 @@ class App extends Component {
       showCart: false,
       quickViewModalActive: false,
       quantity: 1,  // FIXME что здесь хранится?
-      searchCityIndex: 0,
       banners: [],
       checkoutModalActive: false,
     };
@@ -43,7 +40,6 @@ class App extends Component {
     this.handleQuickViewModalShow = this.handleQuickViewModalShow.bind(this);
     this.updateQuantity=this.updateQuantity.bind(this);
     this.handleCheckout=this.handleCheckout.bind(this);
-    this.handleCitySearch=this.handleCitySearch.bind(this);
     this.handleCheckoutModalShow=this.handleCheckoutModalShow.bind(this);
     this.handleCheckoutModalClose=this.handleCheckoutModalClose.bind(this);
   }
@@ -149,38 +145,11 @@ class App extends Component {
     });
   }
 
-  async getCities(){
-    const url = "/api/cities/";
-
-    let response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (!response.ok){
-      return;
-    }
-
-    let data = await response.json();
-    this.setState({
-      cities : data
-    });
-  }
-
   componentWillMount(){
     this.getProducts();
-    this.getCities();
     this.getBanners();
   }
 
-
-  handleCitySearch(event){
-    this.setState({
-      searchCityIndex:Number(event.target.value)
-    })
-  }
 
   // Search by Keyword
   handleSearch(event){
@@ -331,14 +300,7 @@ class App extends Component {
           <div className="row">
             <div className="col-md-3  col-lg-3"></div>
             <div className="col-md-6 col-sm-12 col-lg-6">
-              <center>
-                <FiltersComponent
-                  cityIndex={this.state.searchCityIndex}
-                  cities={this.state.cities}
-                  products={this.state.products}
-                  handleCitySearch={this.handleCitySearch}
-                />
-              </center>
+              <center></center>
               <br/>
               <div className="input-group">
                 <input type="text" onChange={this.handleSearch} className="form-control"/>
@@ -362,7 +324,6 @@ class App extends Component {
           <SpecialsComponent
             productsList={this.state.products}
             term={this.state.term}
-            searchCityIndex={this.state.searchCityIndex}
             addToCart={this.handleAddToCart}
             productQuantity={this.state.quantity}
             updateQuantity={this.updateQuantity}
@@ -381,7 +342,6 @@ class App extends Component {
             <Products
               productsList={this.state.products}
               term={this.state.term}
-              searchCityIndex={this.state.searchCityIndex}
               addToCart={this.handleAddToCart}
               productQuantity={this.state.quantity}
               updateQuantity={this.updateQuantity}

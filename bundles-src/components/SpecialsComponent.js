@@ -8,12 +8,9 @@ class SpecialsComponent extends Component{
   render(){
     let productsData;
     let term = this.props.term.toLowerCase();
-    let searchCityIndex = parseInt(this.props.searchCityIndex);
 
     productsData = this.props.productsList.filter(x => {
       return x.name.toLowerCase().includes(term) || !term;
-    }).filter(x => {
-      return x.restaurant.city == searchCityIndex || !searchCityIndex;
     }).filter(x => {
       return x.special_status == true;
     }).map(product =>{
