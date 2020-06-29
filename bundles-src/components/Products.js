@@ -10,8 +10,6 @@ class Products extends Component{
     let term = this.props.term.toLowerCase();
     productsData = this.props.productsList.filter(x => {
       return x.name.toLowerCase().includes(term) || !term;
-    }).filter(x => {
-      return x.special_status==false;
     }).map(product => {
       return(
         <Product

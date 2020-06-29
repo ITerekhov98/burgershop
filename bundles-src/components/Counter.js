@@ -45,7 +45,7 @@ class Counter extends Component {
   resetQuantity(){
     this.setState({
       value: 1
-    })
+    });
   }
   render() {
     return (

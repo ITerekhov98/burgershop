@@ -13,7 +13,7 @@ class QuickView extends Component{
     return (
       <Modal show={this.props.quickViewModalActive} onHide={this.props.handleQuickViewModalClose} alt={this.props.product.id}>
         <Modal.Header closeButton>
-          <h2><center><Modal.Title>Quick View</Modal.Title></center></h2>
+          <h2><center><Modal.Title>{this.props.product.name}</Modal.Title></center></h2>
         </Modal.Header>
         <Modal.Body>
           <center>

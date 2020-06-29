@@ -31,11 +31,7 @@ class SpecialsComponent extends Component{
     if(productsData.length <= 0 && !term){
       view = <LoadingProducts />
     } else if(productsData.length <= 0 && term){
-      view = (
-        <center>
-          <h3>No Star Burger Specials at this time</h3>
-        </center>
-      )
+      view = '';
     } else{
       view = (
         <CSSTransitionGroup

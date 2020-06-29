@@ -4,6 +4,7 @@ import EmptyCart from './EmptyCart';
 import { Button } from 'react-bootstrap';
 import {Modal} from 'react-bootstrap';
 import {Table} from 'react-bootstrap';
+import '../css/modal.css';
 
 class CartModalComponent extends Component{
 
@@ -25,9 +26,9 @@ class CartModalComponent extends Component{
         <CSSTransitionGroup transitionName="fadeIn" key={product.id} component="tr" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
           <td><img src={product.image} style={imgStyle} /></td>
           <td>{product.name}</td>
-          <td>{product.price}</td>
-          <td>{product.quantity} {product.quantity > 1 ?"Nos." : "No." } </td>
-          <td>{product.quantity * product.price}</td>
+          <td class="currency">{product.price}</td>
+          <td>{product.quantity} шт.</td>
+          <td class="currency">{product.quantity * product.price}</td>
           <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
         </CSSTransitionGroup>
       )
@@ -41,11 +42,11 @@ class CartModalComponent extends Component{
         <Table responsive>
           <thead>
             <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Price</th>
+              <th></th>
+              <th>Название</th>
+              <th>Цена</th>
+              <th>Количество</th>
+              <th>Итого</th>
               <th></th>
             </tr>
           </thead>
@@ -59,7 +60,7 @@ class CartModalComponent extends Component{
     return (
       <Modal show={this.props.showCart} onHide={this.props.handleCartClose}>
         <Modal.Header closeButton>
-          <h2><center><Modal.Title>Cart</Modal.Title></center></h2>
+          <center><Modal.Title>Ваша корзина</Modal.Title></center>
         </Modal.Header>
         <Modal.Body>
           {view}
@@ -73,7 +74,7 @@ class CartModalComponent extends Component{
                 this.props.handleProceed();
               }
               document.getElementById('checkout').style.pointerEvents = 'auto';
-          }} className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}>PROCEED TO CHECKOUT</Button>
+          }} className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}>Оформить заказ</Button>
           <Button onClick={this.props.handleCartClose}>Закрыть</Button>
         </Modal.Footer>
       </Modal>

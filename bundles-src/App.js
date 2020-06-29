@@ -298,9 +298,7 @@ class App extends Component {
         <div id="foodcart_specials" className="container-fluid">
           <div className="row">
             <div className="col-md-3  col-lg-3"></div>
-            <div className="col-md-6 col-sm-12 col-lg-6">
-              <center></center>
-              <br/>
+            <div className="col-md-6 col-sm-12 col-lg-6 mt-5" style={{marginTop: '50px'}}>
               <div className="input-group">
                 <input type="text" onChange={this.handleSearch} className="form-control"/>
                 <span className="input-group-addon" style={{marginTop:"40px"}}>
@@ -316,7 +314,7 @@ class App extends Component {
           <br/>
 
           <center>
-            <b style={{fontFamily:"Times New Roman"}}><h2>Foodcart Specials</h2></b>
+            <b style={{fontFamily:"Times New Roman"}}><h2>Популярное</h2></b>
             <hr/>
           </center>
 
@@ -332,7 +330,7 @@ class App extends Component {
 
         <div id="products" style={{marginTop:"20px"}} className="form-group">
           <center>
-            <h2>Choose your Favourite Fooooood</h2>
+            <h2>Меню Star Burger</h2>
           </center>
 
           <hr/>
@@ -349,9 +347,8 @@ class App extends Component {
           </div>
         </div>
 
-        <div id="contact_us" className="container-fluid" style={{backgroundColor:"black",width:"100%"}}>
-          <FooterComponent/>
-        </div>
+        <a href="#" id="contact_us"></a>
+        <FooterComponent/>
 
         <CheckoutModal
           checkoutModalActive={true}

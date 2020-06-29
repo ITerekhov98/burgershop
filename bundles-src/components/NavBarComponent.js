@@ -16,17 +16,21 @@ class NavBarComponent extends Component{
           <div>
             <div className="collapse navbar-collapse" id="myNavbar">
               <ul className="nav navbar-nav">
-                <li><a href="#foodcart_specials">Star Burger Specials</a></li>
-                <li><a href="#products">Order Now</a></li>
-                <li><a href="#contact_us">Contact Us</a></li>
+                <li><a href="#foodcart_specials">Популярное</a></li>
+                <li><a href="#products">Меню</a></li>
+                <li><a href="#contact_us">Контакты</a></li>
               </ul>
               <ul className="nav navbar-nav navbar-right">
-                <li><a>Total Items:{this.props.totalItems ? <span>{this.props.totalItems}</span> : "" }</a></li>
-                <li><a>Total Amount:{this.props.totalAmount ? <span>{this.props.totalAmount}</span> : "" }</a></li>
+                <li>
+                  <a href="#">Блюд в заказе: {this.props.totalItems ? <span>{this.props.totalItems}</span> : "" }</a>
+                </li>
+                <li>
+                  <a href="#" className={ this.props.totalAmount ? 'currency' : '' }>Стоимость: {this.props.totalAmount ? <span>{this.props.totalAmount}</span> : "" }</a>
+                </li>
                 <li style={{float:'right'}}>
                   <a onClick={this.props.handleCartShow}>
                     <button type="button" href="#" className="btn btn-primary btn-sm">
-                      <span className="glyphicon glyphicon-shopping-cart"></span> View Cart
+                      <span className="glyphicon glyphicon-shopping-cart"></span> Корзина
                     </button>
                   </a>
                 </li>

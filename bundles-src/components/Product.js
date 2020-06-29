@@ -45,10 +45,10 @@ class Product extends Component{
           <img src={image} alt={name} onClick={this.quickView.bind(this)}/>
         </div>
         <h4 className="product-name">{name}</h4>
-        <p className="product-price">{price}</p>
+        <p className="product-price currency">{price}</p>
         <Counter productQuantity={quantity} updateQuantity={this.props.updateQuantity} resetQuantity={this.resetQuantity}/>
         <div className="product-action">
-          <button className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"} type="button" onClick={this.addToCart.bind(this, quantity)}>{!this.state.isAdded ? "ADD TO CART" : "✔ ADDED"}</button>
+          <button className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"} type="button" onClick={this.addToCart.bind(this, quantity)}>{!this.state.isAdded ? "В корзину" : "✔ Добавлено"}</button>
         </div>
       </div>
     )

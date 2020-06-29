@@ -7,6 +7,7 @@
   }
   .product .product-image {
     border-radius: 2px 2px 0 0;
+    margin-bottom: 20px;
   }
   .product .product-image img {
     cursor: zoom-in;
@@ -30,8 +31,8 @@
     line-height: 22px;
     margin-bottom: 16px;
   }
-  .product .product-price:before {
-    content: "₹ ";
+  .currency:after {
+    content: " ₽";
   }
   .product .product-name, .product .product-price {
     color: #666;
