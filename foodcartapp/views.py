@@ -30,11 +30,7 @@ def banners_list_api(request):
 
 
 def product_list_api(request):
-    if request.user.is_authenticated:
-        products = Product.objects.all()
-    else:
-        # FIXME стоит проверить на права администратора и выдать только товары его собственного магазина
-        products = Product.objects.available()
+    products = Product.objects.available()
 
     dumped_products = []
     for product in products:
