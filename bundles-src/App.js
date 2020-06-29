@@ -286,7 +286,6 @@ class App extends Component {
         <QuickView
           product={this.state.quickViewProduct}
           quickViewModalActive={this.state.quickViewModalActive}
-          handleQuickViewModalShow={this.handleQuickViewModalShow}
           handleQuickViewModalClose={this.handleQuickViewModalClose}
         />
 

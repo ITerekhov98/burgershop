@@ -17,10 +17,7 @@ class SpecialsComponent extends Component{
       return (
         <Product
           key={product.id}
-          price={product.price}
-          name={product.name}
-          image={product.image}
-          id={product.id}
+          product={product}
           addToCart={this.props.addToCart}
           productQuantity={this.props.productQuantity}
           updateQuantity={this.props.updateQuantity}

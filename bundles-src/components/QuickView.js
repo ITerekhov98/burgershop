@@ -6,8 +6,8 @@ import {Button} from 'react-bootstrap';
 class QuickView extends Component{
   render(){
     const imageSizing = {
-      width:"400px",
-      height:"400px",
+      maxWidth: "400px",
+      maxHeight: "400px",
       marginBottom:"30px"
     }
     return (
@@ -24,15 +24,15 @@ class QuickView extends Component{
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Product ID:</td>
-                    <td>{this.props.product.id}</td>
-                  </tr>
-                  <tr>
-                    <td>Product Name:</td>
+                    <td>Название:</td>
                     <td>{this.props.product.name}</td>
                   </tr>
                   <tr>
-                    <td>Price:</td>
+                    <td>Ингредиенты:</td>
+                    <td>{this.props.product.ingridients}</td>
+                  </tr>
+                  <tr>
+                    <td>Цена:</td>
                     <td>{this.props.product.price}</td>
                   </tr>
                 </tbody>

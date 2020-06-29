@@ -17,13 +17,12 @@ class CartModalComponent extends Component{
   render(){
     let cartItems;
     const imgStyle = {
-      width: "50px",
-      height: "50px"
+      maxWidth: "100px",
+      maxHeight: "50px"
     };
     cartItems = this.state.cart.map(product => {
       return(
         <CSSTransitionGroup transitionName="fadeIn" key={product.id} component="tr" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-          <td>{product.id}</td>
           <td><img src={product.image} style={imgStyle} /></td>
           <td>{product.name}</td>
           <td>{product.price}</td>
@@ -42,7 +41,6 @@ class CartModalComponent extends Component{
         <Table responsive>
           <thead>
             <tr>
-              <th>ProductID</th>
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>

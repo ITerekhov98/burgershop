@@ -5,65 +5,50 @@ class Product extends Component{
   constructor(props){
     super(props);
     this.state = {
-      selectedProduct: {},
-      quickViewProdcut: {},
       isAdded: false
     }
   }
 
-  addToCart(image, name, price, id, quantity){
-    this.setState({
-      selectedProduct: {
-        image: image,
-        name: name,
-        price: price,
-        id: id,
-        quantity: quantity
-      }
-    }, function(){
-      this.props.addToCart(this.state.selectedProduct);
-    })
+  addToCart(quantity){
+    let selectedProduct = {
+      ...this.props.product,
+      quantity: quantity,
+    };
+
+    this.props.addToCart(selectedProduct);
+
     this.setState({
       isAdded: true
-    }, function(){
-      setTimeout(() => {
-        this.setState({
-          isAdded: false,
-          selectedProduct: {}
-        });
-      }, 3500);
     });
+    this.props.updateQuantity(0);
+
+    setTimeout(() => {
+      this.setState({
+        isAdded: false,
+      });
+    }, 1500);
   }
 
-  quickView(image, name, price, id){
-    this.setState({
-      quickViewProdcut: {
-        image: image,
-        name: name,
-        price: price,
-        id: id
-      }
-    }, function(){
-      this.props.openModal(this.state.quickViewProdcut);
-    })
+  quickView(){
+    this.props.openModal(this.props.product);
   }
 
   render(){
-    let image = this.props.image;
-    let name = this.props.name;
-    let price = this.props.price;
-    let id = this.props.id;
+    let image = this.props.product.image;
+    let name = this.props.product.name;
+    let price = this.props.product.price;
+    let id = this.props.product.id;
     let quantity = this.props.productQuantity;
     return (
       <div className="product">
         <div className="product-image">
-          <img src={image} alt={this.props.name} onClick={this.quickView.bind(this, image, name, price, id, quantity)}/>
+          <img src={image} alt={name} onClick={this.quickView.bind(this)}/>
         </div>
-        <h4 className="product-name">{this.props.name}</h4>
-        <p className="product-price">{this.props.price}</p>
+        <h4 className="product-name">{name}</h4>
+        <p className="product-price">{price}</p>
         <Counter productQuantity={quantity} updateQuantity={this.props.updateQuantity} resetQuantity={this.resetQuantity}/>
         <div className="product-action">
-          <button className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"} type="button" onClick={this.addToCart.bind(this, image, name, price, id, quantity)}>{!this.state.isAdded ? "ADD TO CART" : "✔ ADDED"}</button>
+          <button className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"} type="button" onClick={this.addToCart.bind(this, quantity)}>{!this.state.isAdded ? "ADD TO CART" : "✔ ADDED"}</button>
         </div>
       </div>
     )
