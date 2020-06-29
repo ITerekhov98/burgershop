@@ -19,7 +19,7 @@ class App extends Component {
       totalItems: 0,  // FIXME заменить на вычисляемые свойства
       totalAmount: 0,  // FIXME заменить на вычисляемые свойства
       term: '',
-      category: '',
+      categoryId: null,
       quickViewProduct: {},
       showCart: false,
       quickViewModalActive: false,
@@ -157,7 +157,7 @@ class App extends Component {
   }
   // Filter by Category
   handleCategory(event){
-    this.setState({category: event.target.value});
+    this.setState({categoryId: event.target.value});
   }
 
   handleCartClose() {

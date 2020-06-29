@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.shortcuts import reverse
 
-from .models import Restaurant, Product, RestaurantMenuItem
+from .models import Restaurant, Product, RestaurantMenuItem, ProductCategory
 
 
 class RestaurantMenuItemInline(admin.TabularInline):
@@ -92,3 +92,8 @@ class ProductAdmin(admin.ModelAdmin):
         edit_url = reverse('admin:foodcartapp_product_change', args=(obj.id,))
         return format_html('<a href="{edit_url}"><img src="{src}" height="50"/></a>', edit_url=edit_url, src=obj.image.url)
     get_image_list_preview.short_description = 'превью'
+
+
+@admin.register(ProductCategory)
+class ProductAdmin(admin.ModelAdmin):
+    pass

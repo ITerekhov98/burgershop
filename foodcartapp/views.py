@@ -30,7 +30,7 @@ def banners_list_api(request):
 
 
 def product_list_api(request):
-    products = Product.objects.available()
+    products = Product.objects.select_related('category').available()
 
     dumped_products = []
     for product in products:
@@ -39,7 +39,10 @@ def product_list_api(request):
             'name': product.name,
             'price': product.price,
             'special_status': product.special_status,
-            'category': product.category,
+            'category': {
+                'id': product.category.id,
+                'name': product.category.name,
+            },
             'image': product.image.url,
             'restaurant': {
                 'id': product.id,
