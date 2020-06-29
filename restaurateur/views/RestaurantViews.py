@@ -22,7 +22,6 @@ class RestaurantListView(LoginRequiredMixin, ListView):
         return {
             **super().get_context_data(**kwargs),
             'restaurants': self.request.user.administrated_restaurants.all(),
-            'Name': self.request.user.username,
         }
 
         context = super().get_context_data(**kwargs)

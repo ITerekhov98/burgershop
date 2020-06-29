@@ -9,13 +9,6 @@
   </center>
 
   <hr/>
-  <div class="row">
-    <div class="col-sm-5 col-md-5 col-lg-5"></div>
-    <div class="col-sm-2 col-md-2 col-lg-2">
-      <a href="{% url 'restaurateur:AddProductView' %}" class="btn btn-primary">Добавить блюдо</a>
-    </div>
-    <div class="col-sm-5 col-md-5 col-lg-5"></div>
-  </div>
 
   <br/>
   <br/>
@@ -23,29 +16,22 @@
   <div class="container">
    <table class="table table-responsive">
       <tr>
+        <th></th>
         <th>Название</th>
         <th>Категория</th>
         <th>Цена</th>
         <th>В продаже</th>
-        <th>Фотография</th>
-        <th>Спец.предложение</th>
         <th>Ресторан</th>
-        <th>Действия</th>
       </tr>
 
       {% for product in products %}
         <tr>
+          <td><img src="{{product.image.url}}" alt="{{product.name}}" height="50px"></td>
           <td>{{product.name}}</td>
           <td>{{product.category}}</td>
           <td>{{product.price}}</td>
           <td>{{product.availability}}</td>
-          <td><img src="{{product.image.url}}" alt="image.jpg" height="100px" width="100px"></td>
-          <td>{{product.special_status}}</td>
           <td>{{product.restaurant.name}}</td>
-          <td>
-            <a href="{% url 'restaurateur:UpdateProductView' pk=product.id %}">Редактировать</a>/
-            <a href="{% url 'restaurateur:DeleteProductView' pk=product.id %}">Удалить</a>
-          </td>
         </tr>
       {% endfor %}
     </table>

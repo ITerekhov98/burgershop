@@ -13,14 +13,16 @@
 
     <table class="table table-responsive">
       <tr>
-        <th>Id</th>
         <th>Название</th>
+        <th>Адрес</th>
+        <th>Контактный телефон</th>
       </tr>
 
       {% for restaurant in restaurants %}
         <tr>
-          <td>{{restaurant.id}}</td>
           <td>{{restaurant.name}}</td>
+          <td>пусто</td>
+          <td>пусто</td>
         </tr>
       {% endfor %}
     </table>

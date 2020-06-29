@@ -1,18 +1,16 @@
 from django.urls import path
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .views.RestaurantViews import RestaurantListView
-from .views.ProductViews import ProductListView, AddProductView, UpdateProductView, DeleteProductView
+from .views.ProductViews import ProductListView
 from .views.AuthViews import LoginView, LogoutView
 
 app_name = "restaurateur"
 
 urlpatterns = [
+    path('', lambda request: redirect('restaurateur:ProductsView')),
 
     path('products/', ProductListView.as_view(), name="ProductsView"),
-    path('products/add/', AddProductView.as_view(), name="AddProductView"),
-    path('products/<int:pk>/edit/', UpdateProductView.as_view(), name="UpdateProductView"),
-    path('products/<int:pk>/delete/', DeleteProductView.as_view(), name="DeleteProductView"),
 
     path('restaurants/', RestaurantListView.as_view(), name="RestaurantView"),
 
