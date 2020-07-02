@@ -1,9 +1,9 @@
 from django.urls import path
 from django.shortcuts import render, redirect
 
-from .views.RestaurantViews import RestaurantListView
-from .views.ProductViews import ProductListView
-from .views.AuthViews import LoginView, LogoutView
+from .views import RestaurantListView
+from .views import ProductListView
+from .views import LoginView, LogoutView
 
 app_name = "restaurateur"
 

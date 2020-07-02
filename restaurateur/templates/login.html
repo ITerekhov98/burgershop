@@ -1,38 +1,40 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'base_restaurateur_page.html' %}
 
-    <title>Авторизация</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  </head>
-  <body>
+{% block header_nav %}{% endblock %}
 
-    <br/>
-    <br/>
-    <br/>
+{% block title %}Авторизация | Star Burger{% endblock %}
 
-    <center>
-      <h2>Авторизация</h2>
 
-      <hr/>
+{% block content %}
+  <br/>
+  <br/>
+  <br/>
 
-      <div class="row">
-        <div class="col-sm-4 col-md-4 col-lg-4"></div>
-        <div class="col-sm-4 col-md-4 col-lg-4">
-          <form method="post">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">Войти</button>
-          </form>
-        </div>
-        <div class="col-sm-4 col-md-4 col-lg-4"></div>
+  <center>
+    <h2>Авторизация</h2>
 
+    <hr/>
+
+    <div class="row">
+      <div class="col-sm-4 col-md-4 col-lg-4"></div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <form method="post">
+          {% csrf_token %}
+
+          {{ form.non_field_errors }}
+
+          {% if ivalid %}
+            <div class="alert alert-danger" role="alert">Неверный логин / пароль.</div>
+          {% endif %}
+
+          <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+
+          {{form.as_p}}
+          <button class="btn btn-primary" type="submit">Войти</button>
+        </form>
       </div>
-    </center>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <div class="col-sm-4 col-md-4 col-lg-4"></div>
 
-  </body>
-</html>
+    </div>
+  </center>
+{% endblock %}
