@@ -19,7 +19,6 @@ class App extends Component {
       totalItems: 0,  // FIXME заменить на вычисляемые свойства
       totalAmount: 0,  // FIXME заменить на вычисляемые свойства
       term: '',
-      categoryId: null,
       quickViewProduct: {},
       showCart: false,
       quickViewModalActive: false,
@@ -27,7 +26,6 @@ class App extends Component {
       checkoutModalActive: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
-    this.handleCategory = this.handleCategory.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.sumTotalItems = this.sumTotalItems.bind(this);
     this.sumTotalAmount = this.sumTotalAmount.bind(this);
@@ -148,10 +146,6 @@ class App extends Component {
   // Search by Keyword
   handleSearch(event){
     this.setState({term: event.target.value});
-  }
-  // Filter by Category
-  handleCategory(event){
-    this.setState({categoryId: event.target.value});
   }
 
   handleCartClose() {
