@@ -78,3 +78,10 @@ def view_restaurants(request):
     return render(request, template_name="restaurants_list.html", context={
         'restaurants': request.user.administrated_restaurants.all(),
     })
+
+
+@user_passes_test(is_manager, login_url='restaurateur:login')
+def view_orders(request):
+    return render(request, template_name='order_items.html', context={
+        # TODO заглушка для нереализованного функционала
+    })
