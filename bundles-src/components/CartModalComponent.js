@@ -7,28 +7,32 @@ import {Table} from 'react-bootstrap';
 import '../css/modal.css';
 
 class CartModalComponent extends Component{
-
-  constructor(props){
-    super(props);
-    this.state = {
-      cart: this.props.cartItems
-    };
+  handleCheckout(){
+    document.getElementById('checkout').style.pointerEvents = 'none';
+    document.getElementById("checkout").setAttribute("disabled", "disabled");
+    if (this.props.cartItems.length>0){
+      this.props.handleCartClose();
+      this.props.handleProceed();
+    }
+    document.getElementById('checkout').style.pointerEvents = 'auto';
   }
 
   render(){
-    let cartItems;
     const imgStyle = {
       maxWidth: "100px",
       maxHeight: "50px"
     };
-    cartItems = this.state.cart.map(product => (
-      <CSSTransition component="tr" classNames="fadeIn" key={product.id} timeout={{ enter:500, exit: 300 }}>
-        <td><img src={product.image} style={imgStyle} /></td>
-        <td>{product.name}</td>
-        <td className="currency">{product.price}</td>
-        <td>{product.quantity} шт.</td>
-        <td className="currency">{product.quantity * product.price}</td>
-        <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
+
+    let cartItems = this.props.cartItems.map(product => (
+      <CSSTransition classNames="fadeIn" key={product.id} timeout={{ enter:500, exit: 300 }}>
+        <tr>
+          <td><img src={product.image} style={imgStyle} /></td>
+          <td>{product.name}</td>
+          <td className="currency">{product.price}</td>
+          <td>{product.quantity} шт.</td>
+          <td className="currency">{product.quantity * product.price}</td>
+          <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
+        </tr>
       </CSSTransition>
     ));
 
@@ -64,15 +68,13 @@ class CartModalComponent extends Component{
           {view}
         </Modal.Body>
         <Modal.Footer>
-          <Button id="checkout" onClick={event => {
-              document.getElementById('checkout').style.pointerEvents = 'none';
-              document.getElementById("checkout").setAttribute("disabled", "disabled");
-              if(this.props.cartItems.length>0){
-                this.props.handleCartClose();
-                this.props.handleProceed();
-              }
-              document.getElementById('checkout').style.pointerEvents = 'auto';
-          }} className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}>Оформить заказ</Button>
+          <Button
+            id="checkout"
+            onClick={event => this.handleCheckout()}
+            className={this.props.cartItems.length>0 ? "btn btn-danger" : "disabled btn btn-danger"}
+          >
+            Оформить заказ
+          </Button>
           <Button onClick={this.props.handleCartClose}>Закрыть</Button>
         </Modal.Footer>
       </Modal>
