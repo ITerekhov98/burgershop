@@ -2,11 +2,8 @@ from django import forms
 from django.shortcuts import redirect, render
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView
 from django.contrib.auth.decorators import user_passes_test
-from django.utils.decorators import method_decorator
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 
