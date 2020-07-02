@@ -21,8 +21,6 @@ class Products extends Component{
           <Product
             product={product}
             addToCart={this.props.addToCart}
-            productQuantity={this.props.productQuantity}
-            updateQuantity={this.props.updateQuantity}
             openModal={this.props.openModal}
           />
         </CSSTransition>

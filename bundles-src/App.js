@@ -23,7 +23,6 @@ class App extends Component {
       quickViewProduct: {},
       showCart: false,
       quickViewModalActive: false,
-      quantity: 1,  // FIXME что здесь хранится?
       banners: [],  // null represent "Loading" state, will be replaced by Array on server response
       checkoutModalActive: false,
     };
@@ -38,7 +37,6 @@ class App extends Component {
     this.handleCartClose = this.handleCartClose.bind(this);
     this.handleQuickViewModalClose = this.handleQuickViewModalClose.bind(this);
     this.handleQuickViewModalShow = this.handleQuickViewModalShow.bind(this);
-    this.updateQuantity=this.updateQuantity.bind(this);
     this.handleCheckout=this.handleCheckout.bind(this);
     this.handleCheckoutModalShow=this.handleCheckoutModalShow.bind(this);
     this.handleCheckoutModalClose=this.handleCheckoutModalClose.bind(this);
@@ -164,12 +162,6 @@ class App extends Component {
     this.setState({ showCart: true });
   }
 
-  updateQuantity(qty){
-    this.setState({
-        quantity: qty
-    })
-  }
-
   // Add to Cart
   handleAddToCart(selectedProducts){
 
@@ -191,14 +183,6 @@ class App extends Component {
     this.setState({
       cart : cartItems,
     });
-
-
-    setTimeout(() => {
-      // FIXME протестировать этот код, он работает?
-      this.setState({
-        quantity: 1
-      });
-    }, 1000);
 
     this.sumTotalItems(this.state.cart);
     this.sumTotalAmount(this.state.cart);
@@ -321,8 +305,6 @@ class App extends Component {
               productsList={this.state.products}
               term={this.state.term}
               addToCart={this.handleAddToCart}
-              productQuantity={this.state.quantity}
-              updateQuantity={this.updateQuantity}
               openModal={this.handleQuickViewModalShow}
             />
           }
@@ -341,8 +323,6 @@ class App extends Component {
                 productsList={this.state.products}
                 term={this.state.term}
                 addToCart={this.handleAddToCart}
-                productQuantity={this.state.quantity}
-                updateQuantity={this.updateQuantity}
                 openModal={this.handleQuickViewModalShow}
               />
             </div>

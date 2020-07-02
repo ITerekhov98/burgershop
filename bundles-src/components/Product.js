@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 import Counter from './Counter';
 
 class Product extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      isAdded: false
-    }
+  state = {
+    isAdded: false,
+    quantity: 1,
+  }
+
+  updateQuantity(qty){
+    this.setState({
+      quantity: qty
+    })
   }
 
   addToCart(quantity){
@@ -20,9 +24,9 @@ class Product extends Component{
     this.setState({
       isAdded: true
     });
-    this.props.updateQuantity(0);
 
     setTimeout(() => {
+      this.updateQuantity(1);
       this.setState({
         isAdded: false,
       });
@@ -38,7 +42,6 @@ class Product extends Component{
     let name = this.props.product.name;
     let price = this.props.product.price;
     let id = this.props.product.id;
-    let quantity = this.props.productQuantity;
     return (
       <div className="product">
         <div className="product-image">
@@ -46,9 +49,15 @@ class Product extends Component{
         </div>
         <h4 className="product-name">{name}</h4>
         <p className="product-price currency">{price}</p>
-        <Counter productQuantity={quantity} updateQuantity={this.props.updateQuantity} resetQuantity={this.resetQuantity}/>
+        <Counter quantity={this.state.quantity} updateQuantity={qty=>this.updateQuantity(qty)}/>
         <div className="product-action">
-          <button className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"} type="button" onClick={this.addToCart.bind(this, quantity)}>{!this.state.isAdded ? "В корзину" : "✔ Добавлено"}</button>
+          <button
+            className={!this.state.isAdded ? "btn btn-primary" : "btn btn-success"}
+            type="button"
+            onClick={event => this.addToCart(this.state.quantity)}
+          >
+            {!this.state.isAdded ? "В корзину" : "✔ Добавлено"}
+          </button>
         </div>
       </div>
     )
