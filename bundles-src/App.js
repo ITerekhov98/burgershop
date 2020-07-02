@@ -14,7 +14,7 @@ class App extends Component {
   constructor(props){
     super();
     this.state = {
-      products: [],
+      products: null,  // null represent "Loading" state, will be replaced by Array on server response
       cart: [],
       totalItems: 0,  // FIXME заменить на вычисляемые свойства
       totalAmount: 0,  // FIXME заменить на вычисляемые свойства
@@ -24,7 +24,7 @@ class App extends Component {
       showCart: false,
       quickViewModalActive: false,
       quantity: 1,  // FIXME что здесь хранится?
-      banners: [],
+      banners: [],  // null represent "Loading" state, will be replaced by Array on server response
       checkoutModalActive: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -106,9 +106,7 @@ class App extends Component {
 
 
   async getProducts(){
-    const url = "/api/products/";
-
-    let response = await fetch(url, {
+    let response = await fetch('/api/products/', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -126,9 +124,7 @@ class App extends Component {
   }
 
   async getBanners(){
-    const url = "/api/banners/";
-
-    let response = await fetch(url, {
+    let response = await fetch('/api/banners/', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -145,7 +141,7 @@ class App extends Component {
     });
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getProducts();
     this.getBanners();
   }
@@ -289,7 +285,9 @@ class App extends Component {
           handleQuickViewModalClose={this.handleQuickViewModalClose}
         />
 
-        <BannerComponent banners={this.state.banners}/>
+        { this.state.banners &&
+          <BannerComponent banners={this.state.banners}/>
+        }
 
         <div id="what_we_do" className="container-fluid"></div>
 
@@ -318,14 +316,16 @@ class App extends Component {
             <hr/>
           </center>
 
-          <SpecialsComponent
-            productsList={this.state.products}
-            term={this.state.term}
-            addToCart={this.handleAddToCart}
-            productQuantity={this.state.quantity}
-            updateQuantity={this.updateQuantity}
-            openModal={this.handleQuickViewModalShow}
-          />
+          { this.state.products &&
+            <SpecialsComponent
+              productsList={this.state.products}
+              term={this.state.term}
+              addToCart={this.handleAddToCart}
+              productQuantity={this.state.quantity}
+              updateQuantity={this.updateQuantity}
+              openModal={this.handleQuickViewModalShow}
+            />
+          }
         </div>
 
         <div id="products" style={{marginTop:"20px"}} className="form-group">
@@ -335,16 +335,18 @@ class App extends Component {
 
           <hr/>
 
-          <div className="container">
-            <Products
-              productsList={this.state.products}
-              term={this.state.term}
-              addToCart={this.handleAddToCart}
-              productQuantity={this.state.quantity}
-              updateQuantity={this.updateQuantity}
-              openModal={this.handleQuickViewModalShow}
-            />
-          </div>
+          { this.state.products &&
+            <div className="container">
+              <Products
+                productsList={this.state.products}
+                term={this.state.term}
+                addToCart={this.handleAddToCart}
+                productQuantity={this.state.quantity}
+                updateQuantity={this.updateQuantity}
+                openModal={this.handleQuickViewModalShow}
+              />
+            </div>
+          }
         </div>
 
         <a href="#" id="contact_us"></a>
