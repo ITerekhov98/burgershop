@@ -58,10 +58,10 @@
     opacity: 1;
     transition: opacity 500ms ease-in;
   }
-  .fadeIn-leave {
+  .fadeIn-exit {
     opacity: 1;
   }
-  .fadeIn-leave.fadeIn-leave-active {
+  .fadeIn-exit.fadeIn-exit-active {
     opacity: 0.01;
     transition: opacity 300ms ease-in;
   }

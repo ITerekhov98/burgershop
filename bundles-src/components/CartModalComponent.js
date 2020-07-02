@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import EmptyCart from './EmptyCart';
 import { Button } from 'react-bootstrap';
 import {Modal} from 'react-bootstrap';
@@ -21,18 +21,16 @@ class CartModalComponent extends Component{
       maxWidth: "100px",
       maxHeight: "50px"
     };
-    cartItems = this.state.cart.map(product => {
-      return(
-        <CSSTransitionGroup transitionName="fadeIn" key={product.id} component="tr" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-          <td><img src={product.image} style={imgStyle} /></td>
-          <td>{product.name}</td>
-          <td className="currency">{product.price}</td>
-          <td>{product.quantity} шт.</td>
-          <td className="currency">{product.quantity * product.price}</td>
-          <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
-        </CSSTransitionGroup>
-      )
-    });
+    cartItems = this.state.cart.map(product => (
+      <CSSTransition component="tr" classNames="fadeIn" key={product.id} timeout={{ enter:500, exit: 300 }}>
+        <td><img src={product.image} style={imgStyle} /></td>
+        <td>{product.name}</td>
+        <td className="currency">{product.price}</td>
+        <td>{product.quantity} шт.</td>
+        <td className="currency">{product.quantity * product.price}</td>
+        <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
+      </CSSTransition>
+    ));
 
     let view;
     if(cartItems.length <= 0){
@@ -50,9 +48,9 @@ class CartModalComponent extends Component{
               <th></th>
             </tr>
           </thead>
-          <tbody>
+          <TransitionGroup component="tbody">
             {cartItems}
-          </tbody>
+          </TransitionGroup>
         </Table>
       )
     }

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Product from './Product';
 import LoadingProducts from './loaders/LoadingProducts';
 import NoResults from "./NoResults";
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 class Products extends Component{
   render(){
@@ -12,14 +12,20 @@ class Products extends Component{
       return x.name.toLowerCase().includes(term) || !term;
     }).map(product => {
       return(
-        <Product
+        <CSSTransition
+          classNames="fadeIn"
+          timeout={{ enter:500, exit: 300 }}
+          component="div"
           key={product.id}
-          product={product}
-          addToCart={this.props.addToCart}
-          productQuantity={this.props.productQuantity}
-          updateQuantity={this.props.updateQuantity}
-          openModal={this.props.openModal}
-        />
+        >
+          <Product
+            product={product}
+            addToCart={this.props.addToCart}
+            productQuantity={this.props.productQuantity}
+            updateQuantity={this.props.updateQuantity}
+            openModal={this.props.openModal}
+          />
+        </CSSTransition>
       )
     });
 
@@ -31,14 +37,9 @@ class Products extends Component{
       view = <NoResults />
     } else{
       view = (
-        <CSSTransitionGroup
-          transitionName="fadeIn"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-          component="div"
-          className="products">
+        <TransitionGroup className="products">
           {productsData}
-        </CSSTransitionGroup>
+        </TransitionGroup>
       )
     }
     return (
