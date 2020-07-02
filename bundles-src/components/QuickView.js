@@ -11,7 +11,7 @@ class QuickView extends Component{
       marginBottom:"30px"
     }
     return (
-      <Modal show={this.props.quickViewModalActive} onHide={this.props.handleQuickViewModalClose} alt={this.props.product.id}>
+      <Modal show={true} onHide={this.props.handleQuickViewModalClose} alt={this.props.product.id}>
         <Modal.Header closeButton>
           <h2><center><Modal.Title>{this.props.product.name}</Modal.Title></center></h2>
         </Modal.Header>

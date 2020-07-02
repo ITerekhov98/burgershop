@@ -14,21 +14,16 @@ class App extends Component {
   constructor(props){
     super();
     this.state = {
-      products: null,  // null represent "Loading" state, will be replaced by Array on server response
-      cart: [],
-      totalItems: 0,  // FIXME заменить на вычисляемые свойства
-      totalAmount: 0,  // FIXME заменить на вычисляемые свойства
-      term: '',
-      quickViewProduct: {},
-      showCart: false,
-      quickViewModalActive: false,
       banners: [],  // null represent "Loading" state, will be replaced by Array on server response
+      products: null,  // null represent "Loading" state, will be replaced by Array on server response
+      term: '',
+      cart: [],
+      quickViewProduct: null,  // will be replaced by selected product attributes
+      showCart: false,
       checkoutModalActive: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
-    this.sumTotalItems = this.sumTotalItems.bind(this);
-    this.sumTotalAmount = this.sumTotalAmount.bind(this);
     this.checkProduct = this.checkProduct.bind(this);
     this.handleRemoveProduct = this.handleRemoveProduct.bind(this);
     this.handleCartShow = this.handleCartShow.bind(this);
@@ -78,9 +73,7 @@ class App extends Component {
       let responseData = await response.json();
 
       this.setState({
-        totalAmount: 0,
-        totalItems: 0,
-        cart: []
+        cart: [],
       });
 
       alert("Заказ оформлен. Вам перезвонят в течение 10 минут.");
@@ -177,10 +170,6 @@ class App extends Component {
     this.setState({
       cart : cartItems,
     });
-
-    this.sumTotalItems(this.state.cart);
-    this.sumTotalAmount(this.state.cart);
-
   }
 
 
@@ -191,8 +180,6 @@ class App extends Component {
     this.setState({
       cart: cart
     })
-    this.sumTotalItems(this.state.cart);
-    this.sumTotalAmount(this.state.cart);
     e.preventDefault();
   }
 
@@ -204,48 +191,28 @@ class App extends Component {
     });
   }
 
-  sumTotalItems(){
-        let total = 0;
-        let cart = this.state.cart;
-    total = cart.length;
-    this.setState({
-      totalItems: total
-    })
-  }
-
-
-  sumTotalAmount(){
-        let total = 0;
-        let cart = this.state.cart;
-        for (var i=0; i<cart.length; i++) {
-            total += cart[i].price * parseFloat(cart[i].quantity);
-        }
-    this.setState({
-      totalAmount: total
-    })
-  }
-
-  // Open Modal
   handleQuickViewModalShow(product){
     this.setState({
       quickViewProduct: product,
-      quickViewModalActive: true
     })
   }
-  // Close Modal
+
   handleQuickViewModalClose(){
     this.setState({
-      quickViewModalActive: false
+      quickViewProduct: null,
     })
   }
 
   render() {
+
+    const totalAmount = this.state.cart.map(item => item.price * item.quantity).reduce((a,b) => a + b, 0);
+
     return (
 
       <React.Fragment>
         <NavBarComponent
-          totalItems= {this.state.totalItems}
-          totalAmount ={this.state.totalAmount}
+          totalItems={this.state.cart.length}
+          totalAmount={totalAmount}
           handleCartShow={this.handleCartShow}
         />
 
@@ -257,11 +224,12 @@ class App extends Component {
           handleProceed={this.handleCheckoutModalShow}
         />
 
-        <QuickView
-          product={this.state.quickViewProduct}
-          quickViewModalActive={this.state.quickViewModalActive}
-          handleQuickViewModalClose={this.handleQuickViewModalClose}
-        />
+        { this.state.quickViewProduct &&
+          <QuickView
+            product={this.state.quickViewProduct}
+            handleQuickViewModalClose={this.handleQuickViewModalClose}
+          />
+        }
 
         { this.state.banners &&
           <BannerComponent banners={this.state.banners}/>
