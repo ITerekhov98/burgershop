@@ -15,7 +15,7 @@ urlpatterns = [
     path('restaurants/', view_restaurants, name="RestaurantView"),
 
     # TODO заглушка для нереализованного функционала
-    path('orders/', render, kwargs={
+    path('orders/new/', render, kwargs={
         'template_name': 'order_items.html',
     }, name="OrderListView"),
 
