@@ -1,8 +1,8 @@
 from django.urls import path
 from django.shortcuts import render, redirect
 
-from .views import RestaurantListView
-from .views import ProductListView
+from .views import view_restaurants
+from .views import view_products
 from .views import LoginView, LogoutView
 
 app_name = "restaurateur"
@@ -10,9 +10,9 @@ app_name = "restaurateur"
 urlpatterns = [
     path('', lambda request: redirect('restaurateur:ProductsView')),
 
-    path('products/', ProductListView.as_view(), name="ProductsView"),
+    path('products/', view_products, name="ProductsView"),
 
-    path('restaurants/', RestaurantListView.as_view(), name="RestaurantView"),
+    path('restaurants/', view_restaurants, name="RestaurantView"),
 
     # TODO заглушка для нереализованного функционала
     path('orders/', render, kwargs={

@@ -66,19 +66,15 @@ def is_manager(user):
     return user.is_staff  # FIXME replace with specific permission
 
 
-@method_decorator(user_passes_test(is_manager, login_url='restaurateur:login'), name='dispatch')
-class ProductListView(LoginRequiredMixin, ListView):
-    model = Product
-    template_name = "products_list.html"
-    context_object_name = "products"
+@user_passes_test(is_manager, login_url='restaurateur:login')
+def view_products(request):
+    return render(request, template_name="products_list.html", context={
+        'products': Product.objects.all(),
+    })
 
 
-@method_decorator(user_passes_test(is_manager, login_url='restaurateur:login'), name='dispatch')
-class RestaurantListView(LoginRequiredMixin, TemplateView):
-    template_name = "restaurants_list.html"
-
-    def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            'restaurants': self.request.user.administrated_restaurants.all(),
-        }
+@user_passes_test(is_manager, login_url='restaurateur:login')
+def view_restaurants(request):
+    return render(request, template_name="restaurants_list.html", context={
+        'restaurants': request.user.administrated_restaurants.all(),
+    })
