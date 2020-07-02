@@ -26,9 +26,9 @@ class CartModalComponent extends Component{
         <CSSTransitionGroup transitionName="fadeIn" key={product.id} component="tr" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
           <td><img src={product.image} style={imgStyle} /></td>
           <td>{product.name}</td>
-          <td class="currency">{product.price}</td>
+          <td className="currency">{product.price}</td>
           <td>{product.quantity} шт.</td>
-          <td class="currency">{product.quantity * product.price}</td>
+          <td className="currency">{product.quantity * product.price}</td>
           <td><a href="#" onClick={this.props.removeProduct.bind(this, product.id)}>×</a></td>
         </CSSTransitionGroup>
       )
