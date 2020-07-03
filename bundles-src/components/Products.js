@@ -1,17 +1,12 @@
 import React, {Component} from 'react';
 import Product from './Product';
 import LoadingProducts from './loaders/LoadingProducts';
-import NoResults from "./NoResults";
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 class Products extends Component{
   render(){
-    let productsData;
-    let term = this.props.term.toLowerCase();
-    productsData = this.props.productsList.filter(x => {
-      return x.name.toLowerCase().includes(term) || !term;
-    }).map(product => {
-      return(
+    let productCards = this.props.productsList.map(product => {
+      return (
         <CSSTransition
           classNames="fadeIn"
           timeout={{ enter:500, exit: 300 }}
@@ -27,22 +22,11 @@ class Products extends Component{
       )
     });
 
-    // Empty and Loading States
-    let view;
-    if(productsData.length <= 0 && !term){
-      view = <LoadingProducts />
-    } else if(productsData.length <= 0 && term){
-      view = <NoResults />
-    } else{
-      view = (
-        <TransitionGroup className="products">
-          {productsData}
-        </TransitionGroup>
-      )
-    }
     return (
       <div className="products-wrapper">
-        {view}
+        <TransitionGroup className="products">
+          {productCards}
+        </TransitionGroup>
       </div>
     )
   }

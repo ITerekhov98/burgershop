@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import './css/App.css';
+import _ from 'lodash';
+
 import NavBarComponent from './components/NavBarComponent';
 import CartModalComponent from './components/CartModalComponent';
 import BannerComponent from './components/BannerComponent';
 import Products from './components/Products';
 import QuickView from './components/QuickView';
 import FooterComponent from './components/FooterComponent';
-import SpecialsComponent from './components/SpecialsComponent';
 import CheckoutModal from './components/CheckoutModalComponent';
+import LoadingProducts from './components/loaders/LoadingProducts';
+import NoResults from "./components/NoResults";
+
+import './css/App.css';
 
 class App extends Component {
 
@@ -207,6 +211,52 @@ class App extends Component {
 
     const totalAmount = this.state.cart.map(item => item.price * item.quantity).reduce((a,b) => a + b, 0);
 
+    let menuBlocks = [];
+    let normalizedTerm = _.lowerCase(_.trim(this.state.term));
+
+    if (this.state.products){
+      let filteredProducts = this.state.products;
+
+      if (normalizedTerm){
+        filteredProducts = this.state.products.filter(product => !normalizedTerm || product.name.toLowerCase().includes(normalizedTerm));
+      } else {
+        let highlightedProducts = this.state.products.filter(x => x.special_status);
+
+        if (highlightedProducts.length){
+          menuBlocks.push(
+            <div style={{marginTop:"50px"}} className="form-group" key={'_popular'}>
+              <center>
+                <h2>Популярное</h2>
+                <hr/>
+              </center>
+
+              <Products
+                productsList={highlightedProducts}
+                addToCart={this.handleAddToCart}
+                openModal={this.handleQuickViewModalShow}
+              />
+            </div>
+          )
+        }
+      }
+
+      let menyGroups = _.groupBy(filteredProducts, product => product.category && product.category.name);
+      menuBlocks.push(...Object.entries(menyGroups).map( ([groupName, products], index) => (
+        <div style={{marginTop:"50px"}} className="form-group" key={index}>
+          <center>
+            <h2>{ groupName }</h2>
+            <hr/>
+          </center>
+
+          <Products
+            productsList={products}
+            addToCart={this.handleAddToCart}
+            openModal={this.handleQuickViewModalShow}
+          />
+        </div>
+      )));
+    }
+
     return (
 
       <React.Fragment>
@@ -235,12 +285,10 @@ class App extends Component {
           <BannerComponent banners={this.state.banners}/>
         }
 
-        <div id="what_we_do" className="container-fluid"></div>
+        <a id="foodcart_specials" href="#"></a>
 
-        <div id="restaurants" className="container-fluid"></div>
-
-        <div id="foodcart_specials" className="container-fluid">
-          <div className="row">
+        <div className="container-fluid">
+          <div className="row" style={{marginBottom:"50px"}}>
             <div className="col-md-3  col-lg-3"></div>
             <div className="col-md-6 col-sm-12 col-lg-6 mt-5" style={{marginTop: '50px'}}>
               <div className="input-group">
@@ -253,42 +301,37 @@ class App extends Component {
             <div className="col-md-3 col-lg-3"></div>
           </div>
 
-          <br/>
-          <br/>
-          <br/>
-
-          <center>
-            <b style={{fontFamily:"Times New Roman"}}><h2>Популярное</h2></b>
-            <hr/>
-          </center>
-
-          { this.state.products &&
-            <SpecialsComponent
-              productsList={this.state.products}
-              term={this.state.term}
-              addToCart={this.handleAddToCart}
-              openModal={this.handleQuickViewModalShow}
-            />
-          }
-        </div>
-
-        <div id="products" style={{marginTop:"20px"}} className="form-group">
-          <center>
-            <h2>Меню Star Burger</h2>
-          </center>
-
-          <hr/>
-
-          { this.state.products &&
-            <div className="container">
-              <Products
-                productsList={this.state.products}
-                term={this.state.term}
-                addToCart={this.handleAddToCart}
-                openModal={this.handleQuickViewModalShow}
-              />
+          { !this.state.products && (
+            <div>
+              <center>
+                <h2>Меню Star Burger</h2>
+                <hr/>
+              </center>
+              <LoadingProducts />
             </div>
-          }
+          )}
+
+          { this.state.products && normalizedTerm && !menuBlocks.length && (
+            <NoResults />
+          )}
+
+          { this.state.products && !normalizedTerm && !menuBlocks.length && (
+            <div className="row">
+              <div className="col-6">
+                <center>
+                  <h2>Меню пока пусто...</h2>
+                </center>
+              </div>
+            </div>
+          )}
+
+          { menuBlocks }
+
+          <br/>
+          <br/>
+          <br/>
+
+
         </div>
 
         <a href="#" id="contact_us"></a>
