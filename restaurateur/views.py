@@ -65,8 +65,26 @@ def is_manager(user):
 
 @user_passes_test(is_manager, login_url='restaurateur:login')
 def view_products(request):
+    restaurants = list(Restaurant.objects.order_by('name'))
+    products = list(Product.objects.prefetch_related('menu_items'))
+
+    default_availability = {restaurant.id: False for restaurant in restaurants}
+    products_with_restaurants = []
+    for product in products:
+
+        availability = {
+            **default_availability,
+            **{item.restaurant_id: item.availability for item in product.menu_items.all()},
+        }
+        orderer_availability = [availability[restaurant.id] for restaurant in restaurants]
+
+        products_with_restaurants.append(
+            (product, orderer_availability)
+        )
+
     return render(request, template_name="products_list.html", context={
-        'products': Product.objects.all(),
+        'products_with_restaurants': products_with_restaurants,
+        'restaurants': restaurants,
     })
 
 

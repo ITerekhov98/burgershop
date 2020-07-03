@@ -27,6 +27,8 @@
           <td>
             {% if restaurant.contact_phone %}
               <a href="phone:{{ restaurant.contact_phone }}">{{ restaurant.contact_phone }}</a>
+            {% else %}
+              пусто
             {% endif %}
           </td>
           <td>
@@ -35,5 +37,8 @@
         </tr>
       {% endfor %}
     </table>
+
+    <a href="{% url 'admin:foodcartapp_restaurant_add' %}" class="btn btn-default">Добавить</a>
+
   </div>
 {% endblock %}
