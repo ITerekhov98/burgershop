@@ -14,10 +14,13 @@ class RestaurantMenuItemInline(admin.TabularInline):
 class RestaurantAdmin(admin.ModelAdmin):
     search_fields = [
         'name',
+        'address',
+        'contact_phone',
     ]
     list_display = [
         'name',
-        'admin',
+        'address',
+        'contact_phone',
     ]
     inlines = [
         RestaurantMenuItemInline

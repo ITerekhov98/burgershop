@@ -6,8 +6,6 @@ class Restaurant(models.Model):
     name = models.CharField('название', max_length=50)
     address = models.CharField('адрес', max_length=100, blank=True)
     contact_phone = models.CharField('контактный телефон', max_length=50, blank=True)
-    admin = models.ForeignKey(User, verbose_name='администратор', on_delete=models.SET_NULL,
-                              null=True, blank=True, related_name='administrated_restaurants')
 
     def __str__(self):
         return self.name
