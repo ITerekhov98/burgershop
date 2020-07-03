@@ -240,8 +240,8 @@ class App extends Component {
         }
       }
 
-      let menyGroups = _.groupBy(filteredProducts, product => product.category && product.category.name);
-      menuBlocks.push(...Object.entries(menyGroups).map( ([groupName, products], index) => (
+      let menuGroups = _.groupBy(filteredProducts, product => product.category && product.category.name);
+      menuBlocks.push(...Object.entries(menuGroups).map( ([groupName, products], index) => (
         <div style={{marginTop:"50px"}} className="form-group" key={index}>
           <center>
             <h2>{ groupName }</h2>
@@ -285,7 +285,7 @@ class App extends Component {
           <BannerComponent banners={this.state.banners}/>
         }
 
-        <a id="foodcart_specials" href="#"></a>
+        <a id="menu" href="#"></a>
 
         <div className="container-fluid">
           <div className="row" style={{marginBottom:"50px"}}>

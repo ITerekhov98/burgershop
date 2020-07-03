@@ -16,8 +16,7 @@ class NavBarComponent extends Component{
           <div>
             <div className="collapse navbar-collapse" id="myNavbar">
               <ul className="nav navbar-nav">
-                <li><a href="#foodcart_specials">Популярное</a></li>
-                <li><a href="#products">Меню</a></li>
+                <li><a href="#menu">Меню</a></li>
                 <li><a href="#contact_us">Контакты</a></li>
               </ul>
               <ul className="nav navbar-nav navbar-right">
