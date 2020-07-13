@@ -21,7 +21,7 @@
 
 Скачайте код:
 ```sh
-git clone https://github.com/devmanorg/star-burger
+git clone https://github.com/devmanorg/star-burger.git
 ```
 
 [Установите Python](https://www.python.org/), если этого ещё не сделали.
