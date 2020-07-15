@@ -50,7 +50,10 @@ class App extends Component {
   async handleCheckout({firstname, lastname, phonenumber, address}){
     const url = "api/order/";
     let data = {
-      'products': this.state.cart,
+      'products': this.state.cart.map(item=>({
+        product: item.id,
+        quantity: item.quantity,
+      })),
       firstname,
       lastname,
       phonenumber,
