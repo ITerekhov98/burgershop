@@ -42,17 +42,25 @@ python -m venv venv
 - Windows: `.\venv\Scripts\activate`
 - MacOS/Linux: `source venv/bin/activate`
 
+Перейдите в каталог проекта:
+
+```sh
+cd star-burger
+```
+
 Установите зависимости в виртуальное окружение:
 ```sh
 pip install -r requirements.txt
 ```
 
-Создайте базу данных и отмигрируйте её следующей командой:
+Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
+
 ```sh
 python manage.py migrate
 ```
 
 Запустите сервер:
+
 ```sh
 python manage.py runserver
 ```
