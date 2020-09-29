@@ -1,5 +1,5 @@
-from django.templatetags.static import static
 from django.http import JsonResponse
+from django.templatetags.static import static
 
 
 from .models import Product
@@ -39,7 +39,7 @@ def product_list_api(request):
             'name': product.name,
             'price': product.price,
             'special_status': product.special_status,
-            'ingridients': product.ingridients,
+            'description': product.description,
             'category': {
                 'id': product.category.id,
                 'name': product.category.name,
@@ -58,5 +58,7 @@ def product_list_api(request):
 
 
 def register_order(request):
+    print(request.POST)
+    import pdb; pdb.set_trace()
     # TODO это лишь заглушка
     return JsonResponse({})

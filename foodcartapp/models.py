@@ -38,7 +38,7 @@ class Product(models.Model):
     price = models.DecimalField('цена', max_digits=8, decimal_places=2)
     image = models.ImageField('картинка')
     special_status = models.BooleanField('спец.предложение', default=False, db_index=True)
-    ingridients = models.CharField('ингредиенты', max_length=200, blank=True)
+    description = models.TextField('описание', max_length=200, blank=True)
 
     objects = ProductQuerySet.as_manager()
 

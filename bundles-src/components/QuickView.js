@@ -28,8 +28,8 @@ class QuickView extends Component{
                     <td>{this.props.product.name}</td>
                   </tr>
                   <tr>
-                    <td>Ингредиенты:</td>
-                    <td>{this.props.product.ingridients}</td>
+                    <td>Подробнее:</td>
+                    <td>{this.props.product.description}</td>
                   </tr>
                   <tr>
                     <td>Цена:</td>

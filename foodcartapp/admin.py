@@ -1,8 +1,11 @@
 from django.contrib import admin
-from django.utils.html import format_html
 from django.shortcuts import reverse
+from django.utils.html import format_html
 
-from .models import Restaurant, Product, RestaurantMenuItem, ProductCategory
+from .models import Product
+from .models import ProductCategory
+from .models import Restaurant
+from .models import RestaurantMenuItem
 
 
 class RestaurantMenuItemInline(admin.TabularInline):
@@ -64,7 +67,7 @@ class ProductAdmin(admin.ModelAdmin):
         ('Подробно', {
             'fields': [
                 'special_status',
-                'ingridients',
+                'description',
             ],
             'classes': [
                 'wide'
