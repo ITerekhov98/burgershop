@@ -58,7 +58,5 @@ def product_list_api(request):
 
 
 def register_order(request):
-    print(request.POST)
-    import pdb; pdb.set_trace()
     # TODO это лишь заглушка
     return JsonResponse({})
