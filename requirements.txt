@@ -2,3 +2,4 @@ django==3.0.7
 django-debug-toolbar==2.2
 dj-database-url==0.5.0
 Pillow==7.1.2
+environs==9.3.0
