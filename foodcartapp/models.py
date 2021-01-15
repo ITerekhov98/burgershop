@@ -50,8 +50,10 @@ class Product(models.Model):
 
 
 class RestaurantMenuItem(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='menu_items')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items',
+                                   verbose_name="ресторан")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='menu_items',
+                                verbose_name='продукт')
     availability = models.BooleanField('в продаже', default=True, db_index=True)
 
     def __str__(self):
