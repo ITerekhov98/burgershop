@@ -135,6 +135,12 @@ Parcel будет следить за файлами в каталоге `bundle
 parcel build bundles-src/index.js -d bundles --public-url="./"
 ```
 
+Настроить бэкенд: создать файл `.env` в каталоге `StarBurger` со следующими настройками:
+
+- `DEBUG` — дебаг-режим. Поставьте `False`.
+- `SECRET_KEY` — секретный ключ проекта. Им зашифрованы все пароли на вашем сайте, например. Не стоит использовать значение по-умолчанию.
+- `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
+
 ## Цели проекта
 
 Код написан в учебных целях — это урок в курсе по Python и веб-разработке на сайте [Devman](https://dvmn.org). За основу был взят код проекта [FoodCart](https://github.com/Saibharath79/FoodCart).
