@@ -48,7 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
         # FIXME SQLite can not convert letter case for cyrillic words properly, so search will be buggy.
         # Migration to PostgreSQL is necessary
         'name',
-        'category',
+        'category__name',
     ]
 
     inlines = [
