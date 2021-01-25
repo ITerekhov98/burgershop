@@ -7,7 +7,7 @@ const BannerComponent = (props) => {
   const bannerStyle = {
     maxWidth: "100%",
     height: "auto",
-    width: "auto\9"
+    width: "auto"
   };
 
   let carousel_items = props.banners.map( (cfg, index) => {
