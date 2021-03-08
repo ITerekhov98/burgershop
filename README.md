@@ -78,6 +78,10 @@ python manage.py runserver
 ```sh
 nodejs --version
 # v12.18.2
+# Если ошибка, попробуйте node:
+node --version
+# v12.18.2
+
 npm --version
 # 6.14.5
 ```
