@@ -28,7 +28,12 @@ class Restaurant(models.Model):
 
 class ProductQuerySet(models.QuerySet):
     def available(self):
-        return self.distinct().filter(menu_items__availability=True)
+        products = (
+            RestaurantMenuItem.objects
+            .filter(availability=True)
+            .values_list('product')
+        )
+        return self.filter(pk__in=products)
 
 
 class ProductCategory(models.Model):
