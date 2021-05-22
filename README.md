@@ -97,19 +97,20 @@ npm install --dev
 Установите [Parcel](https://parceljs.org/). Это упаковщик веб-приложений. Он похож на [Webpack](https://webpack.js.org/), но совсем не требует настроек:
 
 ```sh
-npm install -g parcel-bundler@1.12.3  # понадобятся права администратора `sudo`
+npm install -g parcel@latest  # понадобятся права администратора `sudo`
 ```
 
-Вам нужна именно версия 1.12.3. Проверьте, что `parcel` установлен и его версию в командной строке:
+Вам нужна вторая версия Parcel. Проверьте, что `parcel` установлен и его версию в командной строке:
 
 ```sh
-parcel --version
+$ parcel --version
+2.0.0-beta.2
 ```
 
 Почти всё готово. Теперь запустите сборку фронтенда и не выключайте. Parcel будет работать в фоне и следить за изменениями в JS-коде:
 
 ```sh
-parcel watch bundles-src/index.js -d bundles --public-url="./"
+parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
 Дождитесь завершения первичной сборки. Это вполне может занять 10 и более секунд. О готовности вы узнаете по сообщению в консоли:
@@ -134,7 +135,7 @@ Parcel будет следить за файлами в каталоге `bundle
 Собрать фронтенд:
 
 ```sh
-parcel build bundles-src/index.js -d bundles --public-url="./"
+parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
 Настроить бэкенд: создать файл `.env` в каталоге `star_burger/` со следующими настройками:
