@@ -24,6 +24,11 @@
 git clone https://github.com/devmanorg/star-burger.git
 ```
 
+Перейдите в каталог проекта:
+```sh
+cd star-burger
+```
+
 [Установите Python](https://www.python.org/), если этого ещё не сделали.
 
 Проверьте, что `python` установлен и корректно настроен. Запустите его в командной строке:
@@ -42,11 +47,6 @@ python -m venv venv
 - Windows: `.\venv\Scripts\activate`
 - MacOS/Linux: `source venv/bin/activate`
 
-Перейдите в каталог проекта:
-
-```sh
-cd star-burger
-```
 
 Установите зависимости в виртуальное окружение:
 ```sh
