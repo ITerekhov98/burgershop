@@ -97,7 +97,7 @@ npm install --dev
 Установите [Parcel](https://parceljs.org/). Это упаковщик веб-приложений. Он похож на [Webpack](https://webpack.js.org/), но совсем не требует настроек:
 
 ```sh
-npm install -g parcel@latest  # понадобятся права администратора `sudo`
+npm install -g parcel@2.0.0-beta.2  # понадобятся права администратора `sudo`
 ```
 
 Вам нужна вторая версия Parcel. Проверьте, что `parcel` установлен и его версию в командной строке:
