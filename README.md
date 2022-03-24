@@ -44,6 +44,7 @@ python --version
 python -m venv venv
 ```
 Активируйте его. На разных операционных системах это делается разными командами:
+
 - Windows: `.\venv\Scripts\activate`
 - MacOS/Linux: `source venv/bin/activate`
 
@@ -88,29 +89,21 @@ npm --version
 
 Версия `nodejs` должна быть не младше 10.0. Версия `npm` не важна. Как обновить Node.js читайте в статье: [How to Update Node.js](https://phoenixnap.com/kb/update-node-js-version).
 
-Установите необходимые пакеты. В каталоге проекта запустите:
+Перейдите в каталог проекта и установите пакеты Node.js:
 
 ```sh
-npm install --dev
+cd star-burger
+npm ci --dev
 ```
 
-Установите [Parcel](https://parceljs.org/). Это упаковщик веб-приложений. Он похож на [Webpack](https://webpack.js.org/), но совсем не требует настроек:
+Команда `npm ci` создаст каталог `node_modules` и установит туда пакеты Node.js. Получится аналог виртуального окружения как для Python, но для Node.js.
+
+Помимо прочего будет установлен [Parcel](https://parceljs.org/) — это упаковщик веб-приложений, похожий на [Webpack](https://webpack.js.org/). В отличии от Webpack он прост в использовании и совсем не требует настроек.
+
+Теперь запустите сборку фронтенда и не выключайте. Parcel будет работать в фоне и следить за изменениями в JS-коде:
 
 ```sh
-npm install -g parcel@2.0.0-beta.2  # понадобятся права администратора `sudo`
-```
-
-Вам нужна вторая версия Parcel. Проверьте, что `parcel` установлен и его версию в командной строке:
-
-```sh
-$ parcel --version
-2.0.0-beta.2
-```
-
-Почти всё готово. Теперь запустите сборку фронтенда и не выключайте. Parcel будет работать в фоне и следить за изменениями в JS-коде:
-
-```sh
-parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
+./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
 Дождитесь завершения первичной сборки. Это вполне может занять 10 и более секунд. О готовности вы узнаете по сообщению в консоли:
@@ -135,7 +128,7 @@ Parcel будет следить за файлами в каталоге `bundle
 Собрать фронтенд:
 
 ```sh
-parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
+./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
 Настроить бэкенд: создать файл `.env` в каталоге `star_burger/` со следующими настройками:
