@@ -106,6 +106,12 @@ npm ci --dev
 ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
+Если вы на Windows, то вам нужна та же команда, только с другими слешами в путях:
+
+```sh
+.\node_modules\.bin\parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
+```
+
 Дождитесь завершения первичной сборки. Это вполне может занять 10 и более секунд. О готовности вы узнаете по сообщению в консоли:
 
 ```
