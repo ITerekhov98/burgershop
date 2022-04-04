@@ -243,7 +243,7 @@ class App extends Component {
         }
       }
 
-      let menuGroups = _.groupBy(filteredProducts, product => product.category && product.category.name);
+      let menuGroups = _.groupBy(filteredProducts, product => product.category && product.category.name || '');
       menuBlocks.push(...Object.entries(menuGroups).map( ([groupName, products], index) => (
         <div style={{marginTop:"50px"}} className="form-group" key={index}>
           <center>
