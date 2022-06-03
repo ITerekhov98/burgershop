@@ -1,8 +1,10 @@
+import json
+
 from django.http import JsonResponse
 from django.templatetags.static import static
 
 
-from .models import Product
+from .models import Product, Order, Purchase
 
 
 def banners_list_api(request):
@@ -58,5 +60,22 @@ def product_list_api(request):
 
 
 def register_order(request):
-    # TODO это лишь заглушка
+    try:
+        serialized_order = json.loads(request.body.decode())
+    except ValueError:
+        return JsonResponse({
+            'error': 'invalid data in order',
+        })
+    registered_order = Order.objects.create(
+        phonenumber = serialized_order.get('phonenumber'),
+        firstname = serialized_order.get('firstname'),
+        lastname = serialized_order.get('lastname'),
+        address = serialized_order.get('address'),
+    )
+    Purchase.objects.bulk_create(
+        [Purchase(
+            order=registered_order,
+            product_id=item['product'],
+            count=item['quantity']) for item in serialized_order['products']]
+    )
     return JsonResponse({})

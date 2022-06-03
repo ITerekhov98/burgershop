@@ -1,6 +1,7 @@
+from tabnanny import verbose
 from django.db import models
-from django.core.validators import MinValueValidator
-
+from django.core.validators import MinValueValidator, MaxValueValidator
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Restaurant(models.Model):
     name = models.CharField(
@@ -79,7 +80,7 @@ class Product(models.Model):
     )
     description = models.TextField(
         'описание',
-        max_length=200,
+        max_length=1000,
         blank=True,
     )
 
@@ -121,3 +122,35 @@ class RestaurantMenuItem(models.Model):
 
     def __str__(self):
         return f"{self.restaurant.name} - {self.product.name}"
+
+
+class Order(models.Model):
+    phonenumber = PhoneNumberField('номер телефона', db_index=True)
+    firstname = models.CharField('имя покупателя', max_length=50)
+    lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
+    address = models.TextField('адрес', db_index=True, max_length=200)
+    created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)    
+    products = models.ManyToManyField(Product, through='Purchase', verbose_name='детали заказа')
+
+    class Meta:
+        verbose_name = 'заказ'
+        verbose_name_plural = 'заказы'
+
+    def __str__(self):
+        return f'{self.phonenumber}'
+
+
+class Purchase(models.Model):
+    order = models.ForeignKey(Order, related_name='purchases', verbose_name='заказ', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='блюдо', on_delete=models.CASCADE)
+    count = models.PositiveSmallIntegerField(
+        verbose_name='количество',
+        validators=[MinValueValidator(0), MaxValueValidator(20)]
+    )
+
+    class Meta:
+        verbose_name = 'покупка'
+        verbose_name_plural = 'покупки'
+
+    def __str__(self):
+        return f"{self.product} - {self.count}шт."

@@ -7,7 +7,7 @@ from .models import Product
 from .models import ProductCategory
 from .models import Restaurant
 from .models import RestaurantMenuItem
-
+from .models import Purchase, Order
 
 class RestaurantMenuItemInline(admin.TabularInline):
     model = RestaurantMenuItem
@@ -104,3 +104,13 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductCategory)
 class ProductAdmin(admin.ModelAdmin):
     pass
+
+
+class PurchaseInline(admin.TabularInline):
+    model = Purchase
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('phonenumber', 'created_at',)
+    readonly_fields = ('created_at',)
+    inlines = [PurchaseInline]
