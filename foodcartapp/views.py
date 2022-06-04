@@ -1,4 +1,5 @@
-import json
+import phonenumbers
+from phonenumbers import NumberParseException
 
 from django.http import JsonResponse
 from django.templatetags.static import static
@@ -8,9 +9,18 @@ from rest_framework import status
 
 from .models import Product, Order, Purchase
 
+
 class OrderValidationError(Exception):
     def __init__(self, report):
         self.report = report
+
+
+def check_phonenumber(number):
+    try:
+        parsed_number = phonenumbers.parse(number)
+    except NumberParseException:
+        return False
+    return phonenumbers.is_valid_number(parsed_number)
 
 
 def banners_list_api(request):
@@ -65,16 +75,33 @@ def product_list_api(request):
     })
 
 def validate_order_data(serialized_order):
+    required_fields = ['firstname', 'lastname', 'phonenumber', 'address', 'products']
     report = None
-    if 'products' not in serialized_order:
-        report = 'products: Обязательное поле.'
-    elif not serialized_order['products']:
-        if isinstance(serialized_order['products'], list):
-            report = 'products: Этот список не может быть пустым.'
-        else:
-            report = 'products: Это поле не может быть пустым.'
+
+    missing_fields = set(required_fields).difference(serialized_order.keys())
+    fields_with_empty_values = [field for field, value in serialized_order.items() if not value]
+
+    if missing_fields:
+        report = f"{', '.join(field for field in missing_fields)}: обязательные поля"
+
+    elif not isinstance(serialized_order['firstname'], str):
+        report = 'firstname: Not a valid string.'
+
+    elif fields_with_empty_values:
+        report = f"{', '.join(field for field in fields_with_empty_values)}: Эти поля не могут быть пустыми"
+
     elif not isinstance(serialized_order['products'], list):
         report = "products: Ожидался list со значениями, но был получен 'str'."
+
+    elif not check_phonenumber(serialized_order['phonenumber']):
+        report = "phonenumber: Введен некорректный номер телефона."
+    
+    else:
+        ordered_products_ids = set([item['product'] for item in serialized_order['products']])
+        existing_products_ids = set(Product.objects.filter(pk__in=ordered_products_ids).values_list('id', flat=True))
+        if ordered_products_ids != existing_products_ids:
+            unexisting_products_ids = ordered_products_ids.difference(existing_products_ids)
+            report = f"products: Недопустимый первичный ключ: {' '.join(str(pk) for pk in unexisting_products_ids)}"
 
     if report:
         raise OrderValidationError(report)
