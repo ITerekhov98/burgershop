@@ -2,7 +2,8 @@ import json
 
 from django.http import JsonResponse
 from django.templatetags.static import static
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import Product, Order, Purchase
 
@@ -59,13 +60,16 @@ def product_list_api(request):
     })
 
 
+@api_view(['POST'])
 def register_order(request):
-    try:
-        serialized_order = json.loads(request.body.decode())
-    except ValueError:
-        return JsonResponse({
-            'error': 'invalid data in order',
-        })
+    # try:
+    #     serialized_order = json.loads(request.body.decode())
+    # except ValueError:
+    #     return JsonResponse({
+    #         'error': 'invalid data in order',
+    #     })
+    serialized_order = request.data
+    print(serialized_order)
     registered_order = Order.objects.create(
         phonenumber = serialized_order.get('phonenumber'),
         firstname = serialized_order.get('firstname'),
@@ -78,4 +82,4 @@ def register_order(request):
             product_id=item['product'],
             count=item['quantity']) for item in serialized_order['products']]
     )
-    return JsonResponse({})
+    return Response({})
