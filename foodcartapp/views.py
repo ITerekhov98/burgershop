@@ -4,8 +4,13 @@ from django.http import JsonResponse
 from django.templatetags.static import static
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Product, Order, Purchase
+
+class OrderValidationError(Exception):
+    def __init__(self, report):
+        self.report = report
 
 
 def banners_list_api(request):
@@ -59,17 +64,31 @@ def product_list_api(request):
         'indent': 4,
     })
 
+def validate_order_data(serialized_order):
+    report = None
+    if 'products' not in serialized_order:
+        report = 'products: Обязательное поле.'
+    elif not serialized_order['products']:
+        if isinstance(serialized_order['products'], list):
+            report = 'products: Этот список не может быть пустым.'
+        else:
+            report = 'products: Это поле не может быть пустым.'
+    elif not isinstance(serialized_order['products'], list):
+        report = "products: Ожидался list со значениями, но был получен 'str'."
+
+    if report:
+        raise OrderValidationError(report)
+    return
+ 
 
 @api_view(['POST'])
 def register_order(request):
-    # try:
-    #     serialized_order = json.loads(request.body.decode())
-    # except ValueError:
-    #     return JsonResponse({
-    #         'error': 'invalid data in order',
-    #     })
     serialized_order = request.data
-    print(serialized_order)
+    try:
+        validate_order_data(serialized_order)
+    except OrderValidationError as err:
+        return Response({'error': err.report}, status=status.HTTP_400_BAD_REQUEST)
+
     registered_order = Order.objects.create(
         phonenumber = serialized_order.get('phonenumber'),
         firstname = serialized_order.get('firstname'),
