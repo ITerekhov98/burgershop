@@ -130,7 +130,6 @@ class Order(models.Model):
     lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
     address = models.TextField('адрес', db_index=True, max_length=200)
     created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)    
-    products = models.ManyToManyField(Product, through='Purchase', verbose_name='детали заказа')
 
     class Meta:
         verbose_name = 'заказ'
@@ -143,7 +142,7 @@ class Order(models.Model):
 class Purchase(models.Model):
     order = models.ForeignKey(Order, related_name='purchases', verbose_name='заказ', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='блюдо', on_delete=models.CASCADE)
-    count = models.PositiveSmallIntegerField(
+    quantity = models.PositiveSmallIntegerField(
         verbose_name='количество',
         validators=[MinValueValidator(0), MaxValueValidator(20)]
     )
@@ -153,4 +152,4 @@ class Purchase(models.Model):
         verbose_name_plural = 'покупки'
 
     def __str__(self):
-        return f"{self.product} - {self.count}шт."
+        return f"{self.product} - {self.quantity}шт."
