@@ -1,28 +1,13 @@
-from urllib import response
-import phonenumbers
-from phonenumbers import NumberParseException
 
 from django.http import JsonResponse
 from django.templatetags.static import static
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.serializers import ListField, ModelSerializer, ValidationError
 
 from .models import Product, Order, Purchase
-
+from .serializers import OrderSerializer
         
-class PurchaseSerializer(ModelSerializer):
-    class Meta:
-        fields = ['quantity', 'product']
-        model = Purchase 
 
-
-class OrderSerializer(ModelSerializer):
-    products = ListField(child=PurchaseSerializer(), allow_empty=False, write_only=True)
-    class Meta:
-        model = Order
-        fields = ['id', 'phonenumber', 'firstname', 'lastname', 'address', 'products']
 
 
 
