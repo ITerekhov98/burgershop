@@ -1,3 +1,4 @@
+from urllib import response
 import phonenumbers
 from phonenumbers import NumberParseException
 
@@ -18,10 +19,10 @@ class PurchaseSerializer(ModelSerializer):
 
 
 class OrderSerializer(ModelSerializer):
-    products = ListField(child=PurchaseSerializer(), allow_empty=False)
+    products = ListField(child=PurchaseSerializer(), allow_empty=False, write_only=True)
     class Meta:
         model = Order
-        fields = ['phonenumber', 'firstname', 'lastname', 'address', 'products']
+        fields = ['id', 'phonenumber', 'firstname', 'lastname', 'address', 'products']
 
 
 
@@ -96,5 +97,6 @@ def register_order(request):
             product=item['product'],
             quantity=item['quantity']) for item in serializer.validated_data['products']]
     )
-    return Response({})
+    serializer = OrderSerializer(registered_order)
+    return Response(serializer.data, status=201)
 
