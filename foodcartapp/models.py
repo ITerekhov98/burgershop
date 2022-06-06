@@ -1,5 +1,5 @@
-from tabnanny import verbose
 from django.db import models
+from django.db.models import F, Sum 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -124,13 +124,21 @@ class RestaurantMenuItem(models.Model):
         return f"{self.restaurant.name} - {self.product.name}"
 
 
+class OrderQuerySet(models.QuerySet):
+    def with_cost(self):
+        return self.annotate(
+            cost=Sum(F('purchases__product__price') * F('purchases__quantity'))) \
+            .order_by('-created_at')
+
+
+
 class Order(models.Model):
     phonenumber = PhoneNumberField('номер телефона', db_index=True)
     firstname = models.CharField('имя покупателя', max_length=50)
     lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
     address = models.TextField('адрес', db_index=True, max_length=200)
     created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)    
-
+    objects = OrderQuerySet.as_manager()
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
