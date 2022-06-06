@@ -107,8 +107,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class PurchaseInline(admin.TabularInline):
-
     model = Purchase
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -119,7 +119,6 @@ class OrderAdmin(admin.ModelAdmin):
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
         for instance in instances:
-            print(instance)
             instance.price = instance.product.price
             instance.save()
         formset.save()

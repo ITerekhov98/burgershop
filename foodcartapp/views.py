@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.templatetags.static import static
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db import transaction
 
 from .models import Product, Order, Purchase
 from .serializers import OrderSerializer
@@ -63,7 +64,7 @@ def product_list_api(request):
     })
 
  
-
+@transaction.atomic
 @api_view(['POST'])
 def register_order(request):
     serializer = OrderSerializer(data=request.data)
@@ -75,7 +76,6 @@ def register_order(request):
         lastname = serializer.validated_data.get('lastname'),
         address = serializer.validated_data.get('address'),
     )
-
     Purchase.objects.bulk_create(
         [Purchase(
             order=registered_order,

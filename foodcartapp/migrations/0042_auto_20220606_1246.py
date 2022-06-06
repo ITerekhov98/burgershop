@@ -5,7 +5,7 @@ from django.db import migrations
 
 def add_price_field(apps, schema_editor):
     Purchase = apps.get_model('foodcartapp', 'Purchase')
-    for purchase in Purchase.objects.all():
+    for purchase in Purchase.objects.all().iterator():
         purchase.price = purchase.product.price
         purchase.save()
 
