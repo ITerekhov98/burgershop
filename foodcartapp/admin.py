@@ -107,6 +107,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class PurchaseInline(admin.TabularInline):
+
     model = Purchase
 
 @admin.register(Order)
@@ -114,3 +115,11 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('phonenumber', 'created_at',)
     readonly_fields = ('created_at',)
     inlines = [PurchaseInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            print(instance)
+            instance.price = instance.product.price
+            instance.save()
+        formset.save()

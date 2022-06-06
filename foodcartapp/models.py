@@ -154,6 +154,13 @@ class Purchase(models.Model):
         verbose_name='количество',
         validators=[MinValueValidator(0), MaxValueValidator(20)]
     )
+    price = models.DecimalField(
+        verbose_name='цена',
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'покупка'

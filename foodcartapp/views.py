@@ -80,7 +80,10 @@ def register_order(request):
         [Purchase(
             order=registered_order,
             product=item['product'],
-            quantity=item['quantity']) for item in serializer.validated_data['products']]
+            quantity=item['quantity'],
+            price = item['product'].price,)
+            for item in serializer.validated_data['products']
+        ]
     )
     serializer = OrderSerializer(registered_order)
     return Response(serializer.data, status=201)
