@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.contrib import admin
 from django.shortcuts import reverse
 from django.templatetags.static import static
 from django.utils.html import format_html
+from django.http import HttpResponseRedirect
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import Product
 from .models import ProductCategory
@@ -116,9 +119,18 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
     inlines = [PurchaseInline]
 
+    def response_post_save_change(self, request, obj):
+        res = super().response_post_save_change(request, obj)
+        if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET['next'], settings.ALLOWED_HOSTS):
+            return HttpResponseRedirect(request.GET['next'])
+        else:
+            return res
+
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
         for instance in instances:
-            instance.price = instance.product.price
-            instance.save()
+            if not instance.price:
+                instance.price = instance.product.price
+                instance.save()
         formset.save()
+    
