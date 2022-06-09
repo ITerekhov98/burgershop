@@ -149,7 +149,9 @@ class Order(models.Model):
     lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
     address = models.TextField('адрес', db_index=True, max_length=200)
     created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)
-    status = models.CharField('статус', max_length=10, choices=STATUSES, default=UNPROCCESSED, db_index=True)    
+    status = models.CharField('статус', max_length=10, choices=STATUSES, default=UNPROCCESSED, db_index=True) 
+    comment = models.TextField('комментарий', max_length=200, blank=True)
+
     objects = OrderQuerySet.as_manager()
     class Meta:
         verbose_name = 'заказ'
