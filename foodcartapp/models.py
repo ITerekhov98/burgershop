@@ -126,18 +126,30 @@ class RestaurantMenuItem(models.Model):
 
 class OrderQuerySet(models.QuerySet):
     def with_cost(self):
-        return self.annotate(
-            cost=Sum(F('purchases__price') * F('purchases__quantity'))) \
-            .order_by('-created_at')
+        return self.exclude(status='D') \
+                   .annotate(
+                   cost=Sum(F('purchases__price') * F('purchases__quantity'))) \
+                   .order_by('-created_at')
 
 
 
 class Order(models.Model):
+    UNPROCCESSED = 'UN'
+    COOKING = 'C'
+    ON_THE_WAY = 'OTW'
+    DONE = 'D'
+    STATUSES = (
+        (UNPROCCESSED, 'Необработан'),
+        (COOKING, 'Готовится'),
+        (ON_THE_WAY, 'В пути'),
+        (DONE, 'Завершён')
+    )
     phonenumber = PhoneNumberField('номер телефона', db_index=True)
     firstname = models.CharField('имя покупателя', max_length=50)
     lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
     address = models.TextField('адрес', db_index=True, max_length=200)
-    created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)    
+    created_at = models.DateTimeField('дата заказа', auto_now_add=True, db_index=True)
+    status = models.CharField('статус', max_length=10, choices=STATUSES, default=UNPROCCESSED, db_index=True)    
     objects = OrderQuerySet.as_manager()
     class Meta:
         verbose_name = 'заказ'
