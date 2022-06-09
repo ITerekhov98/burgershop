@@ -1,11 +1,12 @@
 from django.conf import settings
+from django import forms
 from django.contrib import admin
 from django.shortcuts import reverse
 from django.templatetags.static import static
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
-
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Product
 from .models import ProductCategory
 from .models import Restaurant
@@ -111,6 +112,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class PurchaseInline(admin.TabularInline):
     model = Purchase
+    extra = 0
 
 
 @admin.register(Order)
@@ -119,6 +121,26 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
     inlines = [PurchaseInline]
 
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        try:
+            order_id = request.resolver_match.kwargs.get('object_id')
+            purchases = Purchase.objects.filter(order_id=order_id).select_related('product')
+        except ObjectDoesNotExist:
+            return
+        if db_field.name == "restaurant":
+            restaurant_menu_items = RestaurantMenuItem.objects.all().select_related('product', 'restaurant')
+            available_restaurants = []
+            for purchase in purchases.all():
+                res = [item.restaurant.id for item in restaurant_menu_items if item.product==purchase.product and item.availability]
+                if not available_restaurants:
+                    available_restaurants.extend(res)
+                else:
+                    available_restaurants = [item for item in available_restaurants if item in res]
+            kwargs["queryset"] = Restaurant.objects.filter(id__in=available_restaurants)
+        return super(OrderAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
     def response_post_save_change(self, request, obj):
         res = super().response_post_save_change(request, obj)
         if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET['next'], settings.ALLOWED_HOSTS):
@@ -126,11 +148,17 @@ class OrderAdmin(admin.ModelAdmin):
         else:
             return res
 
+
     def save_formset(self, request, form, formset, change):
+        order = form.save(commit=False)
+        if order.restaurant and order.status == 'UN':
+            order.status = 'P'
+        order.save()
+
         instances = formset.save(commit=False)
         for instance in instances:
             if not instance.price:
                 instance.price = instance.product.price
-                instance.save()
+            instance.save()
         formset.save()
     

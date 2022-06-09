@@ -136,12 +136,12 @@ class OrderQuerySet(models.QuerySet):
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
-    COOKING = 'C'
+    PROCCESSED = 'P'
     ON_THE_WAY = 'OTW'
     DONE = 'D'
     STATUSES = (
         (UNPROCCESSED, 'Необработан'),
-        (COOKING, 'Готовится'),
+        (PROCCESSED, 'Готовится'),
         (ON_THE_WAY, 'В пути'),
         (DONE, 'Завершён')
     )
@@ -160,6 +160,7 @@ class Order(models.Model):
     comment = models.TextField('комментарий', max_length=200, blank=True)
     payment = models.CharField('метод оплаты', max_length=5, choices=PAYMENT_METHODS, db_index=True)
     objects = OrderQuerySet.as_manager()
+    restaurant = models.ForeignKey(Restaurant, related_name='orders', verbose_name='готовящий ресторан', blank=True, null=True, on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
@@ -170,7 +171,7 @@ class Order(models.Model):
 
 class Purchase(models.Model):
     order = models.ForeignKey(Order, related_name='purchases', verbose_name='заказ', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, verbose_name='блюдо', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name = 'products', verbose_name='блюдо', on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(
         verbose_name='количество',
         validators=[MinValueValidator(0), MaxValueValidator(20)]
