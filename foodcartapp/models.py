@@ -145,6 +145,10 @@ class Order(models.Model):
         (ON_THE_WAY, 'В пути'),
         (DONE, 'Завершён')
     )
+    PAYMENT_METHODS = (
+        ('CASH', 'Наличными'),
+        ('CARD', 'Онлайн')
+    )
     phonenumber = PhoneNumberField('номер телефона', db_index=True)
     firstname = models.CharField('имя покупателя', max_length=50)
     lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
@@ -154,7 +158,7 @@ class Order(models.Model):
     delivered_at = models.DateTimeField('дата и время доставки',  db_index=True, blank=True, null=True)
     status = models.CharField('статус', max_length=10, choices=STATUSES, default=UNPROCCESSED, db_index=True) 
     comment = models.TextField('комментарий', max_length=200, blank=True)
-
+    payment = models.CharField('метод оплаты', max_length=5, choices=PAYMENT_METHODS, db_index=True)
     objects = OrderQuerySet.as_manager()
     class Meta:
         verbose_name = 'заказ'
