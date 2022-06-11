@@ -36,16 +36,19 @@
         <td>{{ item.cost }}</td>
         <td>{{ item.comment }}</td>
         {% if not item.restaurant %}
-        <!-- Доавить строку если нет доступных ресторанов -->
+          {% if not item.coordinates %}
+          <td><p>Ошибка определения координат</p></td>
+          {% else %}
           <td><details>
               <summary>Может быть приготовлен ресторанами:</summary>
               <ul>
                 {% for restaurant in item.available_restaurants %}
-                  <li>{{restaurant}}</li>
+                  <li>{{ restaurant }}: {{ restaurant.readable_distance }}</li>
                 {% endfor %}
               </ul>
               </details>
           </td>
+          {% endif %}
         {% else %}
           <td>Готовит {{ item.restaurant }}</td>
         {% endif %}

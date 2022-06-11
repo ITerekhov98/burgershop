@@ -1,3 +1,5 @@
+import requests
+
 from django import forms
 from django.shortcuts import redirect, render
 from django.views import View
@@ -6,9 +8,28 @@ from django.contrib.auth.decorators import user_passes_test
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
-
+from geopy import distance
 
 from foodcartapp.models import Product, Restaurant, Order ,RestaurantMenuItem
+from django.conf import settings  
+
+
+def fetch_coordinates(apikey, address):
+    base_url = "https://geocode-maps.yandex.ru/1.x"
+    response = requests.get(base_url, params={
+        "geocode": address,
+        "apikey": apikey,
+        "format": "json",
+    })
+    response.raise_for_status()
+    found_places = response.json()['response']['GeoObjectCollection']['featureMember']
+    if not found_places:
+        return None
+
+    most_relevant = found_places[0]
+    lon, lat = most_relevant['GeoObject']['Point']['pos'].split(" ")
+    return lon, lat
+
 
 class Login(forms.Form):
     username = forms.CharField(
@@ -99,13 +120,19 @@ def view_orders(request):
     orders = Order.objects.with_cost().prefetch_related('purchases__product').order_by('-status')
     restaurant_menu_items = RestaurantMenuItem.objects.all().select_related('product').select_related('restaurant')
     for order in orders:
-        available_restaurants = []
+        order.coordinates = fetch_coordinates(settings.YANDEX_API_TOKEN, order.address)
+        order.available_restaurants = []
         for purchase in order.purchases.all():
             res = [item.restaurant for item in restaurant_menu_items if item.product==purchase.product and item.availability]
-            if not available_restaurants:
-                available_restaurants.extend(res)
+            if not order.available_restaurants:
+                order.available_restaurants.extend(res)
             else:
-                available_restaurants = [item for item in available_restaurants if item in res]
-        order.available_restaurants = [item.name for item in available_restaurants]
+                order.available_restaurants = [item for item in order.available_restaurants if item in res]
+        if order.coordinates:
+            for restaurant in order.available_restaurants:
+                restaurant_coordinates = fetch_coordinates(settings.YANDEX_API_TOKEN, restaurant.address)
+                restaurant.distance = distance.distance(order.coordinates, restaurant_coordinates).km
+                restaurant.readable_distance = f' {restaurant.distance:.4f} км'
+            order.available_restaurants = sorted(order.available_restaurants, key=lambda x: x.distance)
             
     return render(request, template_name='order_items.html', context={'order_items': orders})
