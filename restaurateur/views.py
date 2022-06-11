@@ -11,6 +11,7 @@ from django.contrib.auth import views as auth_views
 from geopy import distance
 
 from foodcartapp.models import Product, Restaurant, Order ,RestaurantMenuItem
+from geolocation.models import PlaceLocation
 from django.conf import settings  
 
 
@@ -115,12 +116,39 @@ def view_restaurants(request):
     })
 
 
+def get_places_coordinats(places):
+    addresses = [place.address for place in places]
+    saved_locations = PlaceLocation.objects.filter(address__in=addresses)
+    saved_addresses = [location.address for location in saved_locations]
+    serialized_coordinats = {}
+
+    for address in addresses:
+        if address not in saved_addresses:
+            coordinats = fetch_coordinates(settings.YANDEX_API_TOKEN, address)
+            if coordinats:
+                PlaceLocation.objects.create(
+                    address=address,
+                    longitude=float(coordinats[0]),
+                    latitude=float(coordinats[1])
+                )
+                serialized_coordinats[address] = coordinats
+
+    for place in saved_locations:
+        if place.address not in serialized_coordinats:
+            serialized_coordinats[place.address] = (str(place.longitude), str(place.latitude))
+    
+    return serialized_coordinats
+        
+
+
 @user_passes_test(is_manager, login_url='restaurateur:login')
 def view_orders(request):
-    orders = Order.objects.with_cost().prefetch_related('purchases__product').order_by('-status')
+    orders = Order.objects.with_cost().prefetch_related('purchases__product').select_related('restaurant').order_by('-status')
     restaurant_menu_items = RestaurantMenuItem.objects.all().select_related('product').select_related('restaurant')
+    orders_coordinats = get_places_coordinats(orders)
+    restaurants_coordinates = get_places_coordinats(Restaurant.objects.all())
     for order in orders:
-        order.coordinates = fetch_coordinates(settings.YANDEX_API_TOKEN, order.address)
+        order.coordinates = orders_coordinats.get(order.address)
         order.available_restaurants = []
         for purchase in order.purchases.all():
             res = [item.restaurant for item in restaurant_menu_items if item.product==purchase.product and item.availability]
@@ -130,7 +158,7 @@ def view_orders(request):
                 order.available_restaurants = [item for item in order.available_restaurants if item in res]
         if order.coordinates:
             for restaurant in order.available_restaurants:
-                restaurant_coordinates = fetch_coordinates(settings.YANDEX_API_TOKEN, restaurant.address)
+                restaurant_coordinates = restaurants_coordinates[restaurant.address]
                 restaurant.distance = distance.distance(order.coordinates, restaurant_coordinates).km
                 restaurant.readable_distance = f' {restaurant.distance:.4f} км'
             order.available_restaurants = sorted(order.available_restaurants, key=lambda x: x.distance)
