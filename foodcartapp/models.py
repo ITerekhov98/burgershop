@@ -238,4 +238,4 @@ class Purchase(models.Model):
         verbose_name_plural = 'покупки'
 
     def __str__(self):
-        return f"{self.product} - {self.quantity}шт."
+        return f"Позиция"

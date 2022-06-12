@@ -115,9 +115,17 @@ class PurchaseInline(admin.TabularInline):
     model = Purchase
     extra = 0
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+            field = super(PurchaseInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+            if db_field.name == "order" and hasattr(self, "cached_orders"):
+                field.choices = self.cached_orders
+            elif db_field.name == "product" and hasattr(self, "cached_products"):
+                field.choices = self.cached_products
+            return field        
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+
     list_display = ('phonenumber', 'created_at',)
     fields = (
         'phonenumber',
@@ -133,6 +141,11 @@ class OrderAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('created_at',)
     inlines = (PurchaseInline,)
+
+    def get_formsets_with_inlines(self, request, obj=None):
+        for inline in self.get_inline_instances(request, obj):
+            inline.cached_products = [(i.pk, str(i)) for i in Product.objects.all()]
+            yield inline.get_formset(request, obj), inline
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not db_field.name == "restaurant":
