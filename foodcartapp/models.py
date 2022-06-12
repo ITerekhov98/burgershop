@@ -1,8 +1,9 @@
 from django.db import models
-from django.db.models import F, Sum 
+from django.db.models import F, Sum
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Restaurant(models.Model):
     name = models.CharField(
@@ -133,7 +134,6 @@ class OrderQuerySet(models.QuerySet):
                    .order_by('-created_at')
 
 
-
 class Order(models.Model):
     UNPROCCESSED = 'UN'
     PROCCESSED = 'P'
@@ -151,16 +151,53 @@ class Order(models.Model):
     )
     phonenumber = PhoneNumberField('номер телефона', db_index=True)
     firstname = models.CharField('имя покупателя', max_length=50)
-    lastname = models.CharField('фамилия покупателя', max_length=50, blank=True)
+    lastname = models.CharField(
+        'фамилия покупателя',
+        max_length=50,
+        blank=True
+    )
     address = models.TextField('адрес', db_index=True, max_length=200)
-    created_at = models.DateTimeField('дата и время заказа', default=timezone.now, db_index=True)
-    called_at = models.DateTimeField('дата и время потверждения', db_index=True, blank=True, null=True)
-    delivered_at = models.DateTimeField('дата и время доставки',  db_index=True, blank=True, null=True)
-    status = models.CharField('статус', max_length=10, choices=STATUSES, default=UNPROCCESSED, db_index=True) 
+    created_at = models.DateTimeField(
+        'дата и время заказа',
+        default=timezone.now,
+        db_index=True
+    )
+    called_at = models.DateTimeField(
+        'дата и время потверждения',
+        db_index=True,
+        blank=True,
+        null=True
+    )
+    delivered_at = models.DateTimeField(
+        'дата и время доставки',
+        db_index=True,
+        blank=True,
+        null=True
+    )
+    status = models.CharField(
+        'статус',
+        max_length=10,
+        choices=STATUSES,
+        default=UNPROCCESSED,
+        db_index=True
+    )
     comment = models.TextField('комментарий', max_length=200, blank=True)
-    payment = models.CharField('метод оплаты', max_length=5, choices=PAYMENT_METHODS, db_index=True)
+    payment = models.CharField(
+        'метод оплаты',
+        max_length=5,
+        choices=PAYMENT_METHODS,
+        db_index=True
+    )
     objects = OrderQuerySet.as_manager()
-    restaurant = models.ForeignKey(Restaurant, related_name='orders', verbose_name='готовящий ресторан', blank=True, null=True, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(
+        Restaurant,
+        related_name='orders',
+        verbose_name='готовящий ресторан',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
+    )
+
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
@@ -170,8 +207,18 @@ class Order(models.Model):
 
 
 class Purchase(models.Model):
-    order = models.ForeignKey(Order, related_name='purchases', verbose_name='заказ', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name = 'products', verbose_name='блюдо', on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order,
+        related_name='purchases',
+        verbose_name='заказ',
+        on_delete=models.CASCADE
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='products',
+        verbose_name='блюдо',
+        on_delete=models.CASCADE
+    )
     quantity = models.PositiveSmallIntegerField(
         verbose_name='количество',
         validators=[MinValueValidator(0), MaxValueValidator(20)]

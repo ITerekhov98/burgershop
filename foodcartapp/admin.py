@@ -1,5 +1,4 @@
 from django.conf import settings
-from django import forms
 from django.contrib import admin
 from django.shortcuts import reverse
 from django.templatetags.static import static
@@ -12,6 +11,7 @@ from .models import ProductCategory
 from .models import Restaurant
 from .models import RestaurantMenuItem
 from .models import Purchase, Order
+
 
 class RestaurantMenuItemInline(admin.TabularInline):
     model = RestaurantMenuItem
@@ -121,33 +121,51 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
     inlines = [PurchaseInline]
 
-
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not db_field.name == "restaurant":
+            return
         try:
             order_id = request.resolver_match.kwargs.get('object_id')
-            purchases = Purchase.objects.filter(order_id=order_id).select_related('product')
+            purchases = Purchase.objects.filter(order=order_id) \
+                                        .select_related('product')
         except ObjectDoesNotExist:
             return
-        if db_field.name == "restaurant":
-            restaurant_menu_items = RestaurantMenuItem.objects.all().select_related('product', 'restaurant')
-            available_restaurants = []
-            for purchase in purchases.all():
-                res = [item.restaurant.id for item in restaurant_menu_items if item.product==purchase.product and item.availability]
-                if not available_restaurants:
-                    available_restaurants.extend(res)
-                else:
-                    available_restaurants = [item for item in available_restaurants if item in res]
-            kwargs["queryset"] = Restaurant.objects.filter(id__in=available_restaurants)
-        return super(OrderAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+        restaurant_menu_items = RestaurantMenuItem.objects \
+                                                  .all() \
+                                                  .select_related(
+                                                    'product',
+                                                    'restaurant')
+        available_restaurants = []
+        for purchase in purchases:
+            res = [
+                item.restaurant.id for item in
+                restaurant_menu_items if
+                item.product == purchase.product and item.availability]
+            if not available_restaurants:
+                available_restaurants.extend(res)
+            else:
+                available_restaurants = [
+                    item for item in available_restaurants if item in res
+                ]
+        kwargs["queryset"] = Restaurant.objects.filter(
+            id__in=available_restaurants
+        )
+        return super(OrderAdmin, self).formfield_for_foreignkey(
+            db_field, request,
+            **kwargs
+        )
 
     def response_post_save_change(self, request, obj):
         res = super().response_post_save_change(request, obj)
-        if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET['next'], settings.ALLOWED_HOSTS):
+        url_allow = url_has_allowed_host_and_scheme(
+            request.GET['next'],
+            settings.ALLOWED_HOSTS
+        )
+        if "next" in request.GET and url_allow:
             return HttpResponseRedirect(request.GET['next'])
         else:
             return res
-
 
     def save_formset(self, request, form, formset, change):
         order = form.save(commit=False)
@@ -161,4 +179,4 @@ class OrderAdmin(admin.ModelAdmin):
                 instance.price = instance.product.price
             instance.save()
         formset.save()
-    
+

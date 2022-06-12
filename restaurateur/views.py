@@ -1,5 +1,4 @@
 import requests
-
 from django import forms
 from django.shortcuts import redirect, render
 from django.views import View
@@ -10,9 +9,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 from geopy import distance
 
-from foodcartapp.models import Product, Restaurant, Order ,RestaurantMenuItem
+from foodcartapp.models import Product, Restaurant, Order, RestaurantMenuItem
 from geolocation.models import PlaceLocation
-from django.conf import settings  
+from django.conf import settings
 
 
 def fetch_coordinates(apikey, address):
@@ -135,32 +134,50 @@ def get_places_coordinats(places):
 
     for place in saved_locations:
         if place.address not in serialized_coordinats:
-            serialized_coordinats[place.address] = (str(place.longitude), str(place.latitude))
-    
+            serialized_coordinats[place.address] = (
+                str(place.longitude),
+                str(place.latitude)
+            )
+
     return serialized_coordinats
-        
 
 
 @user_passes_test(is_manager, login_url='restaurateur:login')
 def view_orders(request):
-    orders = Order.objects.with_cost().prefetch_related('purchases__product').select_related('restaurant').order_by('-status')
-    restaurant_menu_items = RestaurantMenuItem.objects.all().select_related('product').select_related('restaurant')
+    orders = Order.objects.with_cost() \
+                          .prefetch_related('purchases__product') \
+                          .select_related('restaurant') \
+                          .order_by('-status')
+
+    restaurant_menu_items = RestaurantMenuItem.objects.all() \
+                                                      .select_related('product') \
+                                                      .select_related('restaurant')
     orders_coordinats = get_places_coordinats(orders)
     restaurants_coordinates = get_places_coordinats(Restaurant.objects.all())
     for order in orders:
         order.coordinates = orders_coordinats.get(order.address)
         order.available_restaurants = []
         for purchase in order.purchases.all():
-            res = [item.restaurant for item in restaurant_menu_items if item.product==purchase.product and item.availability]
+            res = [item.restaurant for item in restaurant_menu_items
+                   if item.product == purchase.product and item.availability]
             if not order.available_restaurants:
                 order.available_restaurants.extend(res)
             else:
-                order.available_restaurants = [item for item in order.available_restaurants if item in res]
+                order.available_restaurants = [item for item in order.available_restaurants 
+                                               if item in res]
         if order.coordinates:
             for restaurant in order.available_restaurants:
                 restaurant_coordinates = restaurants_coordinates[restaurant.address]
-                restaurant.distance = distance.distance(order.coordinates, restaurant_coordinates).km
+                restaurant.distance = distance.distance(
+                    order.coordinates,
+                    restaurant_coordinates).km
                 restaurant.readable_distance = f' {restaurant.distance:.4f} км'
-            order.available_restaurants = sorted(order.available_restaurants, key=lambda x: x.distance)
-            
-    return render(request, template_name='order_items.html', context={'order_items': orders})
+            order.available_restaurants = sorted(
+                order.available_restaurants,
+                key=lambda x: x.distance
+            )
+    return render(
+        request,
+        template_name='order_items.html',
+        context={'order_items': orders}
+    )
