@@ -163,8 +163,9 @@ def view_orders(request):
             if not order.available_restaurants:
                 order.available_restaurants.extend(res)
             else:
-                order.available_restaurants = [item for item in order.available_restaurants 
-                                               if item in res]
+                order.available_restaurants = [
+                    item for item in order.available_restaurants
+                    if item in res]
         if order.coordinates:
             for restaurant in order.available_restaurants:
                 restaurant_coordinates = restaurants_coordinates[restaurant.address]

@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.shortcuts import reverse
@@ -118,8 +119,20 @@ class PurchaseInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('phonenumber', 'created_at',)
+    fields = (
+        'phonenumber',
+        'firstname',
+        'lastname',
+        'address',
+        'payment',
+        'restaurant',
+        'called_at',
+        'delivered_at',
+        'comment',
+        'created_at'
+    )
     readonly_fields = ('created_at',)
-    inlines = [PurchaseInline]
+    inlines = (PurchaseInline,)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not db_field.name == "restaurant":
@@ -158,14 +171,14 @@ class OrderAdmin(admin.ModelAdmin):
 
     def response_post_save_change(self, request, obj):
         res = super().response_post_save_change(request, obj)
-        url_allow = url_has_allowed_host_and_scheme(
-            request.GET['next'],
-            settings.ALLOWED_HOSTS
-        )
-        if "next" in request.GET and url_allow:
-            return HttpResponseRedirect(request.GET['next'])
-        else:
-            return res
+        if "next" in request.GET:
+            url_allow = url_has_allowed_host_and_scheme(
+                request.GET['next'],
+                settings.ALLOWED_HOSTS
+            )
+            if url_allow:
+                return HttpResponseRedirect(request.GET['next'])
+        return res
 
     def save_formset(self, request, form, formset, change):
         order = form.save(commit=False)
