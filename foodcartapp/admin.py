@@ -1,4 +1,3 @@
-from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.shortcuts import reverse
@@ -116,16 +115,17 @@ class PurchaseInline(admin.TabularInline):
     extra = 0
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-            field = super(PurchaseInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
-            if db_field.name == "order" and hasattr(self, "cached_orders"):
-                field.choices = self.cached_orders
-            elif db_field.name == "product" and hasattr(self, "cached_products"):
-                field.choices = self.cached_products
-            return field        
+        '''
+        Используем кешированные объекты чтобы избежать 
+        многократных запросов к базе данных 
+        '''
+        field = super(PurchaseInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "product" and hasattr(self, "cached_products"):
+            field.choices = self.cached_products
+        return field        
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-
     list_display = ('phonenumber', 'created_at',)
     fields = (
         'phonenumber',
@@ -143,11 +143,18 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = (PurchaseInline,)
 
     def get_formsets_with_inlines(self, request, obj=None):
+        '''
+        Достаём и сохраняем продукты, чтобы использовать их при рендере PurchaseInline
+        '''
         for inline in self.get_inline_instances(request, obj):
             inline.cached_products = [(i.pk, str(i)) for i in Product.objects.all()]
             yield inline.get_formset(request, obj), inline
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        '''
+        Если в заказе уже присутствуют покупки, предопределяём выбор ресторанов
+        исходя из наличия в них нужных позиций
+        '''
         if not db_field.name == "restaurant":
             return
         try:
@@ -183,6 +190,10 @@ class OrderAdmin(admin.ModelAdmin):
         )
 
     def response_post_save_change(self, request, obj):
+        '''
+        Возвращаем на страницу менеджера после сохранения заказа,
+        если запрос был сделан с неё
+        '''
         res = super().response_post_save_change(request, obj)
         if "next" in request.GET:
             url_allow = url_has_allowed_host_and_scheme(
@@ -194,6 +205,10 @@ class OrderAdmin(admin.ModelAdmin):
         return res
 
     def save_formset(self, request, form, formset, change):
+        '''
+        При указании готовящего ресторана меняем статус заказа на PROCCESSED
+        Если менеджер не указал цену для товара, рассчитываем её автоматически
+        '''
         order = form.save(commit=False)
         if order.restaurant and order.status == 'UN':
             order.status = 'P'

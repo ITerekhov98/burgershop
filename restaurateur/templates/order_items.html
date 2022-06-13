@@ -1,4 +1,5 @@
 {% extends 'base_restaurateur_page.html' %}
+{% load custom_tags %}
 
 {% block title %}Необработанные заказы | Star Burger{% endblock %}
 
@@ -43,7 +44,7 @@
               <summary>Может быть приготовлен ресторанами:</summary>
               <ul>
                 {% for restaurant in item.available_restaurants %}
-                  <li>{{ restaurant }}: {{ restaurant.readable_distance }}</li>
+                  <li>{{ restaurant }}: {{ item.readable_distance|get_item:restaurant.name }}</li>
                 {% endfor %}
               </ul>
               </details>

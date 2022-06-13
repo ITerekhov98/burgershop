@@ -116,27 +116,31 @@ def view_restaurants(request):
 
 
 def get_places_coordinats(places):
+    '''
+    Принимает queryset restaurants или orders, возвращает словарь 
+    в формате: адрес: координаты
+    '''
     addresses = [place.address for place in places]
     saved_locations = PlaceLocation.objects.filter(address__in=addresses)
     saved_addresses = [location.address for location in saved_locations]
     serialized_coordinats = {}
-
     for address in addresses:
         if address not in saved_addresses:
             coordinats = fetch_coordinates(settings.YANDEX_API_TOKEN, address)
             if coordinats:
                 PlaceLocation.objects.create(
                     address=address,
-                    longitude=float(coordinats[0]),
-                    latitude=float(coordinats[1])
+                    longitude=float(coordinats[1]),
+                    latitude=float(coordinats[0])
                 )
                 serialized_coordinats[address] = coordinats
 
     for place in saved_locations:
         if place.address not in serialized_coordinats:
             serialized_coordinats[place.address] = (
-                str(place.longitude),
-                str(place.latitude)
+                str(place.latitude),                
+                str(place.longitude)
+
             )
 
     return serialized_coordinats
@@ -157,6 +161,7 @@ def view_orders(request):
     for order in orders:
         order.coordinates = orders_coordinats.get(order.address)
         order.available_restaurants = []
+        order.readable_distance = {}
         for purchase in order.purchases.all():
             res = [item.restaurant for item in restaurant_menu_items
                    if item.product == purchase.product and item.availability]
@@ -171,8 +176,8 @@ def view_orders(request):
                 restaurant_coordinates = restaurants_coordinates[restaurant.address]
                 restaurant.distance = distance.distance(
                     order.coordinates,
-                    restaurant_coordinates).km
-                restaurant.readable_distance = f' {restaurant.distance:.4f} км'
+                    restaurant_coordinates).kilometers
+                order.readable_distance[restaurant.name] = f' {restaurant.distance:.4f} км'
             order.available_restaurants = sorted(
                 order.available_restaurants,
                 key=lambda x: x.distance
