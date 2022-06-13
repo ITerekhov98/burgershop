@@ -59,6 +59,10 @@ pip install -r requirements.txt
 ```sh
 python manage.py migrate
 ```
+Создайте файл `.env`. Для dev-версии будет достаточно одной переменной: ключ доступа к API Яндекс-геокодера. Получить его можно [здесь](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F). Положите полученный ключ в файл, в формате:
+```
+YANDEX_API_TOKEN=ваш_токен
+```
 
 Запустите сервер:
 
@@ -142,6 +146,7 @@ Parcel будет следить за файлами в каталоге `bundle
 - `DEBUG` — дебаг-режим. Поставьте `False`.
 - `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте. Не стоит использовать значение по-умолчанию, **замените на своё**.
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
+- `YANDEX_API_TOKEN`  - ключ доступа для [API Яндекс-геокодера](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F) 
 
 ## Цели проекта
 
