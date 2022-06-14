@@ -156,7 +156,7 @@ class Order(models.Model):
         max_length=50,
         blank=True
     )
-    address = models.TextField('адрес', db_index=True, max_length=200)
+    address = models.CharField('адрес', db_index=True, max_length=200)
     created_at = models.DateTimeField(
         'дата и время заказа',
         default=timezone.now,
@@ -181,7 +181,7 @@ class Order(models.Model):
         default=UNPROCCESSED,
         db_index=True
     )
-    comment = models.TextField('комментарий', max_length=200, blank=True)
+    comment = models.TextField('комментарий', blank=True)
     payment = models.CharField(
         'метод оплаты',
         max_length=5,
