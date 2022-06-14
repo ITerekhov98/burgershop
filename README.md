@@ -59,9 +59,10 @@ pip install -r requirements.txt
 ```sh
 python manage.py migrate
 ```
-Создайте файл `.env`. Для dev-версии будет достаточно одной переменной: ключ доступа к API Яндекс-геокодера. Получить его можно [здесь](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F). Положите полученный ключ в файл, в формате:
+Создайте файл `.env`. Для dev-версии будет достаточно двух переменных: ключ доступа к API Яндекс-геокодера и secret_key. Получить первый можно [здесь](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F). Положите данные в файл, в формате:
 ```
 YANDEX_API_TOKEN=ваш_токен
+SECRET_KEY=ваш_секретный_ключ
 ```
 
 Запустите сервер:
