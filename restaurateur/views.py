@@ -115,29 +115,25 @@ def view_restaurants(request):
     })
 
 
-def get_places_coordinats(places):
+def get_places_coordinats(addresses:list):
     '''
-    Принимает queryset restaurants или orders, возвращает словарь 
+    Принимает список адресов, возвращает словарь 
     в формате: адрес: координаты
     '''
-    addresses = [place.address for place in places]
+
     saved_locations = PlaceLocation.objects.filter(address__in=addresses)
     saved_addresses = [location.address for location in saved_locations]
     serialized_coordinats = {}
     for address in addresses:
-        if address not in saved_addresses:
-            coordinats = fetch_coordinates(settings.YANDEX_API_TOKEN, address)
-            if coordinats:
-                PlaceLocation.objects.create(
-                    address=address,
-                    longitude=float(coordinats[1]),
-                    latitude=float(coordinats[0])
-                )
-            else:
-                PlaceLocation.objects.create(
-                    address=address,
-                )
-                serialized_coordinats[address] = coordinats
+        if address in saved_addresses:
+            continue
+
+        coordinats = fetch_coordinates(settings.YANDEX_API_TOKEN, address)
+        place = PlaceLocation(address=address)
+        if coordinats:
+            place.latitude, place.longitude = map(float, coordinats)
+
+        serialized_coordinats[address] = coordinats
 
     for place in saved_locations:
         if place.address not in serialized_coordinats and \
@@ -155,26 +151,13 @@ def view_orders(request):
     orders = Order.objects.with_cost() \
                           .prefetch_related('purchases__product') \
                           .select_related('restaurant') \
-                          .order_by('-status')
-
-    restaurant_menu_items = RestaurantMenuItem.objects.all() \
-                                                      .select_related('product') \
-                                                      .select_related('restaurant')
-    orders_coordinats = get_places_coordinats(orders)
-    restaurants_coordinates = get_places_coordinats(Restaurant.objects.all())
+                          .order_by('-status') \
+                          .with_available_restaurants() 
+    orders_coordinats = get_places_coordinats([order.address for order in orders])
+    restaurants_coordinates = get_places_coordinats(Restaurant.objects.values_list('address', flat=True))
     for order in orders:
         order.coordinates = orders_coordinats.get(order.address)
-        order.available_restaurants = []
         order.readable_distance = {}
-        for purchase in order.purchases.all():
-            res = [item.restaurant for item in restaurant_menu_items
-                   if item.product == purchase.product and item.availability]
-            if not order.available_restaurants:
-                order.available_restaurants.extend(res)
-            else:
-                order.available_restaurants = [
-                    item for item in order.available_restaurants
-                    if item in res]
         if order.coordinates:
             for restaurant in order.available_restaurants:
                 restaurant_coordinates = restaurants_coordinates[restaurant.address]

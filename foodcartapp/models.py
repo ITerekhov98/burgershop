@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Q, Subquery, OuterRef
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
@@ -127,6 +127,25 @@ class RestaurantMenuItem(models.Model):
 
 
 class OrderQuerySet(models.QuerySet):
+    def with_available_restaurants(self):
+        restaurant_menu_items = RestaurantMenuItem.objects.all() \
+                                                  .select_related('product') \
+                                                  .select_related('restaurant')
+        for order in self:
+            order.available_restaurants = []
+            for purchase in order.purchases.all():
+                res = [item.restaurant for item in restaurant_menu_items
+                    if item.product == purchase.product and item.availability]
+                if not order.available_restaurants:
+                    order.available_restaurants.extend(res)
+                else:
+                    order.available_restaurants = [
+                        item for item in order.available_restaurants
+                        if item in res
+                    ]
+        return self
+
+        
     def with_cost(self):
         return self.exclude(status='D') \
                    .annotate(
