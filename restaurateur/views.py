@@ -133,14 +133,18 @@ def get_places_coordinats(places):
                     longitude=float(coordinats[1]),
                     latitude=float(coordinats[0])
                 )
+            else:
+                PlaceLocation.objects.create(
+                    address=address,
+                )
                 serialized_coordinats[address] = coordinats
 
     for place in saved_locations:
-        if place.address not in serialized_coordinats:
+        if place.address not in serialized_coordinats and \
+           all((place.latitude, place.longitude)):
             serialized_coordinats[place.address] = (
                 str(place.latitude),                
                 str(place.longitude)
-
             )
 
     return serialized_coordinats
