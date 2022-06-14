@@ -223,7 +223,7 @@ class Purchase(models.Model):
     )
     quantity = models.PositiveSmallIntegerField(
         verbose_name='количество',
-        validators=[MinValueValidator(0), MaxValueValidator(20)]
+        validators=[MinValueValidator(1), MaxValueValidator(20)]
     )
     price = models.DecimalField(
         verbose_name='цена',
@@ -238,4 +238,4 @@ class Purchase(models.Model):
         verbose_name_plural = 'покупки'
 
     def __str__(self):
-        return f"Позиция"
+        return f"{self.product} - {self.quantity} шт"

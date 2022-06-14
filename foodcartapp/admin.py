@@ -119,7 +119,7 @@ class PurchaseInline(admin.TabularInline):
         Используем кешированные объекты чтобы избежать 
         многократных запросов к базе данных 
         '''
-        field = super(PurchaseInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        field = super().formfield_for_foreignkey(db_field, request)
         if db_field.name == "product" and hasattr(self, "cached_products"):
             field.choices = self.cached_products
         return field        
@@ -184,7 +184,7 @@ class OrderAdmin(admin.ModelAdmin):
         kwargs["queryset"] = Restaurant.objects.filter(
             id__in=available_restaurants
         )
-        return super(OrderAdmin, self).formfield_for_foreignkey(
+        return super().formfield_for_foreignkey(
             db_field, request,
             **kwargs
         )
