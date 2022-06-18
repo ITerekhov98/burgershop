@@ -96,7 +96,9 @@ def view_products(request):
             **default_availability,
             **{item.restaurant_id: item.availability for item in product.menu_items.all()},
         }
-        orderer_availability = [availability[restaurant.id] for restaurant in restaurants]
+        orderer_availability = [
+            availability[restaurant.id] for restaurant in restaurants
+        ]
 
         products_with_restaurants.append(
             (product, orderer_availability)
@@ -115,9 +117,9 @@ def view_restaurants(request):
     })
 
 
-def get_places_coordinats(addresses:list):
+def get_places_coordinats(addresses: list):
     '''
-    Принимает список адресов, возвращает словарь 
+    Принимает список адресов, возвращает словарь
     в формате: адрес: координаты
     '''
 
@@ -152,23 +154,29 @@ def view_orders(request):
                           .prefetch_related('purchases__product') \
                           .select_related('restaurant') \
                           .order_by('-status') \
-                          .with_available_restaurants() 
-    orders_coordinats = get_places_coordinats([order.address for order in orders])
-    restaurants_coordinates = get_places_coordinats(Restaurant.objects.values_list('address', flat=True))
+                          .with_available_restaurants()
+    orders_coordinats = get_places_coordinats(
+        [order.address for order in orders]
+    )
+    restaurants_coordinates = get_places_coordinats(
+        Restaurant.objects.values_list('address', flat=True)
+    )
     for order in orders:
         order.coordinates = orders_coordinats.get(order.address)
+        if not order.coordinats:
+            continue
+
         order.readable_distance = {}
-        if order.coordinates:
-            for restaurant in order.available_restaurants:
-                restaurant_coordinates = restaurants_coordinates[restaurant.address]
-                restaurant.distance = distance.distance(
-                    order.coordinates,
-                    restaurant_coordinates).kilometers
-                order.readable_distance[restaurant.name] = f' {restaurant.distance:.4f} км'
-            order.available_restaurants = sorted(
-                order.available_restaurants,
-                key=lambda x: x.distance
-            )
+        for restaurant in order.available_restaurants:
+            restaurant_coordinates = restaurants_coordinates[restaurant.address]
+            restaurant.distance = distance.distance(
+                order.coordinates,
+                restaurant_coordinates).kilometers
+            order.readable_distance[restaurant.name] = f' {restaurant.distance:.4f} км'
+        order.available_restaurants = sorted(
+            order.available_restaurants,
+            key=lambda x: x.distance
+        )
     return render(
         request,
         template_name='order_items.html',

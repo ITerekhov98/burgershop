@@ -145,8 +145,7 @@ class OrderQuerySet(models.QuerySet):
                 set.intersection(*all_affordable_restaurants)
             )
         return self
-
-        
+   
     def with_cost(self):
         return self.exclude(status='D') \
                    .annotate(

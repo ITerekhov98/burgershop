@@ -94,14 +94,20 @@ class ProductAdmin(admin.ModelAdmin):
     def get_image_preview(self, obj):
         if not obj.image:
             return 'выберите картинку'
-        return format_html('<img src="{url}" style="max-height: 200px;"/>', url=obj.image.url)
+        return format_html(
+            '<img src="{url}" style="max-height: 200px;"/>',
+            url=obj.image.url
+        )
     get_image_preview.short_description = 'превью'
 
     def get_image_list_preview(self, obj):
         if not obj.image or not obj.id:
             return 'нет картинки'
         edit_url = reverse('admin:foodcartapp_product_change', args=(obj.id,))
-        return format_html('<a href="{edit_url}"><img src="{src}" style="max-height: 50px;"/></a>', edit_url=edit_url, src=obj.image.url)
+        return format_html(
+            '<a href="{edit_url}"><img src="{src}" style="max-height: 50px;"/></a>',
+            edit_url=edit_url, src=obj.image.url
+        )
     get_image_list_preview.short_description = 'превью'
 
 
@@ -116,13 +122,14 @@ class PurchaseInline(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         '''
-        Используем кешированные объекты чтобы избежать 
-        многократных запросов к базе данных 
+        Используем кешированные объекты чтобы избежать
+        многократных запросов к базе данных
         '''
         field = super().formfield_for_foreignkey(db_field, request)
         if db_field.name == "product" and hasattr(self, "cached_products"):
             field.choices = self.cached_products
-        return field        
+        return field
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -159,10 +166,13 @@ class OrderAdmin(admin.ModelAdmin):
             return
         try:
             order_id = request.resolver_match.kwargs.get('object_id')
-            order = Order.objects.filter(id=order_id).with_available_restaurants()[0]
+            order = Order.objects.filter(id=order_id) \
+                                 .with_available_restaurants()[0]
         except ObjectDoesNotExist:
             return
-        available_restaurants_ids = [restaurant.id for restaurant in order.available_restaurants]
+        available_restaurants_ids = [
+            restaurant.id for restaurant in order.available_restaurants
+        ]
         kwargs["queryset"] = Restaurant.objects.filter(
             id__in=available_restaurants_ids
         )
@@ -202,4 +212,3 @@ class OrderAdmin(admin.ModelAdmin):
                 instance.price = instance.product.price
             instance.save()
         formset.save()
-
