@@ -159,30 +159,12 @@ class OrderAdmin(admin.ModelAdmin):
             return
         try:
             order_id = request.resolver_match.kwargs.get('object_id')
-            purchases = Purchase.objects.filter(order=order_id) \
-                                        .select_related('product')
+            order = Order.objects.filter(id=order_id).with_available_restaurants()[0]
         except ObjectDoesNotExist:
             return
-
-        restaurant_menu_items = RestaurantMenuItem.objects \
-                                                  .all() \
-                                                  .select_related(
-                                                    'product',
-                                                    'restaurant')
-        available_restaurants = []
-        for purchase in purchases:
-            res = [
-                item.restaurant.id for item in
-                restaurant_menu_items if
-                item.product == purchase.product and item.availability]
-            if not available_restaurants:
-                available_restaurants.extend(res)
-            else:
-                available_restaurants = [
-                    item for item in available_restaurants if item in res
-                ]
+        available_restaurants_ids = [restaurant.id for restaurant in order.available_restaurants]
         kwargs["queryset"] = Restaurant.objects.filter(
-            id__in=available_restaurants
+            id__in=available_restaurants_ids
         )
         return super().formfield_for_foreignkey(
             db_field, request,

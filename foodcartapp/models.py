@@ -128,21 +128,22 @@ class RestaurantMenuItem(models.Model):
 
 class OrderQuerySet(models.QuerySet):
     def with_available_restaurants(self):
-        restaurant_menu_items = RestaurantMenuItem.objects.all() \
+        restaurant_menu_items = RestaurantMenuItem.objects.filter(availability=True) \
                                                   .select_related('product') \
                                                   .select_related('restaurant')
+        affordable_restaurants = {}
+        for item in restaurant_menu_items:
+            if not affordable_restaurants.get(item.product):
+                affordable_restaurants[item.product] = set()
+            affordable_restaurants[item.product].add(item.restaurant)
         for order in self:
-            order.available_restaurants = []
-            for purchase in order.purchases.all():
-                res = [item.restaurant for item in restaurant_menu_items
-                    if item.product == purchase.product and item.availability]
-                if not order.available_restaurants:
-                    order.available_restaurants.extend(res)
-                else:
-                    order.available_restaurants = [
-                        item for item in order.available_restaurants
-                        if item in res
-                    ]
+            products = [purchase.product for purchase in order.purchases.all()]
+            all_affordable_restaurants = [
+                affordable_restaurants.get(product, set()) for product in products
+            ]
+            order.available_restaurants = list(
+                set.intersection(*all_affordable_restaurants)
+            )
         return self
 
         
@@ -236,7 +237,7 @@ class Purchase(models.Model):
     )
     product = models.ForeignKey(
         Product,
-        related_name='products',
+        related_name='purchases',
         verbose_name='блюдо',
         on_delete=models.CASCADE
     )
