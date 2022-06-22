@@ -54,15 +54,28 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
+Создайте файл `.env` и добавтье туда ключ доступа к API Яндекс-геокодера и secret_key. Получить первый можно [здесь](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F). Положите данные в файл, в формате:
 
-```sh
-python manage.py migrate
-```
-Создайте файл `.env`. Для dev-версии будет достаточно двух переменных: ключ доступа к API Яндекс-геокодера и secret_key. Получить первый можно [здесь](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F). Положите данные в файл, в формате:
 ```
 YANDEX_API_TOKEN=ваш_токен
 SECRET_KEY=ваш_секретный_ключ
+```
+
+Сайт использует Postgresql. Если она у вас не установлена, хорошая инструкция есть [здесь](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04). Для удобства и лаконичности записи используются возможности [dj-database-url](https://github.com/jazzband/dj-database-url#url-schema). Соберите учётные данные ваше БД и сохраните в `.env`,  в формате:
+
+
+```
+DB_URL=postgres://DB_USER:DB_PASSWORD@DB_HOST:DB_PORT/DB_NAME
+```
+
+Выполните миграции:
+```sh
+python manage.py migrate
+```
+Для сбора логов используется [rollbar](https://rollbar.com). При регистрации нового проекта выберите Django, выполните преложенные инструкции и затем добавьте в `.env` файл токен доступа и переменную environment (по умолчанию указана development):
+```
+ROLLBAR_TOKEN=ваш токен доступа
+ROLLBAR_ENVIRONMENT=переменная среды, по умолчанию development
 ```
 
 Запустите сервер:
@@ -148,6 +161,9 @@ Parcel будет следить за файлами в каталоге `bundle
 - `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте. Не стоит использовать значение по-умолчанию, **замените на своё**.
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
 - `YANDEX_API_TOKEN`  - ключ доступа для [API Яндекс-геокодера](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F) 
+- `DB_URL` - url с учётными данными для postgres, в формате: postgres://DB_USER:DB_PASSWORD@DB_HOST:DB_PORT/DB_NAME
+- `ROLLBAR_TOKEN` - ваш токен доступа для учёта логов в [rollbar](https://rollbar.com)
+- `ROLLBAR_ENVIRONMENT` - переменная среды, по умолчанию development (но не стоит её оставлять таковой в prod-версии)
 
 ## Цели проекта
 
