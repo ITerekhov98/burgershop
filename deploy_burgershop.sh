@@ -7,7 +7,7 @@ git pull
 npm ci --dev
 ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 /opt/burgershop/env/bin/python3 manage.py collectstatic --noinput
-/opt/burgershop/env/bin/python3 manage.py migrate
+/opt/burgershop/env/bin/python3 manage.py migrate --noinput
 systemctl restart burgershop
 systemctl reload nginx
 

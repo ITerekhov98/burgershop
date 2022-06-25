@@ -143,3 +143,5 @@ cython_debug/
 
 .parcel-cache/
 .vscode
+
+staticfiles
