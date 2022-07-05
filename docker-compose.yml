@@ -5,10 +5,8 @@ services:
     image: postgres:12.0-alpine
     volumes:
       - db_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=burgershop_user
-      - POSTGRES_PASSWORD=burgershop_password
-      - POSTGRES_DB=burgershop
+    env_file:
+      - ./.env
 
   django:
     build: ./backend

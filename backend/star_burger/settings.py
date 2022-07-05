@@ -90,12 +90,12 @@ MEDIA_URL = '/media/'
 
 DATABASES = {
     "default": {
-        "ENGINE": env.str("SQL_ENGINE", "django.db.backends.postgresql"),
-        "NAME": env.str("SQL_DATABASE", "burgershop"),
-        "USER": env.str("SQL_USER", "burgershop_user"),
-        "PASSWORD": env.str("SQL_PASSWORD", "burgershop_password"),
-        "HOST": env.str("SQL_HOST", "db"),
-        "PORT": env.int("SQL_PORT", "5432"),
+        "ENGINE": env.str("POSTGRES_ENGINE"),
+        "NAME": env.str("POSTGRES_DB"),
+        "USER": env.str("POSTGRES_USER"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD"),
+        "HOST": env.str("POSTGRES_HOST"),
+        "PORT": env.int("POSTGRES_PORT"),
 }}
 
 AUTH_PASSWORD_VALIDATORS = [
