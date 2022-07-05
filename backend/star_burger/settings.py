@@ -3,7 +3,7 @@ import os
 import dj_database_url
 import rollbar
 from environs import Env
-
+from pathlib import Path
 
 env = Env()
 env.read_env()
@@ -87,12 +87,16 @@ WSGI_APPLICATION = 'star_burger.wsgi.application'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-DB_URL=env.str('DB_URL')
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=DB_URL
-    )
-}
+    "default": {
+        "ENGINE": env.str("SQL_ENGINE", "django.db.backends.postgresql"),
+        "NAME": env.str("SQL_DATABASE", "burgershop"),
+        "USER": env.str("SQL_USER", "burgershop_user"),
+        "PASSWORD": env.str("SQL_PASSWORD", "burgershop_password"),
+        "HOST": env.str("SQL_HOST", "db"),
+        "PORT": env.int("SQL_PORT", "5432"),
+}}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
