@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+
+  django:
+    build: ./backend
+    command: bash -c "python /code/manage.py migrate --noinput && python /code/manage.py collectstatic --noinput && gunicorn star_burger.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static_volume:/code/staticfiles
+      - media_volume:/code/media
+    env_file:
+      - ./.env
+    expose:
+      - 8000
+    depends_on:
+      - db
+      - node
+  node:
+    build: ./frontend
+    command: bash -c "parcel build bundles-src/index.js -d bundles --public-url='./'"
+    volumes:
+      - static_volume:/code/bundles
+
+  nginx:
+    image: staticfloat/nginx-certbot
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    env_file:
+      - ./.env
+    volumes:
+      - ./nginx_ssl:/etc/nginx/user.conf.d:ro
+      - letsencrypt:/etc/letsencrypt
+      - static_volume:/opt/static
+      - media_volume:/opt/media
+    depends_on:
+      - django
+
+volumes:
+  db_data:
+  static_volume:
+  media_volume:
+  letsencrypt:
