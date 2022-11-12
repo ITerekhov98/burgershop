@@ -27,9 +27,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'rangefilter',
     'phonenumber_field',
     'rest_framework',
-    'geolocation'
+    'geolocation',
 ]
 
 MIDDLEWARE = [

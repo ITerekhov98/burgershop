@@ -6,11 +6,36 @@ from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Product
+from rangefilter.filters import DateRangeFilter
+from .models import Product, Restaurant
 from .models import ProductCategory
 from .models import Restaurant
 from .models import RestaurantMenuItem
 from .models import Purchase, Order
+
+
+class ProductsFilterByRestaurant(admin.SimpleListFilter):
+    title = 'Доступны в Ресторане'
+    parameter_name = 'restaurant_pk'
+
+    def lookups(self, request, model_admin):
+        queryset = Restaurant.objects.all()
+        restaurants = {
+            (
+                str(restaurant.pk),
+                restaurant.name,
+            )
+            for restaurant in queryset
+        }
+        return restaurants
+
+    def queryset(self, request, queryset):
+        restaurant_pk = self.value()
+        if restaurant_pk:
+            return queryset.filter(
+                menu_items__restaurant__pk=restaurant_pk,
+                menu_items__availability=True
+                ).distinct()
 
 
 class RestaurantMenuItemInline(admin.TabularInline):
@@ -37,28 +62,29 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         'get_image_list_preview',
         'name',
         'category',
         'price',
-    ]
-    list_display_links = [
+    )
+    list_display_links = (
         'name',
-    ]
-    list_filter = [
+    )
+    list_filter = (
         'category',
-    ]
-    search_fields = [
+        ProductsFilterByRestaurant,
+    )
+    search_fields = (
         # FIXME SQLite can not convert letter case for cyrillic words properly, so search will be buggy.
         # Migration to PostgreSQL is necessary
         'name',
         'category__name',
-    ]
+    )
 
-    inlines = [
-        RestaurantMenuItemInline
-    ]
+    inlines = (
+        RestaurantMenuItemInline,
+    )
     fieldsets = (
         ('Общее', {
             'fields': [
@@ -80,9 +106,9 @@ class ProductAdmin(admin.ModelAdmin):
         }),
     )
 
-    readonly_fields = [
+    readonly_fields = (
         'get_image_preview',
-    ]
+    )
 
     class Media:
         css = {
@@ -144,10 +170,18 @@ class OrderAdmin(admin.ModelAdmin):
         'called_at',
         'delivered_at',
         'comment',
-        'created_at'
+        'created_at',
     )
     readonly_fields = ('created_at',)
+    
     inlines = (PurchaseInline,)
+
+    list_filter = (
+        ('created_at', DateRangeFilter),
+        'restaurant',
+        'status',
+        'payment',
+    )
 
     def get_formsets_with_inlines(self, request, obj=None):
         '''
