@@ -87,16 +87,10 @@ WSGI_APPLICATION = 'star_burger.wsgi.application'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
 DATABASES = {
-    "default": {
-        "ENGINE": env.str("POSTGRES_ENGINE"),
-        "NAME": env.str("POSTGRES_DB"),
-        "USER": env.str("POSTGRES_USER"),
-        "PASSWORD": env.str("POSTGRES_PASSWORD"),
-        "HOST": env.str("POSTGRES_HOST"),
-        "PORT": env.int("POSTGRES_PORT"),
-}}
+    'default': dj_database_url.parse(env.str("DB_URL"), conn_max_age=600)
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -135,12 +129,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "bundles"),
 ]
 
-YANDEX_API_TOKEN = env.str('YANDEX_API_TOKEN')
+YANDEX_API_TOKEN = env.str('YANDEX_API_TOKEN', '')
 
-ROLLBAR = {
-    'access_token': env.str('ROLLBAR_TOKEN'),
-    'environment': env.str('ROLLBAR_ENVIRONMENT', 'development'),
-    'root': BASE_DIR,
-}
+# ROLLBAR = {
+#     'access_token': env.str('ROLLBAR_TOKEN'),
+#     'environment': env.str('ROLLBAR_ENVIRONMENT', 'development'),
+#     'root': BASE_DIR,
+# }
 
-rollbar.init(**ROLLBAR)
+# rollbar.init(**ROLLBAR)
