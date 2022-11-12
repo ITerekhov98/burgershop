@@ -1,5 +1,3 @@
-import requests
-from django import forms
 from django.shortcuts import redirect, render
 from django.views import View
 from django.urls import reverse_lazy
@@ -9,43 +7,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 from geopy import distance
 
-from foodcartapp.models import Product, Restaurant, Order, RestaurantMenuItem
-from geolocation.models import PlaceLocation
-from django.conf import settings
+from foodcartapp.models import Product, Restaurant, Order
+from geolocation.services import get_places_coordinats
+from .forms import Login
 
-
-def fetch_coordinates(apikey, address):
-    base_url = "https://geocode-maps.yandex.ru/1.x"
-    response = requests.get(base_url, params={
-        "geocode": address,
-        "apikey": apikey,
-        "format": "json",
-    })
-    response.raise_for_status()
-    found_places = response.json()['response']['GeoObjectCollection']['featureMember']
-    if not found_places:
-        return None
-
-    most_relevant = found_places[0]
-    lon, lat = most_relevant['GeoObject']['Point']['pos'].split(" ")
-    return lon, lat
-
-
-class Login(forms.Form):
-    username = forms.CharField(
-        label='Логин', max_length=75, required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Укажите имя пользователя'
-        })
-    )
-    password = forms.CharField(
-        label='Пароль', max_length=75, required=True,
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Введите пароль'
-        })
-    )
 
 
 class LoginView(View):
@@ -115,37 +80,6 @@ def view_restaurants(request):
     return render(request, template_name="restaurants_list.html", context={
         'restaurants': Restaurant.objects.all(),
     })
-
-
-def get_places_coordinats(addresses: list):
-    '''
-    Принимает список адресов, возвращает словарь
-    в формате: адрес: координаты
-    '''
-
-    saved_locations = PlaceLocation.objects.filter(address__in=addresses)
-    saved_addresses = [location.address for location in saved_locations]
-    serialized_coordinats = {}
-    for address in addresses:
-        if address in saved_addresses:
-            continue
-
-        coordinats = fetch_coordinates(settings.YANDEX_API_TOKEN, address)
-        place = PlaceLocation(address=address)
-        if coordinats:
-            place.latitude, place.longitude = map(float, coordinats)
-
-        serialized_coordinats[address] = coordinats
-
-    for place in saved_locations:
-        if place.address not in serialized_coordinats and \
-           all((place.latitude, place.longitude)):
-            serialized_coordinats[place.address] = (
-                str(place.latitude),                
-                str(place.longitude)
-            )
-
-    return serialized_coordinats
 
 
 @user_passes_test(is_manager, login_url='restaurateur:login')
