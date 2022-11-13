@@ -10,7 +10,7 @@ services:
 
   django:
     build: ./backend
-    command: bash -c "python /code/manage.py migrate --noinput && python /code/manage.py collectstatic --noinput && gunicorn star_burger.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "python /code/manage.py migrate --noinput && python /code/manage.py collectstatic --noinput && gunicorn burgershop.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - static_volume:/code/staticfiles
       - media_volume:/code/media
