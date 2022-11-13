@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.core.exceptions import ObjectDoesNotExist
@@ -48,6 +49,7 @@ class OrderAdmin(admin.ModelAdmin):
         'status',
         'payment',
     )
+    actions = ('copy_orders',)
 
     def get_formsets_with_inlines(self, request, obj=None):
         '''
@@ -112,3 +114,10 @@ class OrderAdmin(admin.ModelAdmin):
                 instance.price = instance.product.price
             instance.save()
         formset.save()
+
+    @admin.action(description='Создать копии выбранных Заказов')
+    @transaction.atomic
+    def copy_orders(self, request, queryset):
+        for order in queryset:
+            Order.objects.copy_from(order)
+        self.message_user(request, 'Копирование успешно завершено')

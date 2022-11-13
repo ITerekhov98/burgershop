@@ -151,6 +151,19 @@ class OrderQuerySet(models.QuerySet):
                    .annotate(
                    cost=Sum(F('purchases__price') * F('purchases__quantity'))) \
                    .order_by('-created_at')
+    
+    def copy_from(self, old_order):
+        new_order = self.get(pk=old_order.pk)
+        new_order.pk = None
+        new_order.comment = f'Копия заказа {old_order.pk}'
+        new_order.save()
+
+        purchases = old_order.purchases.all()
+        for purchase in purchases:
+            purchase.pk = None
+            purchase.order = new_order
+        Purchase.objects.bulk_create(purchases)
+            
 
 
 class Order(models.Model):
