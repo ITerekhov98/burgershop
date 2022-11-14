@@ -30,6 +30,7 @@ def get_places_coordinats(addresses: list):
     saved_locations = PlaceLocation.objects.filter(address__in=addresses)
     saved_addresses = [location.address for location in saved_locations]
     serialized_coordinats = {}
+    new_places = []
     for address in addresses:
         if address in saved_addresses:
             continue
@@ -38,9 +39,10 @@ def get_places_coordinats(addresses: list):
         place = PlaceLocation(address=address)
         if coordinats:
             place.latitude, place.longitude = map(float, coordinats)
-
+        new_places.append(place)
         serialized_coordinats[address] = coordinats
-
+        
+    PlaceLocation.objects.bulk_create(new_places)
     for place in saved_locations:
         if place.address not in serialized_coordinats and \
            all((place.latitude, place.longitude)):

@@ -40,14 +40,15 @@
           {% if not item.coordinates %}
           <td><p>Ошибка определения координат</p></td>
           {% else %}
-          <td><details>
+          <td>
+            <details style="cursor:pointer">
               <summary>Может быть приготовлен ресторанами:</summary>
               <ul>
                 {% for restaurant in item.available_restaurants %}
                   <li>{{ restaurant }}: {{ item.readable_distance|get_item:restaurant.name }}</li>
                 {% endfor %}
               </ul>
-              </details>
+            </details>
           </td>
           {% endif %}
         {% else %}

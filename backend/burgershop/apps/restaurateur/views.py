@@ -100,7 +100,7 @@ def view_orders(request):
     )
     for order in orders:
         order.coordinates = orders_coordinats.get(order.address)
-        if not order.coordinats:
+        if not order.coordinates:
             continue
 
         order.readable_distance = {}

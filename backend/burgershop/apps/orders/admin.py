@@ -67,18 +67,22 @@ class OrderAdmin(admin.ModelAdmin):
         '''
         if not db_field.name == "restaurant":
             return
-        try:
-            order_id = request.resolver_match.kwargs.get('object_id')
-            order = Order.objects.filter(id=order_id) \
-                                 .with_available_restaurants()[0]
-        except ObjectDoesNotExist:
-            return
-        available_restaurants_ids = [
-            restaurant.id for restaurant in order.available_restaurants
-        ]
-        kwargs["queryset"] = Restaurant.objects.filter(
-            id__in=available_restaurants_ids
-        )
+        order_id = request.resolver_match.kwargs.get('object_id')
+        if order_id:
+            try:
+                order_id = request.resolver_match.kwargs.get('object_id')
+                print(111111111111111111111111111111111111111111111111)
+                print(order_id)
+                order = Order.objects.filter(id=order_id) \
+                                    .with_available_restaurants()[0]
+            except ObjectDoesNotExist:
+                return
+            available_restaurants_ids = [
+                restaurant.id for restaurant in order.available_restaurants
+            ]
+            kwargs["queryset"] = Restaurant.objects.filter(
+                id__in=available_restaurants_ids
+            )
         return super().formfield_for_foreignkey(
             db_field, request,
             **kwargs
