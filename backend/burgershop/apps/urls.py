@@ -1,7 +1,7 @@
 from django.urls import include
 from django.urls import path
 
-from burgershop.apps.products.views import banners_list_api, product_list_api, ProductsList
+from burgershop.apps.products.views import banners_list_api, ProductsList
 
 urlpatterns = [
     path('products/', ProductsList.as_view()),

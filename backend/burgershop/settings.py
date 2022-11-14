@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'burgershop.apps.orders.apps.OrdersConfig',
     'burgershop.apps.restaurateur.apps.RestaurateurConfig',
     'burgershop.apps.geolocation.apps.GeolocationConfig',
+    'admin_shortcuts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,3 +143,44 @@ YANDEX_API_TOKEN = env.str('YANDEX_API_TOKEN', '')
 # }
 
 # rollbar.init(**ROLLBAR)
+
+
+ADMIN_SHORTCUTS_SETTINGS = {
+'show_on_all_pages': False,
+'hide_app_list': False,
+'open_new_window': False,
+}
+
+ADMIN_SHORTCUTS = [
+    {
+        'title': 'Рестораны',
+        'shortcuts': [
+            {
+                'title': 'Рестораны',
+                'url_name': 'admin:restaurants_restaurant_changelist',
+            }
+        ]
+    },
+    {
+        'title': 'Меню',
+        'shortcuts': [
+            {
+                'title': 'Продукты',
+                'url_name': 'admin:products_product_changelist',
+            },
+            {
+                'title': 'Категории',
+                'url_name': 'admin:products_productcategory_changelist',
+            }
+        ]
+    },
+    {
+        'title': 'Заказы',
+        'shortcuts': [
+            {
+                'title': 'Заказы',
+                'url_name': 'admin:orders_order_changelist',
+            }
+        ]
+    }
+]
