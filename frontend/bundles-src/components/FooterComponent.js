@@ -11,9 +11,9 @@ const FooterComponent = props => {
   }
 
   // FIXME should be moved to backend db ?
-  let email = 'office@star-burger.com';
+  let email = 'office@burgershop.com';
   let phoneNumber = '+7 901 999-99-99';
-  let address = 'г.Москва, Старый Арбарт, 66';
+  let address = 'г.Москва, Старый Арбат, 12';
 
   return (
     <div style={style}>
