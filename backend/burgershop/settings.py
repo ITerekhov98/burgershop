@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'burgershop.apps.orders.apps.OrdersConfig',
     'burgershop.apps.restaurateur.apps.RestaurateurConfig',
     'burgershop.apps.geolocation.apps.GeolocationConfig',
+    'burgershop.apps.main.apps.MainConfig',
     'admin_shortcuts',
     'django.contrib.admin',
     'django.contrib.auth',

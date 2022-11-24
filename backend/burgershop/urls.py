@@ -5,9 +5,11 @@ from django.shortcuts import render
 
 from django.conf import settings
 
+from .apps.main.views import index
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', render, kwargs={'template_name': 'main/index.html'}, name='start_page'),
+    path('', index, name='start_page'),
     path('api/', include('burgershop.apps.urls')),
     path('manager/', include('burgershop.apps.restaurateur.urls')),
     path('api-auth/', include('rest_framework.urls'))
