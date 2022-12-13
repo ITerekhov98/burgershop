@@ -93,10 +93,16 @@ WSGI_APPLICATION = 'burgershop.wsgi.application'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-DATABASES = {
-    'default': dj_database_url.parse(env.str("DB_URL"), conn_max_age=600)
-}
+POSTGRES_DB = env.str('POSTGRES_DB')
+POSTGRES_USER = env.str('POSTGRES_USER')
+POSTGRES_PASSWORD = env.str('POSTGRES_PASSWORD')
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default=f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db/{POSTGRES_DB}", 
+        conn_max_age=600
+    )
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
