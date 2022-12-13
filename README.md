@@ -33,7 +33,9 @@
 - `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте. Не стоит использовать значение по-умолчанию, **замените на своё**.
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
 - `YANDEX_API_TOKEN`  - ключ доступа для [API Яндекс-геокодера](https://passport.yandex.ru/auth?origin=apikeys&retpath=https%3A%2F%2Fdeveloper.tech.yandex.ru%2F) 
-- `DB_URL` - url с учётными данными для postgres, в формате: postgres://DB_USER:DB_PASSWORD@DB_HOST:DB_PORT/DB_NAME
+- `POSTGRES_DB` - Имя базы данных
+- `POSTGRES_USER` - Имя пользователя базы данных
+- `POSTGRES_PASSWORD` - Пароль пользователя базы данных
 - `ROLLBAR_TOKEN` - ваш токен доступа для учёта логов в [rollbar](https://rollbar.com)
 - `ROLLBAR_ENVIRONMENT` - переменная среды, по умолчанию development (но не стоит её оставлять таковой в prod-версии)
 
